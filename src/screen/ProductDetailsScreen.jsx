@@ -30,7 +30,7 @@ const ProductDetailsScreen = () => {
     product.color = selectedColor;
     product.size = selectedSize;
     addToCartItem(product);
-    navigation.navigate("CART")
+    navigation.navigate("CART");
   };
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
@@ -46,7 +46,6 @@ const ProductDetailsScreen = () => {
           <Text style={styles.fontText}>${product.price}</Text>
         </View>
         <Text style={[styles.fontText, styles.sizeText]}>Size</Text>
-        {/* size container */}
         <View style={styles.sizeContainer}>
           <TouchableOpacity
             style={styles.sizeValueContainer}
@@ -101,7 +100,6 @@ const ProductDetailsScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        {/* color container */}
         <View style={styles.colorContainer}>
           {colorsArray.map((color, index) => {
             return (
@@ -127,7 +125,6 @@ const ProductDetailsScreen = () => {
             );
           })}
         </View>
-        {/* cart button */}
         <View>
           <TouchableOpacity style={styles.button} onPress={handleAddToCart}>
             <Text style={styles.buttonText}>Add to Cart</Text>

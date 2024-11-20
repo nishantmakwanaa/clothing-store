@@ -38,10 +38,6 @@ const HomeScreen = () => {
 
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
-      {/* header */}
-
-      {/* <Tags /> */}
-
       <FlatList
         ListHeaderComponent={
           <>
@@ -72,10 +68,7 @@ const HomeScreen = () => {
         )}
         showsVerticalScrollIndicator={false}
       />
-      <View>
-        {/* <Text>HomeScreen</Text>
-        <Text>HomeScreen</Text> */}
-      </View>
+      <View></View>
     </LinearGradient>
   );
 };
@@ -84,7 +77,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     padding: 20,
   },
 

@@ -4,7 +4,6 @@ export const addToCart = async (item) => {
   let cartItems = await AsyncStorage.getItem("cart");
   cartItems = cartItems ? JSON.parse(cartItems) : [];
 
-  //   checking items exist in the cart or not
   const existingItemIndex = cartItems.findIndex(
     (cartItem) => cartItem.id === item.id
   );

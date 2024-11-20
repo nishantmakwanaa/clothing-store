@@ -11,13 +11,28 @@ import Header from "../components/Header";
 import CartCard from "../components/CartCard";
 import { fonts } from "../utils/fonts";
 import { CartContext } from "../context/CartContext";
+import { useNavigation } from "@react-navigation/native";
 
 const CartScreen = () => {
   const { cartItems, deleteCartItem, totalPrice } = useContext(CartContext);
+  const navigation = useNavigation();
 
   const handleDeleteItem = async (id) => {
     await deleteCartItem(id);
   };
+
+  const handleReorder = (item) => {
+    navigation.navigate("REORDER", {
+      productName: item.name,
+      productPrice: item.price,
+      productImage: item.image,
+    });
+  };
+
+  const handleCheckout = () => {
+    navigation.navigate("PaymentScreen");
+  };
+
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
       <View style={styles.header}>
@@ -26,7 +41,11 @@ const CartScreen = () => {
       <FlatList
         data={cartItems}
         renderItem={({ item }) => (
-          <CartCard item={item} handleDelete={handleDeleteItem} />
+          <CartCard
+            item={item}
+            handleDelete={handleDeleteItem}
+            handleReorder={() => handleReorder(item)}
+          />
         )}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ marginTop: 40, paddingBottom: 200 }}
@@ -38,7 +57,7 @@ const CartScreen = () => {
                 <Text style={styles.priceText}>${totalPrice}</Text>
               </View>
               <View style={styles.flexRowContainer}>
-                <Text style={styles.titleText}>Shpping:</Text>
+                <Text style={styles.titleText}>Shipping:</Text>
                 <Text style={styles.priceText}>$0.0</Text>
               </View>
               <View style={styles.divider} />
@@ -49,7 +68,7 @@ const CartScreen = () => {
                 </Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleCheckout}>
               <Text style={styles.buttonText}>Checkout</Text>
             </TouchableOpacity>
           </>
