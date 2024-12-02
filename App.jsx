@@ -12,7 +12,10 @@ import ReorderScreen from "./src/screen/ReorderScreen";
 import AccountScreen from "./src/screen/AccountScreen";
 import LoginScreen from "./src/screen/LoginScreen";
 import SignupScreen from "./src/screen/SignupScreen";
+import UserDetailsScreen from "./src/screen/UserDetailsScreen";
+import SettingsScreen from "./src/screen/SettingsScreen";
 import ForgetPasswordScreen from "./src/screen/ForgetPasswordScreen";
+import { UserContextProvider } from "./src/context/UserContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,6 +24,14 @@ const MyHomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HOME" component={HomeScreen} />
     <Stack.Screen name="PRODUCT_DETAILS" component={ProductDetailsScreen} />
+  </Stack.Navigator>
+);
+
+const AccountStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="ACCOUNT" component={AccountScreen} />
+    <Stack.Screen name="USER_DETAILS" component={UserDetailsScreen} />
+    <Stack.Screen name="SETTINGS" component={SettingsScreen} />
   </Stack.Navigator>
 );
 
@@ -52,8 +63,8 @@ const tabScreens = [
     iconNormal: require("./src/assets/normal/shopping_cart.png"),
   },
   {
-    name: "ACCOUNT",
-    component: AccountScreen,
+    name: "ACCOUNT_STACK",
+    component: AccountStack,
     iconFocused: require("./src/assets/focused/account.png"),
     iconNormal: require("./src/assets/normal/account.png"),
   },
@@ -83,11 +94,13 @@ const App = () => {
   const { isAuthenticated } = useAuth();
 
   return (
+    <UserContextProvider>
     <NavigationContainer>
       <CartProvider>
         {isAuthenticated ? <MainApp /> : <AuthStack />}
       </CartProvider>
     </NavigationContainer>
+    </UserContextProvider>
   );
 };
 

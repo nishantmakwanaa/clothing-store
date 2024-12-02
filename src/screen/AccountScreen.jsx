@@ -18,12 +18,12 @@ const AccountScreen = () => {
 
   const handleSettings = () => {
     console.log("Navigating to Settings...");
-    navigation.navigate("SettingsScreen");
+    navigation.navigate("SETTINGS");
   };
 
   const handleProfile = () => {
     console.log("Navigating to Profile...");
-    navigation.navigate("UserDetailsScreen");
+    navigation.navigate("USER_DETAILS");
   };
 
   return (

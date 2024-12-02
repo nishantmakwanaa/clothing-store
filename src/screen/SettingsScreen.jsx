@@ -1,5 +1,4 @@
-// SettingsScreen.jsx
-import React, { useState } from "react";
+import { React, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Switch } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
