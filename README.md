@@ -1,6 +1,6 @@
 # Clothify
 
-Welcome to **Clothify**, A Modern And User-Friendly Clothing Store App Built With React Native!  
+Welcome To **Clothify**, A Modern And User-Friendly Clothing Store App Built With React Native!  
 **Clothify** Allows Users To Browse And Shop For Stylish Clothing With Ease, Ensuring A Seamless And Delightful Shopping Experience.
 
 ## Features :
