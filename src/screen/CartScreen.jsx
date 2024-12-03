@@ -30,7 +30,7 @@ const CartScreen = () => {
   };
 
   const handleCheckout = () => {
-    navigation.navigate("PaymentScreen");
+    navigation.navigate("PAYMENTS");
   };
 
   return (

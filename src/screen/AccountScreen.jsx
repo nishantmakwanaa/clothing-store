@@ -1,54 +1,52 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 import { fonts } from "../utils/fonts";
-import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../context/AuthContext";
+import { UserContext } from "../context/UserContext";
 
 const AccountScreen = () => {
-  const navigation = useNavigation();
-  const { setIsAuthenticated } = useAuth();
+  const { user, logOut } = useContext(UserContext);
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    navigation.navigate("LoginScreen");
-  };
-
-  const handleSettings = () => {
-    navigation.navigate("SETTINGS");
-  };
-
-  const handleProfile = () => {
-    navigation.navigate("USER_DETAILS");
+  const handleLogOut = () => {
+    logOut();
   };
 
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
       <View style={styles.header}>
-        <Header />
+        <Header isProfile={true} />
       </View>
+
       <View style={styles.contentContainer}>
-        <Text style={[styles.fontText, styles.titleText]}>Account</Text>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>User Name : John Doe</Text>
-          <Text style={styles.infoText}>E-Mail : johndoe@example.com</Text>
-          <Text style={styles.infoText}>Phone : 123-456-7890</Text>
+        <View style={styles.profileHeader}>
+          <Image
+            source={{ uri: user.profileImage }}
+            style={styles.profileImage}
+          />
+          <Text style={styles.userName}>{user.name}</Text>
+          <Text style={styles.userEmail}>{user.email}</Text>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleProfile}>
-          <Text style={styles.buttonText}>View Profile</Text>
-        </TouchableOpacity>
+        <View style={styles.detailsContainer}>
+          <View style={styles.flexRowContainer}>
+            <Text style={styles.detailsTitle}>Phone :</Text>
+            <Text style={styles.detailsValue}>{user.phone}</Text>
+          </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleSettings}>
-          <Text style={styles.buttonText}>Settings</Text>
-        </TouchableOpacity>
+          <View style={styles.flexRowContainer}>
+            <Text style={styles.detailsTitle}>Address :</Text>
+            <Text style={styles.detailsValue}>{user.address}</Text>
+          </View>
 
-        <TouchableOpacity
-          style={[styles.button, styles.logoutButton]}
-          onPress={handleLogout}
-        >
-          <Text style={styles.buttonText}>Logout</Text>
+          <View style={styles.flexRowContainer}>
+            <Text style={styles.detailsTitle}>Joined :</Text>
+            <Text style={styles.detailsValue}>{user.joinedDate}</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.logOutButton} onPress={handleLogOut}>
+          <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -60,48 +58,62 @@ export default AccountScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
     padding: 15,
   },
+  header: {},
   contentContainer: {
-    padding: 20,
+    marginTop: 20,
+    paddingHorizontal: 15,
   },
-  titleText: {
-    fontSize: 30,
-    fontFamily: fonts.regular,
+  profileHeader: {
+    alignItems: "center",
+    marginBottom: 40,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    resizeMode: "cover",
+    marginBottom: 10,
+  },
+  userName: {
+    fontSize: 24,
     fontWeight: "700",
-    color: "#444444",
-    marginBottom: 30,
+    color: "#444",
+    marginBottom: 5,
   },
-  fontText: {
-    fontSize: 20,
-    fontFamily: fonts.regular,
-    fontWeight: "700",
-    color: "#444444",
+  userEmail: {
+    fontSize: 16,
+    color: "#757575",
   },
-  infoContainer: {
-    marginBottom: 20,
+  detailsContainer: {
+    marginVertical: 20,
   },
-  infoText: {
+  flexRowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 10,
+  },
+  detailsTitle: {
     fontSize: 18,
-    fontFamily: fonts.regular,
-    color: "#888",
-    marginVertical: 5,
+    color: "#757575",
+    fontWeight: "500",
   },
-  button: {
+  detailsValue: {
+    fontSize: 18,
+    color: "#444",
+    fontWeight: "600",
+  },
+  logOutButton: {
     backgroundColor: "#E96E6E",
     height: 50,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 20,
-    marginTop: 20,
-  },
-  logoutButton: {
-    backgroundColor: "#FF4C4C",
+    marginTop: 30,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "700",
     fontFamily: fonts.regular,

@@ -8,14 +8,13 @@ import { AuthProvider, useAuth } from "./src/context/AuthContext";
 import HomeScreen from "./src/screen/HomeScreen";
 import ProductDetailsScreen from "./src/screen/ProductDetailsScreen";
 import CartScreen from "./src/screen/CartScreen";
-import ReorderScreen from "./src/screen/ReorderScreen";
 import AccountScreen from "./src/screen/AccountScreen";
 import LoginScreen from "./src/screen/LoginScreen";
 import SignupScreen from "./src/screen/SignupScreen";
-import UserDetailsScreen from "./src/screen/UserDetailsScreen";
 import SettingsScreen from "./src/screen/SettingsScreen";
 import ForgetPasswordScreen from "./src/screen/ForgetPasswordScreen";
 import { UserContextProvider } from "./src/context/UserContext";
+import PaymentScreen from "./src/screen/PaymentScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -24,14 +23,7 @@ const MyHomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HOME" component={HomeScreen} />
     <Stack.Screen name="PRODUCT_DETAILS" component={ProductDetailsScreen} />
-  </Stack.Navigator>
-);
-
-const AccountStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="ACCOUNT" component={AccountScreen} />
-    <Stack.Screen name="USER_DETAILS" component={UserDetailsScreen} />
-    <Stack.Screen name="SETTINGS" component={SettingsScreen} />
+    <Stack.Screen name="PAYMENTS" component={PaymentScreen} />
   </Stack.Navigator>
 );
 
@@ -51,12 +43,6 @@ const tabScreens = [
     iconNormal: require("./src/assets/normal/home.png"),
   },
   {
-    name: "REORDER",
-    component: ReorderScreen,
-    iconFocused: require("./src/assets/focused/reorder.png"),
-    iconNormal: require("./src/assets/normal/reorder.png"),
-  },
-  {
     name: "CART",
     component: CartScreen,
     iconFocused: require("./src/assets/focused/shopping_cart.png"),
@@ -64,9 +50,16 @@ const tabScreens = [
   },
   {
     name: "ACCOUNT_STACK",
-    component: AccountStack,
+    component: AccountScreen,
     iconFocused: require("./src/assets/focused/account.png"),
     iconNormal: require("./src/assets/normal/account.png"),
+  },
+
+  {
+    name: "SETTINGS",
+    component: SettingsScreen,
+    iconFocused: require("./src/assets/focused/reorder.png"),
+    iconNormal: require("./src/assets/normal/reorder.png"),
   },
 ];
 
