@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import LinearGradient from "react-native-linear-gradient";
+import Header from "../components/Header";
 import { fonts } from "../utils/fonts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -15,9 +16,7 @@ const PaymentScreen = () => {
 
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Payment</Text>
-      </View>
+      <Header isHome={false} />
       <View style={styles.productInfoContainer}>
         <Text style={styles.productNameText}>{productName}</Text>
         <Text style={styles.productPriceText}>${productPrice}</Text>
@@ -48,20 +47,11 @@ export default PaymentScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 15,
-  },
-  header: {
-    marginBottom: 20,
-  },
-  headerText: {
-    fontSize: 30,
-    fontFamily: fonts.regular,
-    fontWeight: "700",
-    color: "#444444",
   },
   productInfoContainer: {
     marginBottom: 30,
+    paddingHorizontal: 10,
   },
   productNameText: {
     fontSize: 24,

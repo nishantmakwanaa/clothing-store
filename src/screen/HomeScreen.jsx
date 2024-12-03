@@ -44,7 +44,7 @@ const HomeScreen = () => {
             <>
               <Header />
               <View>
-                <Text style={styles.headingText}>Match Your Style</Text>
+                <Text style={styles.headingText}>Welcome To Clothify</Text>
                 <View style={styles.inputContainer}>
                   <Image
                     source={require("../assets/search.png")}
@@ -77,7 +77,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 15,
   },
 
   headingText: {

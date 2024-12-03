@@ -3,15 +3,24 @@ import React from "react";
 import { fonts } from "../utils/fonts";
 import { useNavigation } from "@react-navigation/native";
 
-const Header = ({ isCart }) => {
+const Header = ({ isHome }) => {
   const navigation = useNavigation();
 
   const handleBack = () => {
-    navigation.navigate("HOME");
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.navigate("HOME");
+    }
   };
+
+  const handleProfileClick = () => {
+    navigation.navigate("ACCOUNT");
+  };
+
   return (
-    <View style={styles.header}>
-      {isCart ? (
+    <View style={[styles.header, isHome && styles.homeHeaderPadding]}>
+      {!isHome && (
         <TouchableOpacity
           style={styles.appDrawerContainer}
           onPress={handleBack}
@@ -21,22 +30,13 @@ const Header = ({ isCart }) => {
             style={styles.appBackIcon}
           />
         </TouchableOpacity>
-      ) : (
-        <View style={styles.appDrawerContainer}>
-          <Image
-            source={require("../assets/apps.png")}
-            style={styles.appDrawerIcon}
-          />
-        </View>
       )}
-
-      {isCart ? <Text style={styles.titleText}>My Cart</Text> : null}
-      <View>
+      <TouchableOpacity onPress={handleProfileClick}>
         <Image
           source={require("../assets/Ellipse2.png")}
           style={styles.profileImage}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

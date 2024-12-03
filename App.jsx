@@ -43,7 +43,7 @@ const AuthStack = () => (
 
 const tabScreens = [
   {
-    name: "HOME",
+    name: "HOME_SCREEN",
     component: HomeStack,
     iconFocused: require("./src/assets/focused/home.png"),
     iconNormal: require("./src/assets/normal/home.png"),

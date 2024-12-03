@@ -22,7 +22,7 @@ const LoginScreen = () => {
   const handleLogin = () => {
     if (email === hardcodedEmail && password === hardcodedPassword) {
       setIsAuthenticated(true);
-      navigation.navigate("HOME_STACK");
+      navigation.navigate("HOME");
     } else {
       alert("Invalid Credentials. Please Try Again...");
     }
