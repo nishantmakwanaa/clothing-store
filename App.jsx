@@ -19,11 +19,17 @@ import PaymentScreen from "./src/screen/PaymentScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const MyHomeStack = () => (
+const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HOME" component={HomeScreen} />
     <Stack.Screen name="PRODUCT_DETAILS" component={ProductDetailsScreen} />
-    <Stack.Screen name="PAYMENTS" component={PaymentScreen} />
+  </Stack.Navigator>
+);
+
+const CartStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="CART" component={CartScreen} />
+    <Stack.Screen name="PAYMENT" component={PaymentScreen} />
   </Stack.Navigator>
 );
 
@@ -37,19 +43,19 @@ const AuthStack = () => (
 
 const tabScreens = [
   {
-    name: "HOME_STACK",
-    component: MyHomeStack,
+    name: "HOME",
+    component: HomeStack,
     iconFocused: require("./src/assets/focused/home.png"),
     iconNormal: require("./src/assets/normal/home.png"),
   },
   {
     name: "CART",
-    component: CartScreen,
+    component: CartStack,
     iconFocused: require("./src/assets/focused/shopping_cart.png"),
     iconNormal: require("./src/assets/normal/shopping_cart.png"),
   },
   {
-    name: "ACCOUNT_STACK",
+    name: "ACCOUNT",
     component: AccountScreen,
     iconFocused: require("./src/assets/focused/account.png"),
     iconNormal: require("./src/assets/normal/account.png"),
