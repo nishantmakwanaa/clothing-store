@@ -23,34 +23,42 @@ Below Are The Screenshots Of Each Page In The App :
 
 ### 2. **Product Listing Page**  
 *Description*: Explore The Clothing Categories With A Clean Layout.  
+<br />
 ![Product Listing Page](./screenshots/PRODUCT_SCREEN.png)
 
 ### 3. **Cart Page**  
 *Description*: Review And Modify Items Before Checkout.  
+<br />
 ![Cart Page](./screenshots/CART_SCREEN.png)
 
 ### 4. **Checkout Page**  
 *Description*: Enter Your Payment Details And Shipping Information.  
+<br />
 ![Checkout Page](./screenshots/PAYMENT_SCREEN.png)
 
 ### 5. **Profile Page**  
 *Description*: Update User Information And View Order History.  
+<br />
 ![Profile Page](./screenshots/ACCOUNT_SCREEN.png)
 
 ### 6. **Settings Page**  
 *Description*: For Customisation Of The App.  
+<br />
 ![Product Details Page](./screenshots/SETTINGS_SCREEN.png)
 
 ### 7. **Login Page**  
 *Description*: Update User Information And View Order History.  
+<br />
 ![Profile Page](./screenshots/LOGIN_SCREEN.png)
 
 ### 8. **Sign-Up Page**  
-*Description*: Update User Information And View Order History.  
+*Description*: Update User Information And View Order History.
+<br />
 ![Profile Page](./screenshots/SIGN_UP_SCREEN.png)
 
 ### 9. **Forget Password Page**  
-*Description*: Update User Information And View Order History.  
+*Description*: Update User Information And View Order History. 
+<br />
 ![Profile Page](./screenshots/FORGET_PASSWORD_SCREEN.png)
 
 ---
