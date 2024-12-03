@@ -1,6 +1,6 @@
 # Clothify
 
-Welcome to **Clothify**, A Modern And User-Friendly Clothing Store App Built With React Native !  
+Welcome to **Clothify**, A Modern And User-Friendly Clothing Store App Built With React Native!  
 **Clothify** Allows Users To Browse And Shop For Stylish Clothing With Ease, Ensuring A Seamless And Delightful Shopping Experience.
 
 ## Features :
@@ -17,49 +17,37 @@ Welcome to **Clothify**, A Modern And User-Friendly Clothing Store App Built Wit
 Below Are The Screenshots Of Each Page In The App :
 
 ### 1. **Home Page**  
-*Description*: Browse Featured Items, New Arrivals, And More.  
-<br />
 ![Home Page](./screenshots/HOME_SCREEN.png)
 
 ### 2. **Product Listing Page**  
-*Description*: Explore The Clothing Categories With A Clean Layout.  
-<br />
 ![Product Listing Page](./screenshots/PRODUCT_SCREEN.png)
 
 ### 3. **Cart Page**  
-*Description*: Review And Modify Items Before Checkout.  
-<br />
 ![Cart Page](./screenshots/CART_SCREEN.png)
 
 ### 4. **Checkout Page**  
-*Description*: Enter Your Payment Details And Shipping Information.  
-<br />
 ![Checkout Page](./screenshots/PAYMENT_SCREEN.png)
 
 ### 5. **Profile Page**  
-*Description*: Update User Information And View Order History.  
-<br />
 ![Profile Page](./screenshots/ACCOUNT_SCREEN.png)
 
 ### 6. **Settings Page**  
-*Description*: For Customisation Of The App.  
-<br />
-![Product Details Page](./screenshots/SETTINGS_SCREEN.png)
+![Settings Page](./screenshots/SETTINGS_SCREEN.png)
 
 ### 7. **Login Page**  
-*Description*: Simple Login Page.  
-<br />
-![Profile Page](./screenshots/LOGIN_SCREEN.png)
+![Login Page](./screenshots/LOGIN_SCREEN.png)
 
-### 8. **Sign-Up Page**  
-*Description*: For Registering In App.
-<br />
-![Profile Page](./screenshots/SIGN_UP_SCREEN.png)
-
-### 9. **Forget Password Page**  
-*Description*: Update User Information And View Order History.
-<br />
-![Profile Page](./screenshots/FORGET_PASSWORD_SCREEN.png)
+### 8. **Sign-Up Page** and **Forget Password Page**  
+<div style="display: flex; justify-content: space-between;">
+  <div style="width: 48%;">
+    <h4>Sign-Up Page</h4>
+    <img src="./screenshots/SIGN_UP_SCREEN.png" alt="Sign Up Page" width="100%" />
+  </div>
+  <div style="width: 48%;">
+    <h4>Forget Password Page</h4>
+    <img src="./screenshots/FORGET_PASSWORD_SCREEN.png" alt="Forget Password Page" width="100%" />
+  </div>
+</div>
 
 ---
 
@@ -77,7 +65,7 @@ Follow These Steps To Get The App Running Locally:
 
 1. Clone This Repository.
 2. In Root Folder, Run " npm install ".
-3. Then Run " npm start start ".
+3. Then Run " npm start ".
 
 ---
 
