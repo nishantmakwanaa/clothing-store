@@ -18,6 +18,7 @@ Below Are The Screenshots Of Each Page In The App :
 
 ### 1. **Home Page**  
 *Description*: Browse Featured Items, New Arrivals, And More.  
+<br />
 ![Home Page](./screenshots/HOME_SCREEN.png)
 
 ### 2. **Product Listing Page**  
