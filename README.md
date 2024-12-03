@@ -57,7 +57,8 @@ Below Are The Screenshots Of Each Page In The App :
 ![Profile Page](./screenshots/SIGN_UP_SCREEN.png)
 
 ### 9. **Forget Password Page**  
-*Description*: Update User Information And View Order History. 
+*Description*: Update User Information And View Order History.
+<br />
 <br />
 ![Profile Page](./screenshots/FORGET_PASSWORD_SCREEN.png)
 
@@ -81,4 +82,4 @@ Follow These Steps To Get The App Running Locally:
 
 ---
 
-###Thank You So Much.
+### Thank You So Much.
