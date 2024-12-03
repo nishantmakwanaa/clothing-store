@@ -37,7 +37,7 @@ Below Are The Screenshots Of Each Page In The App :
 ### 7. **Login Page**  
 ![Login Page](./screenshots/LOGIN_SCREEN.png)
 
-### 8. **Sing-Up Page**  
+### 8. **Sign-Up Page**  
 ![Login Page](./screenshots/SIGN_UP_SCREEN.png)
 
 ### 9. **Forget Password Page**  
