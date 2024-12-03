@@ -47,18 +47,17 @@ Below Are The Screenshots Of Each Page In The App :
 ![Product Details Page](./screenshots/SETTINGS_SCREEN.png)
 
 ### 7. **Login Page**  
-*Description*: Update User Information And View Order History.  
+*Description*: Simple Login Page.  
 <br />
 ![Profile Page](./screenshots/LOGIN_SCREEN.png)
 
 ### 8. **Sign-Up Page**  
-*Description*: Update User Information And View Order History.
+*Description*: For Registering In App.
 <br />
 ![Profile Page](./screenshots/SIGN_UP_SCREEN.png)
 
 ### 9. **Forget Password Page**  
 *Description*: Update User Information And View Order History.
-<br />
 <br />
 ![Profile Page](./screenshots/FORGET_PASSWORD_SCREEN.png)
 
