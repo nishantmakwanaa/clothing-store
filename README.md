@@ -37,17 +37,11 @@ Below Are The Screenshots Of Each Page In The App :
 ### 7. **Login Page**  
 ![Login Page](./screenshots/LOGIN_SCREEN.png)
 
-### 8. **Sign-Up Page** and **Forget Password Page**  
-<div style="display: flex; justify-content: space-between;">
-  <div style="width: 48%;">
-    <h4>Sign-Up Page</h4>
-    <img src="./screenshots/SIGN_UP_SCREEN.png" alt="Sign Up Page" width="100%" />
-  </div>
-  <div style="width: 48%;">
-    <h4>Forget Password Page</h4>
-    <img src="./screenshots/FORGET_PASSWORD_SCREEN.png" alt="Forget Password Page" width="100%" />
-  </div>
-</div>
+### 8. **Sing-Up Page**  
+![Login Page](./screenshots/SIGN_UP_SCREEN.png)
+
+### 9. **Forget Password Page**  
+![Login Page](./screenshots/FORGET_PASSWORD_SCREEN.png)
 
 ---
 
