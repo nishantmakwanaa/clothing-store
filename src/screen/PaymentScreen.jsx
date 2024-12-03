@@ -23,7 +23,7 @@ const PaymentScreen = () => {
         <Text style={styles.productPriceText}>${productPrice}</Text>
       </View>
       <View style={styles.paymentContainer}>
-        <Text style={styles.paymentText}>Select Payment Method:</Text>
+        <Text style={styles.paymentText}>Select Payment Method :</Text>
         <TouchableOpacity style={styles.paymentButton}>
           <Text style={styles.paymentButtonText}>Credit/Debit Card</Text>
         </TouchableOpacity>
@@ -31,7 +31,7 @@ const PaymentScreen = () => {
           <Text style={styles.paymentButtonText}>PayPal</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.paymentButton}>
-          <Text style={styles.paymentButtonText}>Cash on Delivery</Text>
+          <Text style={styles.paymentButtonText}>Cash On Delivery</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity

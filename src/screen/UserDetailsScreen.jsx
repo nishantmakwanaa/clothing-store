@@ -30,17 +30,17 @@ const UserDetailsScreen = () => {
 
         <View style={styles.detailsContainer}>
           <View style={styles.flexRowContainer}>
-            <Text style={styles.detailsTitle}>Phone:</Text>
+            <Text style={styles.detailsTitle}>Phone :</Text>
             <Text style={styles.detailsValue}>{user.phone}</Text>
           </View>
 
           <View style={styles.flexRowContainer}>
-            <Text style={styles.detailsTitle}>Address:</Text>
+            <Text style={styles.detailsTitle}>Address :</Text>
             <Text style={styles.detailsValue}>{user.address}</Text>
           </View>
 
           <View style={styles.flexRowContainer}>
-            <Text style={styles.detailsTitle}>Joined:</Text>
+            <Text style={styles.detailsTitle}>Joined :</Text>
             <Text style={styles.detailsValue}>{user.joinedDate}</Text>
           </View>
         </View>

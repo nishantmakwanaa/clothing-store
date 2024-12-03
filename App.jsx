@@ -95,11 +95,11 @@ const App = () => {
 
   return (
     <UserContextProvider>
-    <NavigationContainer>
-      <CartProvider>
-        {isAuthenticated ? <MainApp /> : <AuthStack />}
-      </CartProvider>
-    </NavigationContainer>
+      <NavigationContainer>
+        <CartProvider>
+          {isAuthenticated ? <MainApp /> : <AuthStack />}
+        </CartProvider>
+      </NavigationContainer>
     </UserContextProvider>
   );
 };

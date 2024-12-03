@@ -20,12 +20,12 @@ const ReorderScreen = () => {
       <View style={styles.contentContainer}>
         <Text style={[styles.fontText, styles.titleText]}>Reorder</Text>
         <Text style={[styles.fontText, styles.descriptionText]}>
-          Reorder your previous items with just one click.
+          Reorder Your Previous Items With Just One Click.
         </Text>
 
         <View style={styles.reorderItemContainer}>
           <Text style={styles.reorderItemText}>Product Name</Text>
-          <Text style={styles.reorderItemText}>Price: $xx.xx</Text>
+          <Text style={styles.reorderItemText}>Price : $xx.xx</Text>
         </View>
 
         <TouchableOpacity style={styles.button} onPress={handleReorder}>

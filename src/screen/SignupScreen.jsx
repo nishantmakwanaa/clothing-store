@@ -34,28 +34,28 @@ const SignupScreen = () => {
         <Text style={styles.inputLabel}>First Name</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your first name"
+          placeholder="Enter Your First Name"
           value={firstName}
           onChangeText={setFirstName}
         />
         <Text style={styles.inputLabel}>Last Name</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your last name"
+          placeholder="Enter Your Last Name"
           value={lastName}
           onChangeText={setLastName}
         />
-        <Text style={styles.inputLabel}>Email</Text>
+        <Text style={styles.inputLabel}>E-Mail</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your email"
+          placeholder="Enter Your E-Mail"
           value={email}
           onChangeText={setEmail}
         />
         <Text style={styles.inputLabel}>Password</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your password"
+          placeholder="Enter Your Password"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
@@ -63,7 +63,7 @@ const SignupScreen = () => {
         <Text style={styles.inputLabel}>Mobile</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your mobile number"
+          placeholder="Enter Your Mobile Number"
           value={mobile}
           onChangeText={setMobile}
           keyboardType="phone-pad"
@@ -72,7 +72,7 @@ const SignupScreen = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
         <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already have an account?</Text>
+          <Text style={styles.loginText}>Already Have An Account ?</Text>
           <TouchableOpacity onPress={handleLoginRedirect}>
             <Text style={styles.loginLink}>Login</Text>
           </TouchableOpacity>

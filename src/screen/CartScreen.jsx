@@ -53,16 +53,16 @@ const CartScreen = () => {
           <>
             <View style={styles.bottomContentContainer}>
               <View style={styles.flexRowContainer}>
-                <Text style={styles.titleText}>Total:</Text>
+                <Text style={styles.titleText}>Total :</Text>
                 <Text style={styles.priceText}>${totalPrice}</Text>
               </View>
               <View style={styles.flexRowContainer}>
-                <Text style={styles.titleText}>Shipping:</Text>
+                <Text style={styles.titleText}>Shipping :</Text>
                 <Text style={styles.priceText}>$0.0</Text>
               </View>
               <View style={styles.divider} />
               <View style={styles.flexRowContainer}>
-                <Text style={styles.titleText}>Grand Total:</Text>
+                <Text style={styles.titleText}>Grand Total :</Text>
                 <Text style={[styles.priceText, styles.grandPriceText]}>
                   ${totalPrice}
                 </Text>

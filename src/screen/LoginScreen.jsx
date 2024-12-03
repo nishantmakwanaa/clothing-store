@@ -24,12 +24,16 @@ const LoginScreen = () => {
       setIsAuthenticated(true);
       navigation.navigate("HOME_STACK");
     } else {
-      alert("Invalid credentials. Please try again.");
+      alert("Invalid Credentials. Please Try Again...");
     }
   };
 
   const handleForgotPassword = () => {
     navigation.navigate("FORGOT_PASSWORD");
+  };
+
+  const handleSignUp = () => {
+    navigation.navigate("SIGNUP");
   };
 
   return (
@@ -41,14 +45,14 @@ const LoginScreen = () => {
         <Text style={styles.inputLabel}>Email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your email"
+          placeholder="Enter Your E-Mail"
           value={email}
           onChangeText={setEmail}
         />
         <Text style={styles.inputLabel}>Password</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your password"
+          placeholder="Enter Your Password"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
@@ -58,7 +62,13 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleSignUp}>
+          <Text style={styles.forgotPasswordText}>
+            New To App ? Sign Up Now !
+          </Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

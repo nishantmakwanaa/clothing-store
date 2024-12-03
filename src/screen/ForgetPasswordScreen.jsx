@@ -15,13 +15,13 @@ const ForgetPasswordScreen = ({ navigation }) => {
 
   const handleResetPassword = () => {
     if (email.trim() === "") {
-      Alert.alert("Error", "Please enter your email address.");
+      Alert.alert("Error", "Please Enter Your E-Mail Address.");
       return;
     }
 
     Alert.alert(
       "Password Reset",
-      `If an account with ${email} exists, instructions to reset the password will be sent to this email.`
+      `If An Account With ${email} Exists, Instructions To Reset The Password Will Be Sent To This E-mail.`
     );
     navigation.navigate("LOGIN");
   };
@@ -33,8 +33,8 @@ const ForgetPasswordScreen = ({ navigation }) => {
       </View>
       <View style={styles.formContainer}>
         <Text style={styles.subtitle}>
-          Enter your registered email address, and we'll send you a link to
-          reset your password.
+          Enter Your Registered E-Mail Address, And We'll Send You A Link To
+          Reset Your Password.
         </Text>
         <Text style={styles.inputLabel}>Email</Text>
         <TextInput

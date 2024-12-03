@@ -11,18 +11,15 @@ const AccountScreen = () => {
   const { setIsAuthenticated } = useAuth();
 
   const handleLogout = () => {
-    console.log("Logging out...");
     setIsAuthenticated(false);
     navigation.navigate("LoginScreen");
   };
 
   const handleSettings = () => {
-    console.log("Navigating to Settings...");
     navigation.navigate("SETTINGS");
   };
 
   const handleProfile = () => {
-    console.log("Navigating to Profile...");
     navigation.navigate("USER_DETAILS");
   };
 
@@ -34,9 +31,9 @@ const AccountScreen = () => {
       <View style={styles.contentContainer}>
         <Text style={[styles.fontText, styles.titleText]}>Account</Text>
         <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Username: John Doe</Text>
-          <Text style={styles.infoText}>Email: johndoe@example.com</Text>
-          <Text style={styles.infoText}>Phone: 123-456-7890</Text>
+          <Text style={styles.infoText}>User Name : John Doe</Text>
+          <Text style={styles.infoText}>E-Mail : johndoe@example.com</Text>
+          <Text style={styles.infoText}>Phone : 123-456-7890</Text>
         </View>
 
         <TouchableOpacity style={styles.button} onPress={handleProfile}>
