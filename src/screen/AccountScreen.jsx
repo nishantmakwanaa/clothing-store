@@ -21,7 +21,7 @@ const AccountScreen = () => {
       <View style={styles.contentContainer}>
         <View style={styles.profileHeader}>
           <Image
-            source={{ uri: user.profileImage }}
+            source={require("../assets/Ellipse2.png")}
             style={styles.profileImage}
           />
           <Text style={styles.userName}>{user.name}</Text>
