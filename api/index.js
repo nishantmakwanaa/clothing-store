@@ -107,16 +107,21 @@ app.post("/login", async (req, res) => {
 
 app.get("/check-auth", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ isAuthenticated: false });
+  if (!token) {
+    return res.status(401).json({ isAuthenticated: false });
+  }
 
   try {
     const decoded = jwt.verify(token, secretKey);
-    const user = await User.findById(decoded.userId);
-    if (!user) return res.status(401).json({ isAuthenticated: false });
-
-    res.status(200).json({ isAuthenticated: true });
+    const userId = decoded.userId;
+    const user = await User.findById(userId);
+    if (user) {
+      return res.status(200).json({ isAuthenticated: true });
+    } else {
+      return res.status(401).json({ isAuthenticated: false });
+    }
   } catch (err) {
-    res.status(401).json({ isAuthenticated: false });
+    return res.status(401).json({ isAuthenticated: false });
   }
 });
 
