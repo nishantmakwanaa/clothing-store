@@ -36,7 +36,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
       if (response.ok) {
         Alert.alert(
           "Password Reset",
-          `If An Account With ${email} Exists, Instructions To Reset The Password Will Be Sent To This E-Mil.`
+          `If An Account With ${email} Exists, Instructions To Reset The Password Will Be Sent To This E-Mail.`
         );
         navigation.navigate("LOGIN");
       } else {

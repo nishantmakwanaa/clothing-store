@@ -55,6 +55,10 @@ const LoginScreen = () => {
     }
   };
 
+  const handleForgetPassword = () => {
+    navigation.navigate("FORGOT_PASSWORD");
+  };
+
   const handleSignUpRedirect = () => {
     navigation.navigate("SIGNUP");
   };
@@ -94,9 +98,16 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>New to App?</Text>
+          <Text style={styles.signupText}>Forget Password ?</Text>
+          <TouchableOpacity onPress={handleForgetPassword}>
+            <Text style={styles.signupLink}>Click Here</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>New to App ?</Text>
           <TouchableOpacity onPress={handleSignUpRedirect}>
-            <Text style={styles.signupLink}>Sign Up Now!</Text>
+            <Text style={styles.signupLink}>Sign Up Now !</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -163,9 +174,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    fontSize: 14,
     marginTop: 10,
     textAlign: "center",
+    fontSize: 14,
   },
 });
 
