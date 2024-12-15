@@ -39,16 +39,23 @@ const AccountScreen = ({ navigation }) => {
     try {
       setLoading(true);
       setError(false);
-      const response = await axios.get(
-        "https://clothing-store-vbrf.onrender.com/profile"
-      );
+
+      const token = user?.token; // Get token from user context (if any)
+
+      // Fetch user data from the API
+      const response = await axios.get("https://your-api-url.com/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       if (response.status === 200) {
         setUserData(response.data);
       } else {
         throw new Error("Failed To Load Data");
       }
     } catch (error) {
-      console.error("Error Fetching User Data :", error);
+      console.error("Error Fetching User Data:", error);
       setUserData(null);
       setError(true);
     } finally {
@@ -99,7 +106,7 @@ const AccountScreen = ({ navigation }) => {
                     source={{
                       uri:
                         userData.profileImage ||
-                        "https://clothing-store-vbrf.onrender.com/profile/default.jpg",
+                        "https://your-api-url.com/profile/default.jpg",
                     }}
                     style={styles.profileImage}
                   />
