@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
 const products = require("./data/data.json");
 
 app.use(
@@ -8,6 +9,8 @@ app.use(
     origin: "*",
   })
 );
+
+app.use("/images", express.static(path.join(__dirname, "data/images")));
 
 app.use(express.json());
 

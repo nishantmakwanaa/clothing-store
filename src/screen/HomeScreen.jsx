@@ -23,7 +23,7 @@ const HomeScreen = () => {
     const getProducts = async () => {
       try {
         const fetchedProducts = await fetchProducts();
-        setProducts(fetchedProducts);
+        setProducts(fetchedProducts.products);
       } catch (error) {
         console.error("Error Fetching Products From API.JS : ", error);
       } finally {

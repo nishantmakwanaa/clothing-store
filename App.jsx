@@ -58,7 +58,6 @@ const tabScreens = [
     iconFocused: require("./src/assets/focused/account.png"),
     iconNormal: require("./src/assets/normal/account.png"),
   },
-
   {
     name: "SETTINGS",
     component: SettingsScreen,
