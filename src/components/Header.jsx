@@ -1,10 +1,28 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { fonts } from "../utils/fonts";
 import { useNavigation } from "@react-navigation/native";
+import { fetchProducts } from "../utils/api";
 
 const Header = ({ isHome }) => {
   const navigation = useNavigation();
+  const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() => {
+    const getProfileImage = async () => {
+      try {
+        await fetchProducts();
+
+        setProfileImage(
+          "https://clothing-store-vbrf.onrender.com/images/Ellipse2.png"
+        );
+      } catch (error) {
+        console.error("Error Fetching Profile Image From API.JS", error);
+      }
+    };
+
+    getProfileImage();
+  }, []);
 
   const handleBack = () => {
     if (navigation.canGoBack()) {
@@ -32,10 +50,11 @@ const Header = ({ isHome }) => {
         </TouchableOpacity>
       )}
       <TouchableOpacity onPress={handleProfileClick}>
-        <Image
-          source={require("../assets/Ellipse2.png")}
-          style={styles.profileImage}
-        />
+        {profileImage ? (
+          <Image source={{ uri: profileImage }} style={styles.profileImage} />
+        ) : (
+          <Text>Loading...</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -64,6 +83,7 @@ const styles = StyleSheet.create({
   profileImage: {
     height: 44,
     width: 44,
+    borderRadius: 22,
   },
   header: {
     flexDirection: "row",
