@@ -20,46 +20,44 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const { setIsAuthenticated } = useAuth();
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      setError("Both Fields Are Required.");
-      return;
-    }
+ const handleLogin = async () => {
+   if (!email || !password) {
+     setError("Both Fields Are Required.");
+     return;
+   }
 
-    setLoading(true);
-    setError(null);
+   setLoading(true);
+   setError(null);
 
-    try {
-      const response = await fetch(
-        "https://clothing-store-vbrf.onrender.com/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+   try {
+     const response = await fetch(
+       "https://clothing-store-vbrf.onrender.com/login",
+       {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+           email,
+           password,
+         }),
+       }
+     );
 
-      const data = await response.json();
+     const data = await response.json();
 
-      if (response.ok) {
-        await AsyncStorage.setItem("authToken", data.token);
-        setIsAuthenticated(true);
-
-        navigation.replace("HOME");
-      } else {
-        setError(data.message || "Login Failed. Please Try Again.");
-      }
-    } catch (err) {
-      setError("Something Went Wrong. Please Try Again Later.");
-    } finally {
-      setLoading(false);
-    }
-  };
+     if (response.ok) {
+       await login(email, password);
+       navigation.replace("HOME");
+     } else {
+       setError(data.message || "Login Failed. Please Try Again.");
+     }
+   } catch (err) {
+     setError("Something Went Wrong. Please Try Again Later.");
+   } finally {
+     setLoading(false);
+   }
+ };
 
   const handleForgetPassword = () => {
     navigation.navigate("FORGOT_PASSWORD");
