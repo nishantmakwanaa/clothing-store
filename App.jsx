@@ -133,7 +133,7 @@ const App = () => {
         setAuthStatus(false);
       }
     } catch (error) {
-      console.error("Error checking auth status:", error);
+      console.error("Error Checking Auth Status :", error);
       setAuthStatus(false);
     }
   };

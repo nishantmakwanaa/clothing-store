@@ -43,6 +43,21 @@ const generateToken = (userId) => {
   return jwt.sign({ userId }, secretKey, { expiresIn: "1h" });
 };
 
+const authMiddleware = async (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "No Token Provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    req.userId = decoded.userId;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid Or Expired Token" });
+  }
+};
+
 app.get("/", (req, res) => {
   res.send("Server Is Running");
 });
@@ -105,22 +120,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/check-auth", async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ isAuthenticated: false });
-  }
-
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    const userId = decoded.userId;
-    const user = await User.findById(userId);
-    if (user) {
-      return res.status(200).json({ isAuthenticated: true });
-    } else {
-      return res.status(401).json({ isAuthenticated: false });
-    }
-  } catch (err) {
+app.get("/check-auth", authMiddleware, async (req, res) => {
+  const user = await User.findById(req.userId);
+  if (user) {
+    return res.status(200).json({ isAuthenticated: true });
+  } else {
     return res.status(401).json({ isAuthenticated: false });
   }
 });
@@ -135,18 +139,14 @@ app.post("/forgetpassword", async (req, res) => {
 
     res.status(200).json({ message: "Password Reset Link Sent" });
   } catch (err) {
-    res.status(500).json({ message: "Database Error" });
+    res.status(500).json({ message: "DataBase Error" });
   }
 });
 
-app.get("/profile/cart", async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "No Token Provided" });
+app.get("/profile/cart", authMiddleware, async (req, res) => {
+  const userId = req.userId;
 
   try {
-    const decoded = jwt.verify(token, secretKey);
-    const userId = decoded.userId;
-
     const cartItems = await Cart.find({ userId }).populate("productId");
     res.status(200).json({ cartItems });
   } catch (err) {
@@ -154,15 +154,11 @@ app.get("/profile/cart", async (req, res) => {
   }
 });
 
-app.post("/profile/cart", async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "No Token Provided" });
+app.post("/profile/cart", authMiddleware, async (req, res) => {
+  const userId = req.userId;
+  const { productId, quantity } = req.body;
 
   try {
-    const decoded = jwt.verify(token, secretKey);
-    const userId = decoded.userId;
-    const { productId, quantity } = req.body;
-
     const cartItem = new Cart({ userId, productId, quantity });
     await cartItem.save();
     res.status(200).json({ message: "Item Added To Cart" });
@@ -171,15 +167,11 @@ app.post("/profile/cart", async (req, res) => {
   }
 });
 
-app.delete("/profile/cart/:itemId", async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "No Token Provided" });
+app.delete("/profile/cart/:itemId", authMiddleware, async (req, res) => {
+  const userId = req.userId;
+  const itemId = req.params.itemId;
 
   try {
-    const decoded = jwt.verify(token, secretKey);
-    const userId = decoded.userId;
-    const itemId = req.params.itemId;
-
     const result = await Cart.deleteOne({ _id: itemId, userId });
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Item Not Found In Cart" });
