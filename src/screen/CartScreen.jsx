@@ -70,7 +70,7 @@ const CartScreen = () => {
               </View>
               <View style={styles.flexRowContainer}>
                 <Text style={styles.titleText}>Shipping :</Text>
-                <Text style={styles.priceText}>$0.0</Text>
+                <Text style={styles.priceText}>₹ 0.0</Text>
               </View>
               <View style={styles.divider} />
               <View style={styles.flexRowContainer}>
