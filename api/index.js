@@ -9,6 +9,7 @@ const products = require("./data/data.json");
 
 const dbURI =
   "mongodb+srv://NISHANT:NISHANT@nishant.c1g7o.mongodb.net/?retryWrites=true&w=majority&appName=NISHANT"; // Replace with your MongoDB Atlas connection string
+
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected To MongoDB Atlas"))
@@ -26,17 +27,27 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+const User = mongoose.model("User", userSchema);
+
 const cartSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  productId: Number,
+  productId: { type: Number, required: true },
   quantity: { type: Number, default: 1 },
   addedAt: { type: Date, default: Date.now },
 });
 
-const User = mongoose.model("User", userSchema);
 const Cart = mongoose.model("Cart", cartSchema);
 
-const saltRounds = 10;
+const productSchema = new mongoose.Schema({
+  productId: { type: Number, required: true, unique: true },
+  name: String,
+  price: Number,
+  description: String,
+  imageUrl: String,
+});
+
+const Product = mongoose.model("Product", productSchema);
+
 const secretKey = "your_secret_key";
 
 const generateToken = (userId) => {
@@ -48,7 +59,7 @@ const authMiddleware = async (req, res, next) => {
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res
       .status(401)
-      .json({ message: "Authorization Header Missing or Malformed" });
+      .json({ message: "Authorization Header Missing or Mailformed" });
   }
 
   const token = authHeader.split(" ")[1];
@@ -81,7 +92,7 @@ app.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "Email Already Exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       firstName,
       lastName,
@@ -127,54 +138,17 @@ app.get("/profile", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
     if (!user) return res.status(404).json({ message: "User Not Found" });
-    res.json({
-      name: `${user.firstName} ${user.lastName}`,
-      email: user.email,
-      phone: user.phone || null,
-      address: user.address || null,
-      joinedDate: user.createdAt,
-      profileImage: user.profileImage || null,
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Failed To Fetch User Profile" });
-  }
-});
 
-app.get("/check-auth", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.userId);
-    if (user) {
-      return res.status(200).json({ isAuthenticated: true });
-    } else {
-      return res.status(404).json({ isAuthenticated: false });
-    }
-  } catch (err) {
-    res.status(500).json({ message: "Database Error" });
-  }
-});
-
-app.post("/forgetpassword", async (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ message: "Email Is Required" });
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "Email Not Found" });
-
-    res.status(200).json({ message: "Password Reset Link Sent" });
-  } catch (err) {
-    res.status(500).json({ message: "Database Error" });
-  }
-});
-
-app.get("/profile/cart", authMiddleware, async (req, res) => {
-  try {
     const cartItems = await Cart.find({ userId: req.userId }).populate(
       "productId"
     );
-    res.status(200).json({ cartItems });
+    res.json({
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      cartItems,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Database Error" });
+    res.status(500).json({ message: "Failed To Fetch User Profile" });
   }
 });
 
@@ -206,7 +180,6 @@ app.delete("/profile/cart/:itemId", authMiddleware, async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-  console.log(`Server Is Running on: http://localhost:${PORT}`);
+  console.log(`Server Is Running On : http://localhost:${PORT}`);
 });

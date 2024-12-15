@@ -17,6 +17,7 @@ const AccountScreen = ({ navigation }) => {
   const { user, logOut } = useContext(UserContext);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const handleLogOut = () => {
     logOut();
@@ -37,13 +38,9 @@ const AccountScreen = ({ navigation }) => {
   const fetchUserData = async () => {
     try {
       setLoading(true);
+      setError(false);
       const response = await axios.get(
-        "https://clothing-store-vbrf.onrender.com/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
+        "https://clothing-store-vbrf.onrender.com/profile"
       );
       if (response.status === 200) {
         setUserData(response.data);
@@ -53,6 +50,7 @@ const AccountScreen = ({ navigation }) => {
     } catch (error) {
       console.error("Error Fetching User Data :", error);
       setUserData(null);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -83,47 +81,8 @@ const AccountScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.contentContainer}>
-        {userData ? (
-          <>
-            <View style={styles.profileHeader}>
-              <Image
-                source={{
-                  uri:
-                    userData.profileImage ||
-                    "https://path-to-placeholder-image.jpg",
-                }}
-                style={styles.profileImage}
-              />
-              <Text style={styles.userName}>{userData.name}</Text>
-              <Text style={styles.userEmail}>{userData.email}</Text>
-            </View>
-
-            <View style={styles.detailsContainer}>
-              <View style={styles.flexRowContainer}>
-                <Text style={styles.detailsTitle}>Phone :</Text>
-                <Text style={styles.detailsValue}>
-                  {userData.phone || "Loading..."}
-                </Text>
-              </View>
-
-              <View style={styles.flexRowContainer}>
-                <Text style={styles.detailsTitle}>Address :</Text>
-                <Text style={styles.detailsValue}>
-                  {userData.address || "Loading..."}
-                </Text>
-              </View>
-
-              <View style={styles.flexRowContainer}>
-                <Text style={styles.detailsTitle}>Joined :</Text>
-                <Text style={styles.detailsValue}>
-                  {userData.joinedDate || "Loading..."}
-                </Text>
-              </View>
-            </View>
-          </>
-        ) : (
+        {error ? (
           <View>
-            <Text style={styles.errorText}>Failed To Load User Data.</Text>
             <TouchableOpacity
               style={styles.retryButton}
               onPress={fetchUserData}
@@ -131,11 +90,56 @@ const AccountScreen = ({ navigation }) => {
               <Text style={styles.retryText}>Retry</Text>
             </TouchableOpacity>
           </View>
-        )}
+        ) : (
+          <>
+            {userData && (
+              <View>
+                <View style={styles.profileHeader}>
+                  <Image
+                    source={{
+                      uri:
+                        userData.profileImage ||
+                        "https://clothing-store-vbrf.onrender.com/profile/default.jpg",
+                    }}
+                    style={styles.profileImage}
+                  />
+                  <Text style={styles.userName}>{userData.name}</Text>
+                  <Text style={styles.userEmail}>{userData.email}</Text>
+                </View>
 
-        <TouchableOpacity style={styles.logOutButton} onPress={handleLogOut}>
-          <Text style={styles.buttonText}>Log Out</Text>
-        </TouchableOpacity>
+                <View style={styles.detailsContainer}>
+                  <View style={styles.flexRowContainer}>
+                    <Text style={styles.detailsTitle}>Phone :</Text>
+                    <Text style={styles.detailsValue}>
+                      {userData.phone || "Loading..."}
+                    </Text>
+                  </View>
+
+                  <View style={styles.flexRowContainer}>
+                    <Text style={styles.detailsTitle}>Address :</Text>
+                    <Text style={styles.detailsValue}>
+                      {userData.address || "Loading..."}
+                    </Text>
+                  </View>
+
+                  <View style={styles.flexRowContainer}>
+                    <Text style={styles.detailsTitle}>Joined :</Text>
+                    <Text style={styles.detailsValue}>
+                      {userData.joinedDate || "Loading..."}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+
+            <TouchableOpacity
+              style={styles.logOutButton}
+              onPress={handleLogOut}
+            >
+              <Text style={styles.buttonText}>Log Out</Text>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     </LinearGradient>
   );
