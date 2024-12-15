@@ -105,6 +105,21 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/check-auth", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ isAuthenticated: false });
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    const user = await User.findById(decoded.userId);
+    if (!user) return res.status(401).json({ isAuthenticated: false });
+
+    res.status(200).json({ isAuthenticated: true });
+  } catch (err) {
+    res.status(401).json({ isAuthenticated: false });
+  }
+});
+
 app.post("/forgetpassword", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email Is Required" });

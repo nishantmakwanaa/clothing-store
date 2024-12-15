@@ -124,7 +124,9 @@ const App = () => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get("http://your-backend-url/check-auth");
+      const response = await axios.get(
+        "https://clothing-store-vbrf.onrender.com/check-auth"
+      );
       if (response.data.isAuthenticated) {
         setAuthStatus(true);
       } else {
