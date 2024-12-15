@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const products = require("./data/data.json");
 
 const dbURI =
-  "mongodb+srv://NISHANT:<NISHANT>@nishant.c1g7o.mongodb.net/?retryWrites=true&w=majority&appName=NISHANT"; // Replace with your MongoDB Atlas connection string
+  "mongodb+srv://NISHANT:NISHANT@nishant.c1g7o.mongodb.net/?retryWrites=true&w=majority&appName=NISHANT"; // Replace with your MongoDB Atlas connection string
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected To MongoDB Atlas"))
