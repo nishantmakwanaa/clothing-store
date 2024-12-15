@@ -20,9 +20,34 @@ const SignupScreen = () => {
   const [error, setError] = useState(null);
   const navigation = useNavigation();
 
+  const validateEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return regex.test(email);
+  };
+
+  const validateMobile = (mobile) => {
+    const regex = /^[0-9]{10}$/;
+    return regex.test(mobile);
+  };
+
   const handleSignUp = async () => {
     if (!firstName || !lastName || !email || !password || !mobile) {
-      setError("All fields are required.");
+      setError("All Fields Are Required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please Enter A Valid E-Mail Address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password Must Be At Least 6 Characters.");
+      return;
+    }
+
+    if (!validateMobile(mobile)) {
+      setError("Please Enter A Valid Mobile Number.");
       return;
     }
 
