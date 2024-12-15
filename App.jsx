@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import axios from "axios";
 import { CartProvider } from "./src/context/CartContext";
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
 import HomeScreen from "./src/screen/HomeScreen";
@@ -17,6 +18,38 @@ import { UserContextProvider } from "./src/context/UserContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+const loginUser = async (email, password) => {
+  try {
+    const response = await axios.post(
+      "https://clothing-store-vbrf.onrender.com/login",
+      {
+        email,
+        password,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Login failed", error);
+    throw error;
+  }
+};
+
+const registerUser = async (email, password) => {
+  try {
+    const response = await axios.post(
+      "https://clothing-store-vbrf.onrender.com/signup",
+      {
+        email,
+        password,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Signup failed", error);
+    throw error;
+  }
+};
 
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -87,7 +120,25 @@ const MainApp = () => (
 );
 
 const App = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setAuthStatus } = useAuth();
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await axios.get("http://your-backend-url/check-auth");
+      if (response.data.isAuthenticated) {
+        setAuthStatus(true);
+      } else {
+        setAuthStatus(false);
+      }
+    } catch (error) {
+      console.error("Error checking auth status:", error);
+      setAuthStatus(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
   return (
     <UserContextProvider>

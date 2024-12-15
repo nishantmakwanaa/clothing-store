@@ -5,34 +5,57 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../context/AuthContext";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigation = useNavigation();
 
-  const hardcodedEmail = "xyz@gmail.com";
-  const hardcodedPassword = "xyz";
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Both Fields Are Required.");
+      return;
+    }
 
-  const handleLogin = () => {
-    if (email === hardcodedEmail && password === hardcodedPassword) {
-      setIsAuthenticated(true);
-      navigation.navigate("HOME");
-    } else {
-      alert("Invalid Credentials. Please Try Again...");
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        "https://clothing-store-vbrf.onrender.com/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigation.navigate("HOME");
+      } else {
+        setError(data.message || "Login Failed. Please Try Again.");
+      }
+    } catch (err) {
+      setError("Something Went Wrong. Please Try Again Later.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleForgotPassword = () => {
-    navigation.navigate("FORGOT_PASSWORD");
-  };
-
-  const handleSignUp = () => {
+  const handleSignUpRedirect = () => {
     navigation.navigate("SIGNUP");
   };
 
@@ -42,7 +65,7 @@ const LoginScreen = () => {
         <Text style={styles.headerText}>Login</Text>
       </View>
       <View style={styles.formContainer}>
-        <Text style={styles.inputLabel}>Email</Text>
+        <Text style={styles.inputLabel}>E-Mail</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter Your E-Mail"
@@ -57,19 +80,25 @@ const LoginScreen = () => {
           value={password}
           onChangeText={setPassword}
         />
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
+        {error && <Text style={styles.errorText}>{error}</Text>}
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Login</Text>
+          )}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={handleSignUp}>
-          <Text style={styles.forgotPasswordText}>
-            New To App ? Sign Up Now !
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>New to App?</Text>
+          <TouchableOpacity onPress={handleSignUpRedirect}>
+            <Text style={styles.signupLink}>Sign Up Now!</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </LinearGradient>
   );
@@ -78,51 +107,65 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
   },
   header: {
     alignItems: "center",
-    justifyContent: "center",
-    padding: 50,
+    marginTop: 50,
   },
   headerText: {
-    fontSize: 35,
-    fontWeight: "bold",
+    fontSize: 30,
+    fontWeight: "700",
     color: "#444444",
   },
   formContainer: {
-    padding: 20,
+    marginTop: 50,
   },
   inputLabel: {
     fontSize: 16,
-    fontWeight: "600",
     color: "#444444",
-    marginBottom: 8,
   },
   input: {
     height: 50,
+    borderColor: "#E96E6E",
     borderWidth: 1,
-    borderColor: "#ddd",
     borderRadius: 10,
+    marginTop: 10,
     paddingLeft: 15,
-    marginBottom: 20,
+    fontSize: 16,
   },
-  button: {
+  submitButton: {
     backgroundColor: "#E96E6E",
     height: 50,
-    alignItems: "center",
     justifyContent: "center",
-    borderRadius: 20,
+    alignItems: "center",
+    borderRadius: 10,
+    marginTop: 30,
   },
   buttonText: {
-    fontSize: 18,
     color: "#FFFFFF",
+    fontSize: 18,
     fontWeight: "700",
   },
-  forgotPasswordText: {
-    fontSize: 16,
-    color: "#E96E6E",
-    textAlign: "center",
+  signupContainer: {
     marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  signupText: {
+    fontSize: 14,
+    color: "#444444",
+  },
+  signupLink: {
+    fontSize: 14,
+    color: "#E96E6E",
+    marginLeft: 5,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: "center",
   },
 });
 

@@ -13,17 +13,41 @@ import { fonts } from "../utils/fonts";
 const ForgetPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
 
-  const handleResetPassword = () => {
+  const handleResetPassword = async () => {
     if (email.trim() === "") {
       Alert.alert("Error", "Please Enter Your E-Mail Address.");
       return;
     }
 
-    Alert.alert(
-      "Password Reset",
-      `If An Account With ${email} Exists, Instructions To Reset The Password Will Be Sent To This E-mail.`
-    );
-    navigation.navigate("LOGIN");
+    try {
+      const response = await fetch(
+        "https://clothing-store-vbrf.onrender.com/forgetpassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert(
+          "Password Reset",
+          `If An Account With ${email} Exists, Instructions To Reset The Password Will Be Sent To This E-Mil.`
+        );
+        navigation.navigate("LOGIN");
+      } else {
+        Alert.alert(
+          "Error",
+          data.message || "An Error Occurred. Please Try Again."
+        );
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed To Communicate With The Server.");
+    }
   };
 
   return (

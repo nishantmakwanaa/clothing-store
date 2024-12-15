@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -15,10 +16,49 @@ const SignupScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigation = useNavigation();
 
-  const handleSignUp = () => {
-    navigation.navigate("LOGIN");
+  const handleSignUp = async () => {
+    if (!firstName || !lastName || !email || !password || !mobile) {
+      setError("All fields are required.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        "https://clothing-store-vbrf.onrender.com/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            password,
+            mobile,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigation.navigate("LOGIN");
+      } else {
+        setError(data.message || "Signup Failed. Please Try Again.");
+      }
+    } catch (err) {
+      setError("Something Went Wrong. Please Try Again Later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLoginRedirect = () => {
@@ -68,8 +108,17 @@ const SignupScreen = () => {
           onChangeText={setMobile}
           keyboardType="phone-pad"
         />
-        <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+        {error && <Text style={styles.errorText}>{error}</Text>}
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleSignUp}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Sign Up</Text>
+          )}
         </TouchableOpacity>
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>Already Have An Account ?</Text>
@@ -138,6 +187,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#E96E6E",
     marginLeft: 5,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: "center",
   },
 });
 
