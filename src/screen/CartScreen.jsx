@@ -12,6 +12,7 @@ import CartCard from "../components/CartCard";
 import { fonts } from "../utils/fonts";
 import { CartContext } from "../context/CartContext";
 import { useNavigation } from "@react-navigation/native";
+import { Linking, Alert, Platform } from "react-native";
 
 const CartScreen = () => {
   const { cartItems, deleteCartItem, totalPrice } = useContext(CartContext);
@@ -30,7 +31,18 @@ const CartScreen = () => {
   };
 
   const handleCheckout = () => {
-    navigation.navigate("PAYMENT");
+    const upiUrl = `upi://pay?pa=your-upi-id@bankname&pn=YourName&tn=Order Payment&am=${totalPrice}&cu=INR`;
+
+    Linking.openURL(upiUrl)
+      .then(() => {
+        Alert.alert("Success", "Redirected to payment app.");
+      })
+      .catch(() => {
+        Alert.alert(
+          "Error",
+          "Failed to open UPI app. Please check if a UPI app is installed."
+        );
+      });
   };
 
   return (
@@ -69,7 +81,7 @@ const CartScreen = () => {
               </View>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleCheckout}>
-              <Text style={styles.buttonText}>Checkout</Text>
+              <Text style={styles.buttonText}>Pay With UPI</Text>
             </TouchableOpacity>
           </>
         }

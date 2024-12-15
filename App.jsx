@@ -14,7 +14,6 @@ import SignupScreen from "./src/screen/SignupScreen";
 import SettingsScreen from "./src/screen/SettingsScreen";
 import ForgetPasswordScreen from "./src/screen/ForgetPasswordScreen";
 import { UserContextProvider } from "./src/context/UserContext";
-import PaymentScreen from "./src/screen/PaymentScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -29,7 +28,6 @@ const HomeStack = () => (
 const CartStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="CART" component={CartScreen} />
-    <Stack.Screen name="PAYMENT" component={PaymentScreen} />
   </Stack.Navigator>
 );
 

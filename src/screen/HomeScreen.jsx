@@ -1,31 +1,47 @@
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   Image,
-  ImageBackground,
-  StyleSheet,
   Text,
   TextInput,
   View,
+  StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 import Tags from "../components/Tags";
 import ProductCard from "../components/ProductCard";
-import data from "../data/data.json";
+import { fetchProducts } from "../utils/api";
 import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
-  const [products, setProducts] = useState(data.products);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const fetchedProducts = await fetchProducts();
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error("Error Fetching Products From API.JS : ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getProducts();
+  }, []);
+
   const handleProductDetails = (item) => {
     navigation.navigate("PRODUCT_DETAILS", { item });
   };
+
   const toggleFavorite = (item) => {
     setProducts(
       products.map((prod) => {
         if (prod.id === item.id) {
-          console.log("prod: ", prod);
           return {
             ...prod,
             isFavorite: !prod.isFavorite,
@@ -41,19 +57,17 @@ const HomeScreen = () => {
       <FlatList
         ListHeaderComponent={
           <>
-            <>
-              <Header />
-              <View>
-                <Text style={styles.headingText}>Welcome To Clothify</Text>
-                <View style={styles.inputContainer}>
-                  <Image
-                    source={require("../assets/search.png")}
-                    style={styles.searchIcon}
-                  />
-                  <TextInput placeholder="Search" style={styles.textInput} />
-                </View>
+            <Header />
+            <View>
+              <Text style={styles.headingText}>Welcome To Clothify</Text>
+              <View style={styles.inputContainer}>
+                <Image
+                  source={require("../assets/search.png")}
+                  style={styles.searchIcon}
+                />
+                <TextInput placeholder="Search" style={styles.textInput} />
               </View>
-            </>
+            </View>
             <Tags />
           </>
         }
@@ -66,9 +80,12 @@ const HomeScreen = () => {
             toggleFavorite={toggleFavorite}
           />
         )}
+        keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          loading ? <Text>Loading...</Text> : <Text>No Products Found</Text>
+        }
       />
-      <View></View>
     </LinearGradient>
   );
 };

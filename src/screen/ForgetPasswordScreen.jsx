@@ -39,7 +39,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
         <Text style={styles.inputLabel}>Email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your email"
+          placeholder="Enter Your E-Mail"
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
