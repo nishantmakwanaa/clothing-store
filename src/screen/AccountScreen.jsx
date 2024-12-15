@@ -27,35 +27,36 @@ const AccountScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (user && user.token) {
-      const fetchUserData = async () => {
-        try {
-          const response = await axios.get(
-            "https://clothing-store-vbrf.onrender.com/profile",
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
-            }
-          );
-          if (response.status === 200) {
-            setUserData(response.data);
-          } else {
-            throw new Error("Failed to load data");
-          }
-        } catch (error) {
-          console.error("Error Fetching User Data :", error);
-          setUserData(null);
-        } finally {
-          setLoading(false);
-        }
-      };
-
+    if (user) {
       fetchUserData();
     } else {
       setLoading(false);
     }
   }, [user]);
+
+  const fetchUserData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://clothing-store-vbrf.onrender.com/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setUserData(response.data);
+      } else {
+        throw new Error("Failed To Load Data");
+      }
+    } catch (error) {
+      console.error("Error Fetching User Data :", error);
+      setUserData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -121,7 +122,15 @@ const AccountScreen = ({ navigation }) => {
             </View>
           </>
         ) : (
-          <Text style={styles.errorText}>Failed To Load User Data.</Text>
+          <View>
+            <Text style={styles.errorText}>Failed To Load User Data.</Text>
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={fetchUserData}
+            >
+              <Text style={styles.retryText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
         )}
 
         <TouchableOpacity style={styles.logOutButton} onPress={handleLogOut}>
@@ -204,6 +213,20 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     fontSize: 16,
+  },
+  retryText: {
+    fontSize: 20,
+    color: "#FFFFFF",
+    fontWeight: "700",
+    fontFamily: fonts.regular,
+  },
+  retryButton: {
+    backgroundColor: "#E96E6E",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    marginTop: 20,
   },
 });
 

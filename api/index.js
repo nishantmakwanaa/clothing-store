@@ -99,24 +99,44 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ message: "Email And Password Are Required" });
+    return res.status(400).json({ message: "Email and Password Required" });
   }
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid Credentials" });
+      return res.status(400).json({ message: "Invalid Email Or Password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid Credentials" });
+      return res.status(400).json({ message: "Invalid Email Or Password" });
     }
 
     const token = generateToken(user._id);
-    res.status(200).json({ message: "Login Successful", token });
+    res.json({
+      token,
+      user: { name: `${user.firstName} ${user.lastName}`, email: user.email },
+    });
   } catch (err) {
-    res.status(500).json({ message: "Database Error" });
+    res.status(500).json({ message: "Login Failed" });
+  }
+});
+
+app.get("/profile", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("-password");
+    if (!user) return res.status(404).json({ message: "User Not Found" });
+    res.json({
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      phone: user.phone || null,
+      address: user.address || null,
+      joinedDate: user.createdAt,
+      profileImage: user.profileImage || null,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed To Fetch User Profile" });
   }
 });
 

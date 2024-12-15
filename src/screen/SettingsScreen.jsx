@@ -1,14 +1,46 @@
 import { React, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Switch } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Switch,
+  Linking,
+  Alert,
+  Modal,
+  FlatList,
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 
 const SettingsScreen = () => {
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
   const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(false);
+  const [language, setLanguage] = useState("English");
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+
+  const languages = ["English", "Gujarati", "Hindi"];
 
   const toggleNotifications = () => setIsNotificationsEnabled((prev) => !prev);
   const toggleDarkMode = () => setIsDarkModeEnabled((prev) => !prev);
+
+  const openLink = async (url) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert("Error", "Unable To Open The Link.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something Went Wrong. Please Try Again Later.");
+    }
+  };
+
+  const selectLanguage = (selectedLanguage) => {
+    setLanguage(selectedLanguage);
+    setLanguageModalVisible(false);
+  };
 
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
@@ -41,23 +73,49 @@ const SettingsScreen = () => {
 
         <View style={styles.settingItemContainer}>
           <Text style={styles.settingTitle}>Language</Text>
-          <Text style={styles.settingValue}>English</Text>
-        </View>
-
-        <View style={styles.settingItemContainer}>
-          <Text style={styles.settingTitle}>Privacy Policy</Text>
-          <TouchableOpacity>
-            <Text style={styles.settingLink}>View</Text>
+          <TouchableOpacity onPress={() => setLanguageModalVisible(true)}>
+            <Text style={styles.settingValue}>{language}</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.settingItemContainer}>
-          <Text style={styles.settingTitle}>Terms of Service</Text>
-          <TouchableOpacity>
-            <Text style={styles.settingLink}>View</Text>
+          <Text style={styles.settingTitle}>Meet Developers</Text>
+          <TouchableOpacity
+            onPress={() => openLink("https://nishantworldwide.in")}
+          >
+            <Text style={styles.settingLink}>Clich Here</Text>
           </TouchableOpacity>
         </View>
       </View>
+      <Modal
+        visible={isLanguageModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setLanguageModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select Language</Text>
+            <FlatList
+              data={languages}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.languageItem}
+                  onPress={() => selectLanguage(item)}
+                >
+                  <Text style={styles.languageText}>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setLanguageModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </LinearGradient>
   );
 };
@@ -102,6 +160,46 @@ const styles = StyleSheet.create({
   settingLink: {
     fontSize: 16,
     color: "#E96E6E",
+    fontWeight: "500",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 20,
+  },
+  languageItem: {
+    padding: 15,
+    width: "100%",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E1E1E1",
+  },
+  languageText: {
+    fontSize: 18,
+    color: "#444",
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#E96E6E",
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    fontSize: 16,
+    color: "#fff",
     fontWeight: "500",
   },
 });

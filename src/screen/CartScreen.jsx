@@ -31,7 +31,7 @@ const CartScreen = () => {
   };
 
   const handleCheckout = () => {
-    const upiUrl = `upi://pay?pa=your-upi-id@bankname&pn=YourName&tn=Order Payment&am=${totalPrice}&cu=INR`;
+    const upiUrl = `upi://pay?pa=nishantmakwanacreations@oksbi&pn="Nishant Makwana"&tn=Order Payment&am=${totalPrice}&cu=INR`;
 
     Linking.openURL(upiUrl)
       .then(() => {
@@ -66,7 +66,7 @@ const CartScreen = () => {
             <View style={styles.bottomContentContainer}>
               <View style={styles.flexRowContainer}>
                 <Text style={styles.titleText}>Total :</Text>
-                <Text style={styles.priceText}>${totalPrice}</Text>
+                <Text style={styles.priceText}>₹ {totalPrice}</Text>
               </View>
               <View style={styles.flexRowContainer}>
                 <Text style={styles.titleText}>Shipping :</Text>
@@ -76,7 +76,7 @@ const CartScreen = () => {
               <View style={styles.flexRowContainer}>
                 <Text style={styles.titleText}>Grand Total :</Text>
                 <Text style={[styles.priceText, styles.grandPriceText]}>
-                  ${totalPrice}
+                  ₹ {totalPrice}
                 </Text>
               </View>
             </View>

@@ -13,7 +13,7 @@ const ProductCard = ({ item, handleProductClick, toggleFavorite }) => {
       <Image source={{ uri: item.image }} style={styles.coverImage} />
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.price}>${item.price}</Text>
+        <Text style={styles.price}>₹ {item.price}</Text>
       </View>
       <View style={styles.likeContainer}>
         <TouchableOpacity
