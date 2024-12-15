@@ -44,17 +44,20 @@ const generateToken = (userId) => {
 };
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "No Token Provided" });
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({ message: "Authorization Header Missing or Malformed" });
   }
 
+  const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, secretKey);
     req.userId = decoded.userId;
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Invalid Or Expired Token" });
+    return res.status(401).json({ message: "Invalid or Expired Token" });
   }
 };
 
@@ -69,9 +72,7 @@ app.get("/api/products", (req, res) => {
 app.post("/signup", async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   if (!email || !password) {
-    return res
-      .status(400)
-      .json({ message: "Email And Password Are Required..." });
+    return res.status(400).json({ message: "Email And Password Are Required" });
   }
 
   try {
@@ -81,7 +82,6 @@ app.post("/signup", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-
     const user = new User({
       firstName,
       lastName,
@@ -92,7 +92,7 @@ app.post("/signup", async (req, res) => {
 
     res.status(201).json({ message: "User Created Successfully" });
   } catch (err) {
-    res.status(500).json({ message: "DataBase Error" });
+    res.status(500).json({ message: "Database Error" });
   }
 });
 
@@ -121,11 +121,15 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/check-auth", authMiddleware, async (req, res) => {
-  const user = await User.findById(req.userId);
-  if (user) {
-    return res.status(200).json({ isAuthenticated: true });
-  } else {
-    return res.status(401).json({ isAuthenticated: false });
+  try {
+    const user = await User.findById(req.userId);
+    if (user) {
+      return res.status(200).json({ isAuthenticated: true });
+    } else {
+      return res.status(404).json({ isAuthenticated: false });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Database Error" });
   }
 });
 
@@ -135,51 +139,49 @@ app.post("/forgetpassword", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Email Not Found" });
+    if (!user) return res.status(404).json({ message: "Email Not Found" });
 
     res.status(200).json({ message: "Password Reset Link Sent" });
   } catch (err) {
-    res.status(500).json({ message: "DataBase Error" });
+    res.status(500).json({ message: "Database Error" });
   }
 });
 
 app.get("/profile/cart", authMiddleware, async (req, res) => {
-  const userId = req.userId;
-
   try {
-    const cartItems = await Cart.find({ userId }).populate("productId");
+    const cartItems = await Cart.find({ userId: req.userId }).populate(
+      "productId"
+    );
     res.status(200).json({ cartItems });
   } catch (err) {
-    res.status(401).json({ message: "Invalid Or Expired Token" });
+    res.status(500).json({ message: "Database Error" });
   }
 });
 
 app.post("/profile/cart", authMiddleware, async (req, res) => {
-  const userId = req.userId;
   const { productId, quantity } = req.body;
 
   try {
-    const cartItem = new Cart({ userId, productId, quantity });
+    const cartItem = new Cart({ userId: req.userId, productId, quantity });
     await cartItem.save();
-    res.status(200).json({ message: "Item Added To Cart" });
+    res.status(201).json({ message: "Item Added To Cart" });
   } catch (err) {
-    res.status(401).json({ message: "Invalid Or Expired Token" });
+    res.status(500).json({ message: "Database Error" });
   }
 });
 
 app.delete("/profile/cart/:itemId", authMiddleware, async (req, res) => {
-  const userId = req.userId;
   const itemId = req.params.itemId;
 
   try {
-    const result = await Cart.deleteOne({ _id: itemId, userId });
+    const result = await Cart.deleteOne({ _id: itemId, userId: req.userId });
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Item Not Found In Cart" });
     }
 
     res.status(200).json({ message: "Item Removed From Cart" });
   } catch (err) {
-    res.status(401).json({ message: "Invalid Or Expired Token" });
+    res.status(500).json({ message: "Database Error" });
   }
 });
 
