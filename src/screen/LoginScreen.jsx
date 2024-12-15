@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "../context/AuthContext";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +18,7 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
+  const { setIsAuthenticated } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -44,7 +47,10 @@ const LoginScreen = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigation.navigate("HOME");
+        await AsyncStorage.setItem("authToken", data.token);
+        setIsAuthenticated(true);
+
+        navigation.replace("HOME");
       } else {
         setError(data.message || "Login Failed. Please Try Again.");
       }

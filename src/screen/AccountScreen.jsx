@@ -13,40 +13,64 @@ import { fonts } from "../utils/fonts";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }) => {
   const { user, logOut } = useContext(UserContext);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const handleLogOut = () => {
     logOut();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "LOGIN" }],
+    });
   };
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "https://clothing-store-vbrf.onrender.com/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-        setUserData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error Fetching User Data :", error);
-        setLoading(false);
-      }
-    };
 
-    fetchUserData();
-  }, [user.token]);
+  useEffect(() => {
+    if (user && user.token) {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(
+            "https://clothing-store-vbrf.onrender.com/profile",
+            {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
+          if (response.status === 200) {
+            setUserData(response.data);
+          } else {
+            throw new Error("Failed to load data");
+          }
+        } catch (error) {
+          console.error("Error Fetching User Data :", error);
+          setUserData(null);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
   if (loading) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#E96E6E" />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.errorText}>
+          User Not Authenticated. Please Log In.
+        </Text>
       </View>
     );
   }
@@ -62,7 +86,11 @@ const AccountScreen = () => {
           <>
             <View style={styles.profileHeader}>
               <Image
-                source={{ uri: userData.profileImage }}
+                source={{
+                  uri:
+                    userData.profileImage ||
+                    "https://path-to-placeholder-image.jpg",
+                }}
                 style={styles.profileImage}
               />
               <Text style={styles.userName}>{userData.name}</Text>
@@ -72,17 +100,23 @@ const AccountScreen = () => {
             <View style={styles.detailsContainer}>
               <View style={styles.flexRowContainer}>
                 <Text style={styles.detailsTitle}>Phone :</Text>
-                <Text style={styles.detailsValue}>{userData.phone}</Text>
+                <Text style={styles.detailsValue}>
+                  {userData.phone || "Loading..."}
+                </Text>
               </View>
 
               <View style={styles.flexRowContainer}>
                 <Text style={styles.detailsTitle}>Address :</Text>
-                <Text style={styles.detailsValue}>{userData.address}</Text>
+                <Text style={styles.detailsValue}>
+                  {userData.address || "Loading..."}
+                </Text>
               </View>
 
               <View style={styles.flexRowContainer}>
                 <Text style={styles.detailsTitle}>Joined :</Text>
-                <Text style={styles.detailsValue}>{userData.joinedDate}</Text>
+                <Text style={styles.detailsValue}>
+                  {userData.joinedDate || "Loading..."}
+                </Text>
               </View>
             </View>
           </>
@@ -97,8 +131,6 @@ const AccountScreen = () => {
     </LinearGradient>
   );
 };
-
-export default AccountScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -174,3 +206,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default AccountScreen;

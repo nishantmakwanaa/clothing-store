@@ -3,8 +3,6 @@ import { Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CartProvider } from "./src/context/CartContext";
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
 import HomeScreen from "./src/screen/HomeScreen";
@@ -24,6 +22,8 @@ const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HOME" component={HomeScreen} />
     <Stack.Screen name="PRODUCT_DETAILS" component={ProductDetailsScreen} />
+    <Stack.Screen name="ACCOUNT" component={AccountScreen} />
+    <Stack.Screen name="SETTINGS" component={SettingsScreen} />
   </Stack.Navigator>
 );
 
@@ -89,31 +89,7 @@ const MainApp = () => (
 );
 
 const App = () => {
-  const { isAuthenticated, setAuthStatus } = useAuth();
-
-  const checkAuth = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      if (!token) throw new Error("No token found");
-
-      const response = await axios.get(
-        "https://clothing-store-vbrf.onrender.com/check-auth",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      console.log("Authentication Status :", response.data);
-    } catch (err) {
-      console.error(
-        "Error Checking Auth Status :",
-        err.response?.data || err.message
-      );
-    }
-  };
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const { isAuthenticated } = useAuth();
 
   return (
     <UserContextProvider>
