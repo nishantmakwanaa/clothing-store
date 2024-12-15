@@ -57,9 +57,7 @@ const generateToken = (userId) => {
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ message: "Authorization Header Missing or Mailformed" });
+    return res.status(401).json({ message: "Authorization Header Missing..." });
   }
 
   const token = authHeader.split(" ")[1];
