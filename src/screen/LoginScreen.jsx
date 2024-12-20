@@ -12,28 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../context/Context";
 import { useDarkMode } from "../context/DarkModeContext";
 
-const lightTheme = {
-  background: "#FDF0F3",
-  gradient: ["#FDF0F3", "#FFFBFC"],
-  textColor: "#444444",
-  inputBackground: "#FFFFFF",
-  inputTextColor: "#000000",
-  errorTextColor: "red",
-  buttonBackground: "#E96E6E",
-  linkColor: "#FF72B1",
-};
-
-const darkTheme = {
-  background: "#333333",
-  gradient: ["#333333", "#444444"],
-  textColor: "#FFFFFF",
-  inputBackground: "#555555",
-  inputTextColor: "#FFFFFF",
-  errorTextColor: "red",
-  buttonBackground: "#E96E6E",
-  linkColor: "#FF72B1",
-};
-
 const LoginScreen = () => {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
@@ -44,7 +22,7 @@ const LoginScreen = () => {
 
   const { isDarkMode } = useDarkMode();
 
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const theme = isDarkMode ? styles.dark : styles.light;
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -208,6 +186,26 @@ const styles = StyleSheet.create({
   },
   signupLink: {
     fontWeight: "500",
+  },
+  light: {
+    background: "#FDF0F3",
+    gradient: ["#FDF0F3", "#FFFBFC"],
+    textColor: "#444444",
+    inputBackground: "#FFFFFF",
+    inputTextColor: "#000000",
+    errorTextColor: "red",
+    buttonBackground: "#E96E6E",
+    linkColor: "#FF72B1",
+  },
+  dark: {
+    background: "#333333",
+    gradient: ["#333333", "#444444"],
+    textColor: "#FFFFFF",
+    inputBackground: "#555555",
+    inputTextColor: "#FFFFFF",
+    errorTextColor: "red",
+    buttonBackground: "#E96E6E",
+    linkColor: "#FF72B1",
   },
 });
 
