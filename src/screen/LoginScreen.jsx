@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   submitButton: {
-    backgroundColor: "#FF72B1",
+    backgroundColor: "#E96E6E",
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
@@ -163,8 +163,10 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    marginTop: 10,
+    marginTop: 5,
     fontSize: 14,
+    textAlign: "center",
+    marginBottom: 15,
   },
   signupContainer: {
     flexDirection: "row",

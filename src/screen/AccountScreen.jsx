@@ -48,7 +48,7 @@ const AccountScreen = ({ navigation }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed To Ppdate Profile.");
+        throw new Error("Failed To Update Profile.");
       }
 
       const data = await response.json();
@@ -59,7 +59,7 @@ const AccountScreen = ({ navigation }) => {
       });
 
       setIsEditing(false);
-      console.log("Profile updated successfully!");
+      console.log("Profile Updated Successfully !");
     } catch (error) {
       console.error("Error Updating Profile :", error);
       alert("Error Updating Profile. Please Try Again.");

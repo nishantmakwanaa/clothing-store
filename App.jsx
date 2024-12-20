@@ -93,13 +93,13 @@ const App = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <UserContextProvider>
-      <NavigationContainer>
-        <CartProvider>
+    <NavigationContainer>
+      <CartProvider>
+        <UserContextProvider>
           {isAuthenticated ? <MainApp /> : <AuthStack />}
-        </CartProvider>
-      </NavigationContainer>
-    </UserContextProvider>
+        </UserContextProvider>
+      </CartProvider>
+    </NavigationContainer>
   );
 };
 
