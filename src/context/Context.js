@@ -23,14 +23,41 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  const login = async (token, navigation) => {
+  const login = async (email, password, navigation) => {
     try {
-      setIsAuthenticated(true);
-      await EncryptedStorage.setItem("isAuthenticated", "true");
-      loadUserData(token);
-      navigation.replace("HOME");
+      const response = await axios.post(
+        "https://clothing-store-vbrf.onrender.com/login",
+        { email, password }
+      );
+      if (response.status === 200) {
+        setIsAuthenticated(true);
+        await EncryptedStorage.setItem("isAuthenticated", "true");
+
+        loadUserData(email, password);
+
+        navigation.replace("HOME");
+      } else {
+        console.error("Login failed");
+      }
     } catch (error) {
       console.error("Error Logging In", error);
+    }
+  };
+
+  const loadUserData = async (email, password) => {
+    try {
+      const response = await axios.post(
+        "https://clothing-store-vbrf.onrender.com/profile",
+        { email, password }
+      );
+      if (response.status === 200) {
+        setUser(response.data);
+        await AsyncStorage.setItem("user", JSON.stringify(response.data));
+      } else {
+        console.error("Error Fetching User Data");
+      }
+    } catch (error) {
+      console.error("Error Loading User Data", error);
     }
   };
 
@@ -93,21 +120,6 @@ export const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
-  const loadUserData = async (email, password) => {
-    try {
-      const response = await axios.post("https://clothing-store-vbrf.onrender.com/get-user-data", { email, password });
-      if (response.status === 200) {
-        setUser(response.data);
-        await AsyncStorage.setItem("user", JSON.stringify(response.data));
-      } else {
-        console.error("Error Fetching User Data");
-      }
-    } catch (error) {
-      console.error("Error Loading User Data", error);
-      setUser(null);
-    }
-  };
 
   useEffect(() => {
     const loadFromAsyncStorage = async () => {

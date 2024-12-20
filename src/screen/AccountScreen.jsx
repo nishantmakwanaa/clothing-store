@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -48,26 +48,24 @@ const AccountScreen = ({ navigation }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed To Update Profile.");
+        throw new Error("Failed to Update Profile.");
       }
 
       const data = await response.json();
-
       setUser({
         ...user,
         ...data,
       });
 
       setIsEditing(false);
-      console.log("Profile Updated Successfully !");
+      console.log("Profile Updated Successfully!");
     } catch (error) {
-      console.error("Error Updating Profile :", error);
+      console.error("Error Updating Profile:", error);
       alert("Error Updating Profile. Please Try Again.");
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
@@ -79,7 +77,7 @@ const AccountScreen = ({ navigation }) => {
         <View style={styles.profileHeader}>
           <Image
             source={{
-              uri: user.profileImage || "https://clothing-store-vbrf.onrender.com/images/Ellipse2.png",
+              uri: "https://clothing-store-vbrf.onrender.com/images/Ellipse2.png",
             }}
             style={styles.profileImage}
           />
@@ -110,7 +108,7 @@ const AccountScreen = ({ navigation }) => {
               style={styles.inputField}
               value={updatedUser.password}
               onChangeText={(text) => handleEditChange("password", text)}
-              placeholder="Enter New password"
+              placeholder="Enter New Password"
               secureTextEntry
             />
             <TextInput
@@ -131,24 +129,24 @@ const AccountScreen = ({ navigation }) => {
         ) : (
           <View style={styles.detailsContainer}>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>First Name :</Text>
-              <Text style={styles.detailsValue}>{user.firstName || "Not Available"}</Text>
+              <Text style={styles.detailsTitle}>First Name:</Text>
+              <Text style={styles.detailsValue}>{user?.firstName || "Not Available"}</Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>Last Name :</Text>
-              <Text style={styles.detailsValue}>{user.lastName || "Not Available"}</Text>
+              <Text style={styles.detailsTitle}>Last Name:</Text>
+              <Text style={styles.detailsValue}>{user?.lastName || "Not Available"}</Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>E-Mail :</Text>
-              <Text style={styles.detailsValue}>{user.email || "Not Available"}</Text>
+              <Text style={styles.detailsTitle}>E-Mail:</Text>
+              <Text style={styles.detailsValue}>{user?.email || "Not Available"}</Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>Phone :</Text>
-              <Text style={styles.detailsValue}>{user.phone || "Not Available"}</Text>
+              <Text style={styles.detailsTitle}>Phone:</Text>
+              <Text style={styles.detailsValue}>{user?.phone || "Not Available"}</Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>Joined :</Text>
-              <Text style={styles.detailsValue}>{user.joined || "Not Available"}</Text>
+              <Text style={styles.detailsTitle}>Joined:</Text>
+              <Text style={styles.detailsValue}>{user?.joined || "Not Available"}</Text>
             </View>
             <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
               <Text style={styles.buttonText}>Edit Details</Text>
@@ -183,16 +181,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     resizeMode: "cover",
     marginBottom: 10,
-  },
-  userName: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#444",
-    marginBottom: 5,
-  },
-  userEmail: {
-    fontSize: 16,
-    color: "#757575",
   },
   detailsContainer: {
     marginVertical: 20,
@@ -247,16 +235,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     paddingHorizontal: 15,
-    fontSize: 16,
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  errorText: {
-    color: "red",
-    textAlign: "center",
     fontSize: 16,
   },
 });
