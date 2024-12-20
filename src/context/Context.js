@@ -3,7 +3,6 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-// AuthContext for handling authentication status
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -26,25 +25,16 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const dummyEmail = "x@gmail.com";
-      const dummyPassword = "123456";
-
-      if (email === dummyEmail && password === dummyPassword) {
+      const response = await axios.post(
+        "https://clothing-store-vbrf.onrender.com/login",
+        { email, password }
+      );
+      if (response.status === 200) {
         setIsAuthenticated(true);
         await EncryptedStorage.setItem("isAuthenticated", "true");
-        loadUserData(dummyEmail, dummyPassword); // Load dummy user data
+        loadUserData(email, password);
       } else {
-        const response = await axios.post(
-          "https://clothing-store-vbrf.onrender.com/login",
-          { email, password }
-        );
-        if (response.status === 200) {
-          setIsAuthenticated(true);
-          await EncryptedStorage.setItem("isAuthenticated", "true");
-          loadUserData(email, password); // Load user data from backend
-        } else {
-          console.error("Login Failed");
-        }
+        console.error("Login Failed");
       }
     } catch (error) {
       console.error("Error Logging In", error);
@@ -104,7 +94,6 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => useContext(AuthContext);
 
-// UserContext for managing user data (user profile, address, etc.)
 export const UserContext = createContext();
 
 export const useUserContext = () => useContext(UserContext);
@@ -114,15 +103,13 @@ export const UserContextProvider = ({ children }) => {
 
   const loadUserData = async (email, password) => {
     try {
-      // Dummy User Data (Replace with real data)
-      const dummyUserData = {
-        email: "testuser@example.com",
-        name: "Test User",
-        address: "123 Test St, Test City, TS 12345",
-      };
-
-      setUser(dummyUserData);
-      await AsyncStorage.setItem("user", JSON.stringify(dummyUserData));
+      const response = await axios.post("https://clothing-store-vbrf.onrender.com/get-user-data", { email, password });
+      if (response.status === 200) {
+        setUser(response.data);
+        await AsyncStorage.setItem("user", JSON.stringify(response.data));
+      } else {
+        console.error("Error Fetching User Data");
+      }
     } catch (error) {
       console.error("Error Loading User Data", error);
       setUser(null);
@@ -157,7 +144,6 @@ export const UserContextProvider = ({ children }) => {
   );
 };
 
-// CartContext for handling cart data (adding/removing items, calculating price)
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
