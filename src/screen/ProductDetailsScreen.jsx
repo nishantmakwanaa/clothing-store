@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import { fonts } from "../utils/fonts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { CartContext } from "../context/Context";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const colorsArray = [
   "#91A1B0",
@@ -22,6 +23,7 @@ const ProductDetailsScreen = () => {
   const product = route.params.item;
   const [selectedSize, setSelectedSize] = useState("M");
   const [selectedColor, setSelectedColor] = useState("#B11D1D");
+  const { isDarkMode } = useDarkMode();
   const imageUrl =
     "https://res.cloudinary.com/dlc5c1ycl/image/upload/v1710567613/vulb5bckiruhpzt2v8ec.png";
 
@@ -31,8 +33,12 @@ const ProductDetailsScreen = () => {
     addToCartItem(product);
     navigation.navigate("CART");
   };
+
   return (
-    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
+    <LinearGradient
+      colors={isDarkMode ? ["#333333", "#444444"] : ["#FDF0F3", "#FFFBFC"]}
+      style={[styles.container, isDarkMode && styles.darkContainer]}
+    >
       <View style={styles.header}>
         <Header />
       </View>
@@ -41,63 +47,28 @@ const ProductDetailsScreen = () => {
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.textContainer}>
-          <Text style={styles.fontText}>{product.title}</Text>
-          <Text style={styles.fontText}>${product.price}</Text>
+          <Text style={[styles.fontText, isDarkMode && styles.darkText]}>{product.title}</Text>
+          <Text style={[styles.fontText, isDarkMode && styles.darkText]}>${product.price}</Text>
         </View>
-        <Text style={[styles.fontText, styles.sizeText]}>Size</Text>
+        <Text style={[styles.fontText, styles.sizeText, isDarkMode && styles.darkText]}>Size</Text>
         <View style={styles.sizeContainer}>
-          <TouchableOpacity
-            style={styles.sizeValueContainer}
-            onPress={() => setSelectedSize("S")}
-          >
-            <Text
-              style={[
-                styles.sizeValueText,
-                selectedSize === "S" && styles.selectedText,
-              ]}
+          {["S", "M", "L", "XL"].map((size) => (
+            <TouchableOpacity
+              key={size}
+              style={styles.sizeValueContainer}
+              onPress={() => setSelectedSize(size)}
             >
-              S
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.sizeValueContainer}
-            onPress={() => setSelectedSize("M")}
-          >
-            <Text
-              style={[
-                styles.sizeValueText,
-                selectedSize === "M" && styles.selectedText,
-              ]}
-            >
-              M
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.sizeValueContainer}
-            onPress={() => setSelectedSize("L")}
-          >
-            <Text
-              style={[
-                styles.sizeValueText,
-                selectedSize === "L" && styles.selectedText,
-              ]}
-            >
-              L
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.sizeValueContainer}
-            onPress={() => setSelectedSize("XL")}
-          >
-            <Text
-              style={[
-                styles.sizeValueText,
-                selectedSize === "XL" && styles.selectedText,
-              ]}
-            >
-              XL
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={[
+                  styles.sizeValueText,
+                  selectedSize === size && styles.selectedText,
+                  isDarkMode && styles.darkText,
+                ]}
+              >
+                {size}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
         <View style={styles.colorContainer}>
           {colorsArray.map((color, index) => {
@@ -114,6 +85,7 @@ const ProductDetailsScreen = () => {
                       borderWidth: 2,
                       borderRadius: 24,
                     },
+                    isDarkMode && styles.darkCircle,
                   ]}
                 >
                   <View
@@ -140,6 +112,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  darkContainer: {
+    backgroundColor: "#333333",
+  },
   header: {
     padding: 15,
   },
@@ -163,7 +138,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontWeight: "700",
     color: "#444444",
-    color: "#444444",
+  },
+  darkText: {
+    color: "#FFFFFF",
   },
   sizeText: {
     marginTop: 20,
@@ -174,7 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   sizeValueContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: isDarkMode ? "#555555" : "#FFFFFF",
     height: 40,
     width: 40,
     borderRadius: 20,
@@ -198,6 +175,9 @@ const styles = StyleSheet.create({
     width: 48,
     padding: 5,
     marginHorizontal: 5,
+  },
+  darkCircle: {
+    borderColor: "#FFFFFF",
   },
   colorCircle: {
     flex: 1,

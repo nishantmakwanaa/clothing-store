@@ -1,40 +1,25 @@
-import { React, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Switch,
-  Linking,
-  Alert,
-  Modal,
-  FlatList,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Switch, Linking, Alert, Modal, FlatList } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
+import DeviceInfo from "react-native-device-info";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const SettingsScreen = () => {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
-  const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(false);
   const [language, setLanguage] = useState("English");
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const [appVersion, setAppVersion] = useState("");
 
-  const languages = ["English", "Gujarati", "Hindi"];
+  const languages = ["English"];
 
-  const toggleNotifications = () => setIsNotificationsEnabled((prev) => !prev);
-  const toggleDarkMode = () => setIsDarkModeEnabled((prev) => !prev);
+  const toggleNotifications = () => setIsNotificationsEnabled(prev => !prev);
 
-  const openLink = async (url) => {
-    try {
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        Alert.alert("Error", "Unable To Open The Link.");
-      }
-    } catch (error) {
-      Alert.alert("Error", "Something Went Wrong. Please Try Again Later.");
-    }
+  const openLink = (url) => {
+    Linking.openURL(url).catch((err) => {
+      Alert.alert("Error", "Something went wrong. Please try again later.");
+    });
   };
 
   const selectLanguage = (selectedLanguage) => {
@@ -42,17 +27,24 @@ const SettingsScreen = () => {
     setLanguageModalVisible(false);
   };
 
+  useEffect(() => {
+    const version = DeviceInfo.getVersion();
+    setAppVersion(version);
+  }, []);
+
   return (
-    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
+    <LinearGradient
+      colors={isDarkMode ? ["#2f2f2f", "#1c1c1c"] : ["#FDF0F3", "#FFFBFC"]}
+      style={[styles.container, { backgroundColor: isDarkMode ? '#1c1c1c' : '#fff' }]}
+    >
       <View style={styles.header}>
         <Header isSettings={true} />
       </View>
-
       <View style={styles.contentContainer}>
-        <Text style={styles.titleText}>Settings</Text>
+        <Text style={[styles.titleText, { color: isDarkMode ? "#fff" : "#444" }]}>Settings</Text>
 
         <View style={styles.settingItemContainer}>
-          <Text style={styles.settingTitle}>Enable Notifications</Text>
+          <Text style={[styles.settingTitle, { color: isDarkMode ? "#fff" : "#757575" }]}>Enable Notifications</Text>
           <Switch
             value={isNotificationsEnabled}
             onValueChange={toggleNotifications}
@@ -60,30 +52,31 @@ const SettingsScreen = () => {
             thumbColor={isNotificationsEnabled ? "#ffffff" : "#C0C0C0"}
           />
         </View>
-
         <View style={styles.settingItemContainer}>
-          <Text style={styles.settingTitle}>Dark Mode</Text>
+          <Text style={[styles.settingTitle, { color: isDarkMode ? "#fff" : "#757575" }]}>Dark Mode</Text>
           <Switch
-            value={isDarkModeEnabled}
+            value={isDarkMode}
             onValueChange={toggleDarkMode}
             trackColor={{ false: "#E1E1E1", true: "#E96E6E" }}
-            thumbColor={isDarkModeEnabled ? "#ffffff" : "#C0C0C0"}
+            thumbColor={isDarkMode ? "#ffffff" : "#C0C0C0"}
           />
         </View>
-
         <View style={styles.settingItemContainer}>
-          <Text style={styles.settingTitle}>Language</Text>
+          <Text style={[styles.settingTitle, { color: isDarkMode ? "#fff" : "#757575" }]}>Language</Text>
           <TouchableOpacity onPress={() => setLanguageModalVisible(true)}>
-            <Text style={styles.settingValue}>{language}</Text>
+            <Text style={[styles.settingValue, { color: isDarkMode ? "#fff" : "#444" }]}>{language}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.settingItemContainer}>
-          <Text style={styles.settingTitle}>Meet Developers</Text>
-          <TouchableOpacity
-            onPress={() => openLink("https://nishantworldwide.in")}
-          >
-            <Text style={styles.settingLink}>Clich Here</Text>
+          <Text style={[styles.settingTitle, { color: isDarkMode ? "#fff" : "#757575" }]}>Meet Developers</Text>
+          <TouchableOpacity onPress={() => openLink("https://nishantworldwide.in")}>
+            <Text style={styles.settingLink}>Click Here</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.versionContainer}>
+          <Text style={[styles.versionText, { color: isDarkMode ? "#fff" : "#000" }]}>
+            App Version : {appVersion}
+          </Text>
         </View>
       </View>
       <Modal
@@ -135,7 +128,6 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 30,
     fontWeight: "700",
-    color: "#444",
     marginBottom: 20,
   },
   settingItemContainer: {
@@ -149,12 +141,10 @@ const styles = StyleSheet.create({
   },
   settingTitle: {
     fontSize: 18,
-    color: "#757575",
     fontWeight: "500",
   },
   settingValue: {
     fontSize: 18,
-    color: "#444",
     fontWeight: "600",
   },
   settingLink: {
@@ -198,8 +188,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   closeButtonText: {
-    fontSize: 16,
     color: "#fff",
-    fontWeight: "500",
+    fontWeight: "600",
+  },
+  versionContainer: {
+    marginTop: 30,
+    alignItems: "center",
+  },
+  versionText: {
+    fontSize: 16,
   },
 });

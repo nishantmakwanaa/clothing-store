@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const SignupScreen = () => {
   const [firstName, setFirstName] = useState("");
@@ -19,6 +20,7 @@ const SignupScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
+  const { isDarkMode } = useDarkMode();
 
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -90,65 +92,77 @@ const SignupScreen = () => {
     navigation.navigate("LOGIN");
   };
 
+  const backgroundColor = isDarkMode ? "#333" : "#FDF0F3";
+  const textColor = isDarkMode ? "#fff" : "#444444";
+  const inputBackground = isDarkMode ? "#555" : "#fff";
+  const inputBorderColor = isDarkMode ? "#777" : "#E96E6E";
+  const buttonColor = isDarkMode ? "#444" : "#E96E6E";
+  const buttonTextColor = isDarkMode ? "#fff" : "#fff";
+
   return (
-    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
+    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={[styles.container, { backgroundColor }]}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Sign Up</Text>
+        <Text style={[styles.headerText, { color: textColor }]}>Sign Up</Text>
       </View>
       <View style={styles.formContainer}>
-        <Text style={styles.inputLabel}>First Name</Text>
+        <Text style={[styles.inputLabel, { color: textColor }]}>First Name</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: inputBackground, borderColor: inputBorderColor }]}
           placeholder="Enter Your First Name"
           value={firstName}
           onChangeText={setFirstName}
+          placeholderTextColor={isDarkMode ? "#ddd" : "#444"}
         />
-        <Text style={styles.inputLabel}>Last Name</Text>
+        <Text style={[styles.inputLabel, { color: textColor }]}>Last Name</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: inputBackground, borderColor: inputBorderColor }]}
           placeholder="Enter Your Last Name"
           value={lastName}
           onChangeText={setLastName}
+          placeholderTextColor={isDarkMode ? "#ddd" : "#444"}
         />
-        <Text style={styles.inputLabel}>E-Mail</Text>
+        <Text style={[styles.inputLabel, { color: textColor }]}>E-Mail</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: inputBackground, borderColor: inputBorderColor }]}
           placeholder="Enter Your E-Mail"
           value={email}
           onChangeText={setEmail}
+          placeholderTextColor={isDarkMode ? "#ddd" : "#444"}
         />
-        <Text style={styles.inputLabel}>Password</Text>
+        <Text style={[styles.inputLabel, { color: textColor }]}>Password</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: inputBackground, borderColor: inputBorderColor }]}
           placeholder="Enter Your Password"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
+          placeholderTextColor={isDarkMode ? "#ddd" : "#444"}
         />
-        <Text style={styles.inputLabel}>Mobile</Text>
+        <Text style={[styles.inputLabel, { color: textColor }]}>Mobile</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: inputBackground, borderColor: inputBorderColor }]}
           placeholder="Enter Your Mobile Number"
           value={mobile}
           onChangeText={setMobile}
           keyboardType="phone-pad"
+          placeholderTextColor={isDarkMode ? "#ddd" : "#444"}
         />
-        {error && <Text style={styles.errorText}>{error}</Text>}
+        {error && <Text style={[styles.errorText, { color: "red" }]}>{error}</Text>}
         <TouchableOpacity
-          style={styles.submitButton}
+          style={[styles.submitButton, { backgroundColor: buttonColor }]}
           onPress={handleSignUp}
           disabled={loading}
         >
           {loading ? (
             <ActivityIndicator size="small" color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Sign Up</Text>
+            <Text style={[styles.buttonText, { color: buttonTextColor }]}>Sign Up</Text>
           )}
         </TouchableOpacity>
         <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already Have An Account ?</Text>
+          <Text style={[styles.loginText, { color: textColor }]}>Already Have An Account ?</Text>
           <TouchableOpacity onPress={handleLoginRedirect}>
-            <Text style={styles.loginLink}>Login</Text>
+            <Text style={[styles.loginLink, { color: buttonColor }]}>Login</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -169,18 +183,15 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 30,
     fontWeight: "700",
-    color: "#444444",
   },
   formContainer: {
     marginTop: 50,
   },
   inputLabel: {
     fontSize: 16,
-    color: "#444444",
   },
   input: {
     height: 50,
-    borderColor: "#E96E6E",
     borderWidth: 1,
     borderRadius: 10,
     marginTop: 10,
@@ -188,7 +199,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   submitButton: {
-    backgroundColor: "#E96E6E",
     height: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -196,7 +206,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   buttonText: {
-    color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "700",
   },
@@ -207,15 +216,12 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 14,
-    color: "#444444",
   },
   loginLink: {
     fontSize: 14,
-    color: "#E96E6E",
     marginLeft: 5,
   },
   errorText: {
-    color: "red",
     fontSize: 14,
     marginTop: 10,
     textAlign: "center",

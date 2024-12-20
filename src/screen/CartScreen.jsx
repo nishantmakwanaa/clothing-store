@@ -13,9 +13,11 @@ import { fonts } from "../utils/fonts";
 import { CartContext } from "../context/Context";
 import { useNavigation } from "@react-navigation/native";
 import { Linking, Alert, Platform } from "react-native";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const CartScreen = () => {
   const { cartItems, deleteCartItem, totalPrice } = useContext(CartContext);
+  const { isDarkMode } = useDarkMode();
   const navigation = useNavigation();
 
   const handleDeleteItem = async (id) => {
@@ -45,8 +47,10 @@ const CartScreen = () => {
       });
   };
 
+  const gradientColors = isDarkMode ? ["#2C2C2C", "#1A1A1A"] : ["#FDF0F3", "#FFFBFC"];
+
   return (
-    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
+    <LinearGradient colors={gradientColors} style={styles.container}>
       <View style={styles.header}>
         <Header isCart={true} />
       </View>
@@ -65,23 +69,23 @@ const CartScreen = () => {
           <>
             <View style={styles.bottomContentContainer}>
               <View style={styles.flexRowContainer}>
-                <Text style={styles.titleText}>Total :</Text>
-                <Text style={styles.priceText}>₹ {totalPrice}</Text>
+                <Text style={[styles.titleText, isDarkMode && styles.darkText]}>Total :</Text>
+                <Text style={[styles.priceText, isDarkMode && styles.darkText]}>₹ {totalPrice}</Text>
               </View>
               <View style={styles.flexRowContainer}>
-                <Text style={styles.titleText}>Shipping :</Text>
-                <Text style={styles.priceText}>₹ 0.0</Text>
+                <Text style={[styles.titleText, isDarkMode && styles.darkText]}>Shipping :</Text>
+                <Text style={[styles.priceText, isDarkMode && styles.darkText]}>₹ 0.0</Text>
               </View>
               <View style={styles.divider} />
               <View style={styles.flexRowContainer}>
-                <Text style={styles.titleText}>Grand Total :</Text>
-                <Text style={[styles.priceText, styles.grandPriceText]}>
+                <Text style={[styles.titleText, isDarkMode && styles.darkText]}>Grand Total :</Text>
+                <Text style={[styles.priceText, styles.grandPriceText, isDarkMode && styles.darkText]}>
                   ₹ {totalPrice}
                 </Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleCheckout}>
-              <Text style={styles.buttonText}>Pay With UPI</Text>
+            <TouchableOpacity style={[styles.button, isDarkMode && styles.darkButton]} onPress={handleCheckout}>
+              <Text style={[styles.buttonText, isDarkMode && styles.darkButtonText]}>Pay With UPI</Text>
             </TouchableOpacity>
           </>
         }
@@ -139,5 +143,14 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "700",
     fontFamily: fonts.regular,
+  },
+  darkText: {
+    color: "#E1E1E1",
+  },
+  darkButton: {
+    backgroundColor: "#FF4B4B",
+  },
+  darkButtonText: {
+    color: "#000000",
   },
 });

@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { fonts } from "../utils/fonts";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const ForgetPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const { isDarkMode } = useDarkMode();
 
   const handleResetPassword = async () => {
     if (email.trim() === "") {
@@ -51,31 +46,41 @@ const ForgetPasswordScreen = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
+    <LinearGradient
+      colors={isDarkMode ? ["#333333", "#444444"] : ["#FDF0F3", "#FFFBFC"]}
+      style={styles.container}
+    >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Forgot Password</Text>
+        <Text style={[styles.headerText, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>
+          Forgot Password
+        </Text>
       </View>
       <View style={styles.formContainer}>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.subtitle, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>
           Enter Your Registered E-Mail Address, And We'll Send You A Link To
           Reset Your Password.
         </Text>
-        <Text style={styles.inputLabel}>Email</Text>
+        <Text style={[styles.inputLabel, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>
+          Email
+        </Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: isDarkMode ? "#555555" : "#FFFFFF", color: isDarkMode ? "#FFFFFF" : "#000000" }]}
           placeholder="Enter Your E-Mail"
+          placeholderTextColor={isDarkMode ? "#AAAAAA" : "#888888"}
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
         />
         <TouchableOpacity
-          style={styles.resetButton}
+          style={[styles.resetButton, { backgroundColor: isDarkMode ? "#E96E6E" : "#E96E6E" }]}
           onPress={handleResetPassword}
         >
           <Text style={styles.buttonText}>Send Reset Link</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("LOGIN")}>
-          <Text style={styles.backToLogin}>Back to Login</Text>
+          <Text style={[styles.backToLogin, { color: isDarkMode ? "#E96E6E" : "#E96E6E" }]}>
+            Back to Login
+          </Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -96,7 +101,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: fonts.regular,
     fontWeight: "700",
-    color: "#444444",
   },
   formContainer: {
     marginTop: 50,
@@ -104,14 +108,12 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     fontFamily: fonts.regular,
-    color: "#444444",
     textAlign: "center",
     marginBottom: 20,
   },
   inputLabel: {
     fontSize: 16,
     fontFamily: fonts.regular,
-    color: "#444444",
   },
   input: {
     height: 50,
@@ -124,7 +126,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
   },
   resetButton: {
-    backgroundColor: "#E96E6E",
     height: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -138,7 +139,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
   },
   backToLogin: {
-    color: "#E96E6E",
     fontSize: 14,
     fontFamily: fonts.regular,
     textAlign: "center",

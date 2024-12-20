@@ -10,9 +10,11 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../context/Context";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const LoginScreen = () => {
   const { login } = useAuth();
+  const { isDarkMode } = useDarkMode();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,29 +73,34 @@ const LoginScreen = () => {
   };
 
   return (
-    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
+    <LinearGradient
+      colors={isDarkMode ? ["#333333", "#444444"] : ["#FDF0F3", "#FFFBFC"]}
+      style={styles.container}
+    >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Login</Text>
+        <Text style={[styles.headerText, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>Login</Text>
       </View>
       <View style={styles.formContainer}>
-        <Text style={styles.inputLabel}>E-Mail</Text>
+        <Text style={[styles.inputLabel, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>E-Mail</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: isDarkMode ? "#555555" : "#FFFFFF", color: isDarkMode ? "#FFFFFF" : "#000000" }]}
           placeholder="Enter Your E-Mail"
+          placeholderTextColor={isDarkMode ? "#BBBBBB" : "#888888"}
           value={email}
           onChangeText={setEmail}
         />
-        <Text style={styles.inputLabel}>Password</Text>
+        <Text style={[styles.inputLabel, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>Password</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: isDarkMode ? "#555555" : "#FFFFFF", color: isDarkMode ? "#FFFFFF" : "#000000" }]}
           placeholder="Enter Your Password"
+          placeholderTextColor={isDarkMode ? "#BBBBBB" : "#888888"}
           secureTextEntry
           value={password}
           onChangeText={setPassword}
         />
         {error && <Text style={styles.errorText}>{error}</Text>}
         <TouchableOpacity
-          style={styles.submitButton}
+          style={[styles.submitButton, { backgroundColor: isDarkMode ? "#E96E6E" : "#E96E6E" }]}
           onPress={handleLogin}
           disabled={loading}
         >
@@ -105,16 +112,16 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>Forget Password ?</Text>
+          <Text style={[styles.signupText, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>Forget Password ?</Text>
           <TouchableOpacity onPress={handleForgetPassword}>
-            <Text style={styles.signupLink}>Click Here</Text>
+            <Text style={[styles.signupLink, { color: isDarkMode ? "#FF72B1" : "#FF72B1" }]}>Click Here</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>New to App ?</Text>
+          <Text style={[styles.signupText, { color: isDarkMode ? "#FFFFFF" : "#444444" }]}>New to App ?</Text>
           <TouchableOpacity onPress={handleSignUpRedirect}>
-            <Text style={styles.signupLink}>Sign Up Now !</Text>
+            <Text style={[styles.signupLink, { color: isDarkMode ? "#FF72B1" : "#FF72B1" }]}>Sign Up Now !</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -135,14 +142,12 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 30,
     fontWeight: "700",
-    color: "#444444",
   },
   formContainer: {
     marginTop: 50,
   },
   inputLabel: {
     fontSize: 16,
-    color: "#444444",
   },
   input: {
     height: 50,
@@ -153,7 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   submitButton: {
-    backgroundColor: "#E96E6E",
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
@@ -176,11 +180,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signupText: {
-    color: "#444444",
+    fontWeight: "500",
   },
   signupLink: {
-    color: "#FF72B1",
-    marginLeft: 5,
     fontWeight: "500",
   },
 });

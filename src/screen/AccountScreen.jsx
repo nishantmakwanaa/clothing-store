@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,6 +11,7 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 import { UserContext } from "../context/Context";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const AccountScreen = ({ navigation }) => {
   const { user, setUser, logOut } = useContext(UserContext);
@@ -23,6 +24,8 @@ const AccountScreen = ({ navigation }) => {
     password: "",
     phone: user?.phone || "",
   });
+
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const handleLogOut = () => {
     logOut();
@@ -68,7 +71,10 @@ const AccountScreen = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
+    <LinearGradient
+      colors={isDarkMode ? ["#2C2C2C", "#121212"] : ["#FDF0F3", "#FFFBFC"]}
+      style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}
+    >
       <View style={styles.header}>
         <Header isProfile={true} />
       </View>
@@ -86,39 +92,42 @@ const AccountScreen = ({ navigation }) => {
         {isEditing ? (
           <View style={styles.detailsContainer}>
             <TextInput
-              style={styles.inputField}
+              style={[styles.inputField, isDarkMode && styles.darkInputField]}
               value={updatedUser.firstName}
               onChangeText={(text) => handleEditChange("firstName", text)}
               placeholder="Enter Your First Name"
             />
             <TextInput
-              style={styles.inputField}
+              style={[styles.inputField, isDarkMode && styles.darkInputField]}
               value={updatedUser.lastName}
               onChangeText={(text) => handleEditChange("lastName", text)}
               placeholder="Enter Your Last Name"
             />
             <TextInput
-              style={styles.inputField}
+              style={[styles.inputField, isDarkMode && styles.darkInputField]}
               value={updatedUser.email}
               onChangeText={(text) => handleEditChange("email", text)}
               placeholder="Enter Your E-mail"
               keyboardType="email-address"
             />
             <TextInput
-              style={styles.inputField}
+              style={[styles.inputField, isDarkMode && styles.darkInputField]}
               value={updatedUser.password}
               onChangeText={(text) => handleEditChange("password", text)}
               placeholder="Enter New Password"
               secureTextEntry
             />
             <TextInput
-              style={styles.inputField}
+              style={[styles.inputField, isDarkMode && styles.darkInputField]}
               value={updatedUser.phone}
               onChangeText={(text) => handleEditChange("phone", text)}
               placeholder="Enter Your Phone Number"
               keyboardType="phone-pad"
             />
-            <TouchableOpacity style={styles.updateButton} onPress={handleUpdate}>
+            <TouchableOpacity
+              style={[styles.updateButton, isDarkMode && styles.darkButton]}
+              onPress={handleUpdate}
+            >
               {loading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
@@ -129,32 +138,58 @@ const AccountScreen = ({ navigation }) => {
         ) : (
           <View style={styles.detailsContainer}>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>First Name:</Text>
-              <Text style={styles.detailsValue}>{user?.firstName || "Not Available"}</Text>
+              <Text style={[styles.detailsTitle, isDarkMode && styles.darkDetailsTitle]}>
+                First Name:
+              </Text>
+              <Text style={[styles.detailsValue, isDarkMode && styles.darkDetailsValue]}>
+                {user?.firstName || "Not Available"}
+              </Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>Last Name:</Text>
-              <Text style={styles.detailsValue}>{user?.lastName || "Not Available"}</Text>
+              <Text style={[styles.detailsTitle, isDarkMode && styles.darkDetailsTitle]}>
+                Last Name:
+              </Text>
+              <Text style={[styles.detailsValue, isDarkMode && styles.darkDetailsValue]}>
+                {user?.lastName || "Not Available"}
+              </Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>E-Mail:</Text>
-              <Text style={styles.detailsValue}>{user?.email || "Not Available"}</Text>
+              <Text style={[styles.detailsTitle, isDarkMode && styles.darkDetailsTitle]}>
+                E-Mail:
+              </Text>
+              <Text style={[styles.detailsValue, isDarkMode && styles.darkDetailsValue]}>
+                {user?.email || "Not Available"}
+              </Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>Phone:</Text>
-              <Text style={styles.detailsValue}>{user?.phone || "Not Available"}</Text>
+              <Text style={[styles.detailsTitle, isDarkMode && styles.darkDetailsTitle]}>
+                Phone:
+              </Text>
+              <Text style={[styles.detailsValue, isDarkMode && styles.darkDetailsValue]}>
+                {user?.phone || "Not Available"}
+              </Text>
             </View>
             <View style={styles.flexRowContainer}>
-              <Text style={styles.detailsTitle}>Joined:</Text>
-              <Text style={styles.detailsValue}>{user?.joined || "Not Available"}</Text>
+              <Text style={[styles.detailsTitle, isDarkMode && styles.darkDetailsTitle]}>
+                Joined:
+              </Text>
+              <Text style={[styles.detailsValue, isDarkMode && styles.darkDetailsValue]}>
+                {user?.joined || "Not Available"}
+              </Text>
             </View>
-            <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+            <TouchableOpacity
+              style={[styles.editButton, isDarkMode && styles.darkButton]}
+              onPress={() => setIsEditing(true)}
+            >
               <Text style={styles.buttonText}>Edit Details</Text>
             </TouchableOpacity>
           </View>
         )}
 
-        <TouchableOpacity style={styles.logOutButton} onPress={handleLogOut}>
+        <TouchableOpacity
+          style={[styles.logOutButton, isDarkMode && styles.darkButton]}
+          onPress={handleLogOut}
+        >
           <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>
       </View>
@@ -224,18 +259,38 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonText: {
-    fontSize: 20,
-    color: "#FFFFFF",
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#fff",
   },
   inputField: {
-    height: 45,
-    borderColor: "#ccc",
+    height: 50,
     borderWidth: 1,
     borderRadius: 10,
     marginVertical: 10,
     paddingHorizontal: 15,
     fontSize: 16,
+    color: "#444",
+  },
+  darkContainer: {
+    backgroundColor: "#121212",
+  },
+  lightContainer: {
+    backgroundColor: "#FDF0F3",
+  },
+  darkInputField: {
+    backgroundColor: "#333",
+    color: "#fff",
+    borderColor: "#444",
+  },
+  darkButton: {
+    backgroundColor: "#4CAF50",
+  },
+  darkDetailsTitle: {
+    color: "#bbb",
+  },
+  darkDetailsValue: {
+    color: "#fff",
   },
 });
 

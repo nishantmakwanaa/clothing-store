@@ -15,6 +15,7 @@ import ForgetPasswordScreen from "./src/screen/ForgetPasswordScreen";
 import { AuthProvider } from "./src/context/Context";
 import { UserContextProvider } from "./src/context/Context";
 import { CartProvider } from "./src/context/Context";
+import { DarkModeProvider, useDarkMode } from "./src/context/DarkModeContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -69,25 +70,36 @@ const tabScreens = [
   },
 ];
 
-const MainApp = () => (
-  <Tab.Navigator screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
-    {tabScreens.map((screen, index) => (
-      <Tab.Screen
-        key={index}
-        name={screen.name}
-        component={screen.component}
-        options={{
-          tabBarIcon: ({ focused, size }) => (
-            <Image
-              source={focused ? screen.iconFocused : screen.iconNormal}
-              style={{ height: size, width: size, resizeMode: "center" }}
-            />
-          ),
-        }}
-      />
-    ))}
-  </Tab.Navigator>
-);
+const MainApp = () => {
+  const { isDarkMode } = useDarkMode();
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: isDarkMode ? '#333' : '#fff',
+        },
+      }}
+    >
+      {tabScreens.map((screen, index) => (
+        <Tab.Screen
+          key={index}
+          name={screen.name}
+          component={screen.component}
+          options={{
+            tabBarIcon: ({ focused, size }) => (
+              <Image
+                source={focused ? screen.iconFocused : screen.iconNormal}
+                style={{ height: size, width: size, resizeMode: "center" }}
+              />
+            ),
+          }}
+        />
+      ))}
+    </Tab.Navigator>
+  );
+};
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -96,7 +108,9 @@ const App = () => {
     <NavigationContainer>
       <CartProvider>
         <UserContextProvider>
-          {isAuthenticated ? <MainApp /> : <AuthStack />}
+          <DarkModeProvider>
+            {isAuthenticated ? <MainApp /> : <AuthStack />}
+          </DarkModeProvider>
         </UserContextProvider>
       </CartProvider>
     </NavigationContainer>
