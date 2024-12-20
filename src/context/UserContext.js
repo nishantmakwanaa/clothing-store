@@ -17,35 +17,38 @@ export const UserContextProvider = ({ children }) => {
   // Function to fetch user data from API using email and password
   const loadUserData = async () => {
     try {
-      const storedUser = await AsyncStorage.getItem("user");
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        const response = await axios.post("https://your-api-url.com/authenticate", {
-          email: parsedUser.email,
-          password: parsedUser.password, // Assuming password is stored (or use token-based auth)
-        });
-        if (response.status === 200) {
-          setUser(response.data);
-        } else {
-          console.error("Failed to authenticate user");
-          setUser(null);
-        }
+      // Simulate logging in with test credentials (for testing purposes)
+      const testEmail = "x@gmail.com";
+      const testPassword = "123456";
+
+      const response = await axios.post("https://https://clothing-store-vbrf.onrender.com/profile", {
+        email: testEmail,
+        password: testPassword,
+      });
+
+      if (response.status === 200) {
+        const userData = response.data;
+        setUser(userData); // Set the user data after successful login
+        await AsyncStorage.setItem("user", JSON.stringify(userData)); // Store user data without the token
+      } else {
+        console.error("Failed to authenticate user");
+        setUser(null);
       }
     } catch (error) {
-      console.error("Error loading user data from AsyncStorage or API", error);
+      console.error("Error loading user data from API", error);
       setUser(null);
     }
   };
 
-  // On initial load, try to retrieve user data and token from AsyncStorage and fetch from API
+  // On initial load, try to retrieve user data from AsyncStorage
   useEffect(() => {
     loadUserData();
   }, []);
 
-  // Sync user data to AsyncStorage whenever it changes
+  // Sync user data to AsyncStorage whenever it changes (without the token)
   useEffect(() => {
     if (user) {
-      AsyncStorage.setItem("user", JSON.stringify(user)); // Store user data with token in AsyncStorage
+      AsyncStorage.setItem("user", JSON.stringify(user)); // Store user data without the token in AsyncStorage
     }
   }, [user]);
 

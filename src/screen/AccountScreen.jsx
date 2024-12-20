@@ -40,14 +40,8 @@ const AccountScreen = ({ navigation }) => {
       setLoading(true);
       setError(false);
 
-      const token = user?.token; // Get token from user context (if any)
-
-      // Fetch user data from the API
-      const response = await axios.get("https://your-api-url.com/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // Removed token handling
+      const response = await axios.get("https://https://clothing-store-vbrf.onrender.com/profile");
 
       if (response.status === 200) {
         setUserData(response.data);

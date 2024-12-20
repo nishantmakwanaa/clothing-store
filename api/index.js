@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const products = require("./data/data.json");
 
@@ -47,28 +46,6 @@ const productSchema = new mongoose.Schema({
 });
 
 const Product = mongoose.model("Product", productSchema);
-
-const secretKey = "your_secret_key";
-
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, secretKey, { expiresIn: "1h" });
-};
-
-const authMiddleware = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Authorization Header Missing..." });
-  }
-
-  const token = authHeader.split(" ")[1];
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.userId = decoded.userId;
-    next();
-  } catch (err) {
-    return res.status(401).json({ message: "Invalid or Expired Token" });
-  }
-};
 
 app.get("/", (req, res) => {
   res.send("Server Is Running");
@@ -122,9 +99,7 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid Email Or Password" });
     }
 
-    const token = generateToken(user._id);
     res.json({
-      token,
       user: { name: `${user.firstName} ${user.lastName}`, email: user.email },
     });
   } catch (err) {
@@ -132,14 +107,25 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.userId).select("-password");
-    if (!user) return res.status(404).json({ message: "User Not Found" });
+app.get("/profile", async (req, res) => {
+  const { email, password } = req.body;
 
-    const cartItems = await Cart.find({ userId: req.userId }).populate(
-      "productId"
-    );
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and Password Required" });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Password" });
+    }
+
+    const cartItems = await Cart.find({ userId: user._id }).populate("productId");
     res.json({
       name: `${user.firstName} ${user.lastName}`,
       email: user.email,
@@ -150,11 +136,25 @@ app.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-app.post("/profile/cart", authMiddleware, async (req, res) => {
-  const { productId, quantity } = req.body;
+app.post("/profile/cart", async (req, res) => {
+  const { email, password, productId, quantity } = req.body;
+
+  if (!email || !password || !productId) {
+    return res.status(400).json({ message: "Required Fields Missing" });
+  }
 
   try {
-    const cartItem = new Cart({ userId: req.userId, productId, quantity });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Password" });
+    }
+
+    const cartItem = new Cart({ userId: user._id, productId, quantity });
     await cartItem.save();
     res.status(201).json({ message: "Item Added To Cart" });
   } catch (err) {
@@ -162,11 +162,27 @@ app.post("/profile/cart", authMiddleware, async (req, res) => {
   }
 });
 
-app.delete("/profile/cart/:itemId", authMiddleware, async (req, res) => {
+app.delete("/profile/cart/:itemId", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and Password Required" });
+  }
+
   const itemId = req.params.itemId;
 
   try {
-    const result = await Cart.deleteOne({ _id: itemId, userId: req.userId });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Password" });
+    }
+
+    const result = await Cart.deleteOne({ _id: itemId, userId: user._id });
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Item Not Found In Cart" });
     }
