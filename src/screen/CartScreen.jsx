@@ -10,7 +10,7 @@ import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 import CartCard from "../components/CartCard";
 import { fonts } from "../utils/fonts";
-import { CartContext } from "../context/context";
+import { CartContext } from "../context/Context";
 import { useNavigation } from "@react-navigation/native";
 import { Linking, Alert, Platform } from "react-native";
 

@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
-import { fonts } from "../utils/fonts";
-import { UserContext } from "../context/context";
+import { UserContext } from "../context/Context";
 import axios from "axios";
 
 const AccountScreen = ({ navigation }) => {
@@ -28,6 +27,7 @@ const AccountScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    console.log("User Context:", user); // Log user data
     if (user) {
       fetchUserData();
     } else {
@@ -35,27 +35,43 @@ const AccountScreen = ({ navigation }) => {
     }
   }, [user]);
 
+
   const fetchUserData = async () => {
     try {
       setLoading(true);
       setError(false);
 
-      // Removed token handling
-      const response = await axios.get("https://https://clothing-store-vbrf.onrender.com/profile");
+      const email = "x@gmail.com";  // Replace with dynamic email
+      const password = "123456";     // Replace with dynamic password
+
+      // Send data as a POST request with JSON body
+      const response = await axios.post("https://clothing-store-vbrf.onrender.com/profile", {
+        email: email,
+        password: password
+      }, {
+        headers: {
+          'Content-Type': 'application/json', // Proper content type for POST requests
+        }
+      });
 
       if (response.status === 200) {
         setUserData(response.data);
       } else {
-        throw new Error("Failed To Load Data");
+        throw new Error("Failed to Load Data");
       }
     } catch (error) {
-      console.error("Error Fetching User Data:", error);
+      console.error("Error Fetching User Data:", error.response || error.message);
       setUserData(null);
       setError(true);
     } finally {
       setLoading(false);
     }
   };
+
+
+
+
+
 
   if (loading) {
     return (
@@ -75,6 +91,20 @@ const AccountScreen = ({ navigation }) => {
     );
   }
 
+  if (error) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text style={styles.errorText}>Failed to Load Data. Please Try Again.</Text>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={fetchUserData}
+        >
+          <Text style={styles.retryText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
       <View style={styles.header}>
@@ -82,65 +112,52 @@ const AccountScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.contentContainer}>
-        {error ? (
-          <View>
-            <TouchableOpacity
-              style={styles.retryButton}
-              onPress={fetchUserData}
-            >
-              <Text style={styles.retryText}>Retry</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
+        {userData && (
           <>
-            {userData && (
-              <View>
-                <View style={styles.profileHeader}>
-                  <Image
-                    source={{
-                      uri:
-                        userData.profileImage ||
-                        "https://your-api-url.com/profile/default.jpg",
-                    }}
-                    style={styles.profileImage}
-                  />
-                  <Text style={styles.userName}>{userData.name}</Text>
-                  <Text style={styles.userEmail}>{userData.email}</Text>
-                </View>
+            <View style={styles.profileHeader}>
+              <Image
+                source={{
+                  uri:
+                    userData.profileImage ||
+                    "https://clothing-store-vbrf.onrender.com/images/Ellipse2.png",
+                }}
+                style={styles.profileImage}
+              />
+              <Text style={styles.userName}>{userData.name}</Text>
+              <Text style={styles.userEmail}>{userData.email}</Text>
+            </View>
 
-                <View style={styles.detailsContainer}>
-                  <View style={styles.flexRowContainer}>
-                    <Text style={styles.detailsTitle}>Phone :</Text>
-                    <Text style={styles.detailsValue}>
-                      {userData.phone || "Loading..."}
-                    </Text>
-                  </View>
-
-                  <View style={styles.flexRowContainer}>
-                    <Text style={styles.detailsTitle}>Address :</Text>
-                    <Text style={styles.detailsValue}>
-                      {userData.address || "Loading..."}
-                    </Text>
-                  </View>
-
-                  <View style={styles.flexRowContainer}>
-                    <Text style={styles.detailsTitle}>Joined :</Text>
-                    <Text style={styles.detailsValue}>
-                      {userData.joinedDate || "Loading..."}
-                    </Text>
-                  </View>
-                </View>
+            <View style={styles.detailsContainer}>
+              <View style={styles.flexRowContainer}>
+                <Text style={styles.detailsTitle}>Phone :</Text>
+                <Text style={styles.detailsValue}>
+                  {userData.phone || "Loading..."}
+                </Text>
               </View>
-            )}
 
-            <TouchableOpacity
-              style={styles.logOutButton}
-              onPress={handleLogOut}
-            >
-              <Text style={styles.buttonText}>Log Out</Text>
-            </TouchableOpacity>
+              <View style={styles.flexRowContainer}>
+                <Text style={styles.detailsTitle}>Address :</Text>
+                <Text style={styles.detailsValue}>
+                  {userData.address || "Loading..."}
+                </Text>
+              </View>
+
+              <View style={styles.flexRowContainer}>
+                <Text style={styles.detailsTitle}>Joined :</Text>
+                <Text style={styles.detailsValue}>
+                  {userData.joinedDate || "Loading..."}
+                </Text>
+              </View>
+            </View>
           </>
         )}
+
+        <TouchableOpacity
+          style={styles.logOutButton}
+          onPress={handleLogOut}
+        >
+          <Text style={styles.buttonText}>Log Out</Text>
+        </TouchableOpacity>
       </View>
     </LinearGradient>
   );
@@ -151,7 +168,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
   },
-  header: {},
   contentContainer: {
     marginTop: 20,
     paddingHorizontal: 15,
@@ -207,7 +223,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "700",
-    fontFamily: fonts.regular,
   },
   loaderContainer: {
     flex: 1,
@@ -223,7 +238,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "700",
-    fontFamily: fonts.regular,
   },
   retryButton: {
     backgroundColor: "#E96E6E",

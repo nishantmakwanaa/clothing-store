@@ -4,7 +4,7 @@ import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 import { fonts } from "../utils/fonts";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { CartContext } from "../context/context";
+import { CartContext } from "../context/Context";
 
 const colorsArray = [
   "#91A1B0",

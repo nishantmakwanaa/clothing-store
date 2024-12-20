@@ -3,7 +3,7 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-// AuthContext
+// AuthContext for handling authentication status
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -24,12 +24,30 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  const login = async () => {
+  const login = async (email, password) => {
     try {
-      setIsAuthenticated(true);
-      await EncryptedStorage.setItem("isAuthenticated", "true");
+      const dummyEmail = "x@gmail.com";
+      const dummyPassword = "123456";
+
+      if (email === dummyEmail && password === dummyPassword) {
+        setIsAuthenticated(true);
+        await EncryptedStorage.setItem("isAuthenticated", "true");
+        loadUserData(dummyEmail, dummyPassword); // Load dummy user data
+      } else {
+        const response = await axios.post(
+          "https://clothing-store-vbrf.onrender.com/login",
+          { email, password }
+        );
+        if (response.status === 200) {
+          setIsAuthenticated(true);
+          await EncryptedStorage.setItem("isAuthenticated", "true");
+          loadUserData(email, password); // Load user data from backend
+        } else {
+          console.error("Login Failed");
+        }
+      }
     } catch (error) {
-      console.error("Error Saving Authentication Credentials", error);
+      console.error("Error Logging In", error);
     }
   };
 
@@ -37,13 +55,48 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsAuthenticated(false);
       await EncryptedStorage.removeItem("isAuthenticated");
+      await AsyncStorage.removeItem("user");
+      await AsyncStorage.removeItem("cart");
+      console.log("User Logged Out");
     } catch (error) {
       console.error("Error Removing Authentication Credentials", error);
     }
   };
 
+  const signup = async (email, password) => {
+    try {
+      const response = await axios.post(
+        "https://clothing-store-vbrf.onrender.com/signup",
+        { email, password }
+      );
+      if (response.status === 201) {
+        console.log("Sign-Up Successful");
+      } else {
+        console.error("Failed To Sign-Up");
+      }
+    } catch (error) {
+      console.error("Error Signing Up", error);
+    }
+  };
+
+  const forgotPassword = async (email) => {
+    try {
+      const response = await axios.post(
+        "https://clothing-store-vbrf.onrender.com/forgot-password",
+        { email }
+      );
+      if (response.status === 200) {
+        console.log("Password Reset Link Sent");
+      } else {
+        console.error("Failed To Reset Password");
+      }
+    } catch (error) {
+      console.error("Error Resetting Password", error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, signup, forgotPassword }}>
       {children}
     </AuthContext.Provider>
   );
@@ -51,55 +104,44 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => useContext(AuthContext);
 
-// UserContext
+// UserContext for managing user data (user profile, address, etc.)
 export const UserContext = createContext();
 
-export const useUserContext = () => {
-  return useContext(UserContext);
-};
+export const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const loadUserData = async () => {
+  const loadUserData = async (email, password) => {
     try {
-      const testEmail = "x@gmail.com";
-      const testPassword = "123456";
+      // Dummy User Data (Replace with real data)
+      const dummyUserData = {
+        email: "testuser@example.com",
+        name: "Test User",
+        address: "123 Test St, Test City, TS 12345",
+      };
 
-      const response = await axios.post(
-        "https://clothing-store-vbrf.onrender.com/profile",
-        {
-          email: testEmail,
-          password: testPassword,
-        }
-      );
-
-      if (response.status === 200) {
-        const userData = response.data;
-        setUser(userData);
-        await AsyncStorage.setItem("user", JSON.stringify(userData));
-      } else {
-        console.error("Failed to authenticate user");
-        setUser(null);
-      }
+      setUser(dummyUserData);
+      await AsyncStorage.setItem("user", JSON.stringify(dummyUserData));
     } catch (error) {
-      console.error("Error loading user data from API", error);
+      console.error("Error Loading User Data", error);
       setUser(null);
     }
   };
 
   useEffect(() => {
-    loadUserData();
+    const loadFromAsyncStorage = async () => {
+      const storedUser = await AsyncStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    };
+
+    loadFromAsyncStorage();
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      AsyncStorage.setItem("user", JSON.stringify(user));
-    }
-  }, [user]);
-
   const logOut = async () => {
-    console.log("User logged out");
+    console.log("User Logged Out");
     await AsyncStorage.removeItem("user");
     setUser(null);
   };
@@ -115,7 +157,7 @@ export const UserContextProvider = ({ children }) => {
   );
 };
 
-// CartContext
+// CartContext for handling cart data (adding/removing items, calculating price)
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -136,12 +178,11 @@ export const CartProvider = ({ children }) => {
   const addToCartItem = async (item) => {
     let cartItems = await AsyncStorage.getItem("cart");
     cartItems = cartItems ? JSON.parse(cartItems) : [];
-    let isExist = cartItems.findIndex((cart) => cart.id === item.id);
-    if (isExist === -1) {
+    if (!cartItems.find((cart) => cart.id === item.id)) {
       cartItems.push(item);
-      calculateTotalPrice(cartItems);
-      setCartItems(cartItems);
       await AsyncStorage.setItem("cart", JSON.stringify(cartItems));
+      setCartItems(cartItems);
+      calculateTotalPrice(cartItems);
     }
   };
 

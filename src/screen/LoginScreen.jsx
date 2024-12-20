@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "../context/context";
+import { useAuth } from "../context/Context";
 
 const LoginScreen = () => {
   const { login } = useAuth();
@@ -19,8 +18,6 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
-  const { setIsAuthenticated } = useAuth();
-
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -46,23 +43,17 @@ const LoginScreen = () => {
         }
       );
 
-      console.log("Response Status:", response.status);
-
       if (!response.ok) {
         const data = await response.json();
-        console.log("Response Data:", data);
         setError(data.message || "Login Failed. Please Try Again.");
         return;
       }
 
       const data = await response.json();
-      console.log("Login Success :", data);
-
       await login(data.token);
 
       navigation.replace("HOME");
     } catch (err) {
-      console.error("Error During Login :", err);
       setError("Something Went Wrong. Please Try Again Later.");
     } finally {
       setLoading(false);
@@ -153,45 +144,40 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: "#E96E6E",
+    borderColor: "#ddd",
     borderWidth: 1,
+    marginVertical: 10,
+    paddingLeft: 10,
     borderRadius: 10,
-    marginTop: 10,
-    paddingLeft: 15,
-    fontSize: 16,
   },
   submitButton: {
-    backgroundColor: "#E96E6E",
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#FF72B1",
+    paddingVertical: 12,
     borderRadius: 10,
-    marginTop: 30,
+    alignItems: "center",
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: "#fff",
     fontSize: 18,
-    fontWeight: "700",
-  },
-  signupContainer: {
-    marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  signupText: {
-    fontSize: 14,
-    color: "#444444",
-  },
-  signupLink: {
-    fontSize: 14,
-    color: "#E96E6E",
-    marginLeft: 5,
+    fontWeight: "500",
   },
   errorText: {
     color: "red",
     marginTop: 10,
-    textAlign: "center",
     fontSize: 14,
+  },
+  signupContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  signupText: {
+    color: "#444444",
+  },
+  signupLink: {
+    color: "#FF72B1",
+    marginLeft: 5,
+    fontWeight: "500",
   },
 });
 
