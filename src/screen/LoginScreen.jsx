@@ -50,10 +50,12 @@ const LoginScreen = () => {
       }
 
       const data = await response.json();
-      await login(data.token);
+      console.log('Login Successful :', data);
+      await login(data.token, navigation);
 
-      navigation.replace("HOME");
+      console.log('Navigating To HOME');
     } catch (err) {
+      console.error("Login Error :", err);
       setError("Something Went Wrong. Please Try Again Later.");
     } finally {
       setLoading(false);

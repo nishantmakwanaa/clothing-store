@@ -23,19 +23,12 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (token, navigation) => {
     try {
-      const response = await axios.post(
-        "https://clothing-store-vbrf.onrender.com/login",
-        { email, password }
-      );
-      if (response.status === 200) {
-        setIsAuthenticated(true);
-        await EncryptedStorage.setItem("isAuthenticated", "true");
-        loadUserData(email, password);
-      } else {
-        console.error("Login Failed");
-      }
+      setIsAuthenticated(true);
+      await EncryptedStorage.setItem("isAuthenticated", "true");
+      loadUserData(token);
+      navigation.replace("HOME");
     } catch (error) {
       console.error("Error Logging In", error);
     }
