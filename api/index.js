@@ -6,6 +6,8 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const products = require("./data/data.json");
 
+app.use(express.json());
+
 const dbURI =
   "mongodb+srv://NISHANT:NISHANT@nishant.c1g7o.mongodb.net/?retryWrites=true&w=majority&appName=NISHANT";
 
@@ -134,12 +136,14 @@ app.get("/profile", async (req, res) => {
     }
 
     const cartItems = await Cart.find({ userId: user._id }).populate("productId");
+
     res.json({
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       password: user.password,
       phoneNumber: user.phoneNumber,
+      createdAt: user.createdAt,
       cartItems,
     });
   } catch (err) {
