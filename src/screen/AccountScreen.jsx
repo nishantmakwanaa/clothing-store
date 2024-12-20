@@ -10,7 +10,7 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 import { fonts } from "../utils/fonts";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/context";
 import axios from "axios";
 
 const AccountScreen = ({ navigation }) => {

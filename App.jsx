@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { CartProvider } from "./src/context/CartContext";
-import { AuthProvider, useAuth } from "./src/context/AuthContext";
+import { useAuth } from "./src/context/context";
 import HomeScreen from "./src/screen/HomeScreen";
 import ProductDetailsScreen from "./src/screen/ProductDetailsScreen";
 import CartScreen from "./src/screen/CartScreen";
@@ -13,7 +12,9 @@ import LoginScreen from "./src/screen/LoginScreen";
 import SignupScreen from "./src/screen/SignupScreen";
 import SettingsScreen from "./src/screen/SettingsScreen";
 import ForgetPasswordScreen from "./src/screen/ForgetPasswordScreen";
-import { UserContextProvider } from "./src/context/UserContext";
+import { AuthProvider } from "./src/context/context";
+import { UserContextProvider } from "./src/context/context";
+import { CartProvider } from "./src/context/context";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

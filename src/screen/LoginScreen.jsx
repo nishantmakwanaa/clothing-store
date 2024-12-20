@@ -10,7 +10,7 @@ import {
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/context";
 
 const LoginScreen = () => {
   const { login } = useAuth();
