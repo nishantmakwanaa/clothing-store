@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../context/AuthContext";
 
 const LoginScreen = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,44 +21,53 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const { setIsAuthenticated } = useAuth();
 
- const handleLogin = async () => {
-   if (!email || !password) {
-     setError("Both Fields Are Required.");
-     return;
-   }
 
-   setLoading(true);
-   setError(null);
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Both Fields Are Required.");
+      return;
+    }
 
-   try {
-     const response = await fetch(
-       "https://clothing-store-vbrf.onrender.com/login",
-       {
-         method: "POST",
-         headers: {
-           "Content-Type": "application/json",
-         },
-         body: JSON.stringify({
-           email,
-           password,
-         }),
-       }
-     );
+    setLoading(true);
+    setError(null);
 
-     const data = await response.json();
+    try {
+      const response = await fetch(
+        "https://clothing-store-vbrf.onrender.com/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
-     if (response.ok) {
-       await login(email, password);
-       navigation.replace("HOME");
-     } else {
-       setError(data.message || "Login Failed. Please Try Again.");
-     }
-   } catch (err) {
-     setError("Something Went Wrong. Please Try Again Later.");
-   } finally {
-     setLoading(false);
-   }
- };
+      console.log("Response Status:", response.status);
+
+      if (!response.ok) {
+        const data = await response.json();
+        console.log("Response Data:", data);
+        setError(data.message || "Login Failed. Please Try Again.");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Login Success :", data);
+
+      await login(data.token);
+
+      navigation.replace("HOME");
+    } catch (err) {
+      console.error("Error During Login :", err);
+      setError("Something Went Wrong. Please Try Again Later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleForgetPassword = () => {
     navigation.navigate("FORGOT_PASSWORD");

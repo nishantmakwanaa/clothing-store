@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import * as Keychain from 'react-native-keychain';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import EncryptedStorage from "react-native-encrypted-storage";
 
 const AuthContext = createContext();
 
@@ -10,33 +9,33 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const token = await AsyncStorage.getItem("authToken");
-        if (token) {
+        const status = await EncryptedStorage.getItem("isAuthenticated");
+        if (status === "true") {
           setIsAuthenticated(true);
         }
       } catch (error) {
-        console.error("Error retrieving authentication token", error);
+        console.error("Error Retrieving Authentication Status", error);
       }
     };
 
     checkAuthStatus();
   }, []);
 
-  const login = async (token) => {
+  const login = async () => {
     try {
-      await AsyncStorage.setItem("authToken", token);
       setIsAuthenticated(true);
+      await EncryptedStorage.setItem("isAuthenticated", "true");
     } catch (error) {
-      console.error("Error saving authentication credentials", error);
+      console.error("Error Saving Authentication Credentials", error);
     }
   };
 
   const logout = async () => {
     try {
-      await AsyncStorage.removeItem("authToken");
       setIsAuthenticated(false);
+      await EncryptedStorage.removeItem("isAuthenticated");
     } catch (error) {
-      console.error("Error removing authentication credentials", error);
+      console.error("Error Removing Authentication Credentials", error);
     }
   };
 
