@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const products = require("./data/data.json");
 
 const dbURI =
-  "mongodb+srv://NISHANT:NISHANT@nishant.c1g7o.mongodb.net/?retryWrites=true&w=majority&appName=NISHANT"; // Replace with your MongoDB Atlas connection string
+  "mongodb+srv://NISHANT:NISHANT@nishant.c1g7o.mongodb.net/?retryWrites=true&w=majority&appName=NISHANT";
 
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: { type: String, unique: true },
   password: String,
+  phoneNumber: String,
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -56,7 +57,7 @@ app.get("/api/products", (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, phoneNumber } = req.body;
   if (!email || !password) {
     return res.status(400).json({ message: "Email And Password Are Required" });
   }
@@ -73,6 +74,7 @@ app.post("/signup", async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
+      phoneNumber,
     });
     await user.save();
 
@@ -100,7 +102,13 @@ app.post("/login", async (req, res) => {
     }
 
     res.json({
-      user: { name: `${user.firstName} ${user.lastName}`, email: user.email },
+      user: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: user.password,
+        phoneNumber: user.phoneNumber,
+      },
     });
   } catch (err) {
     res.status(500).json({ message: "Login Failed" });
@@ -127,12 +135,42 @@ app.get("/profile", async (req, res) => {
 
     const cartItems = await Cart.find({ userId: user._id }).populate("productId");
     res.json({
-      name: `${user.firstName} ${user.lastName}`,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
+      password: user.password,
+      phoneNumber: user.phoneNumber,
       cartItems,
     });
   } catch (err) {
     res.status(500).json({ message: "Failed To Fetch User Profile" });
+  }
+});
+
+app.put("/edit-profile", async (req, res) => {
+  const { email, password, updatedData } = req.body;
+
+  if (!email || !password || !updatedData) {
+    return res.status(400).json({ message: "Required Fields Missing" });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Password" });
+    }
+
+    Object.assign(user, updatedData);
+    await user.save();
+
+    res.status(200).json({ message: "User Data Updated Successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed To Update User Data" });
   }
 });
 
@@ -166,7 +204,7 @@ app.delete("/profile/cart/:itemId", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: "Email and Password Required" });
+    return res.status(400).json({ message: "Email And Password Required" });
   }
 
   const itemId = req.params.itemId;

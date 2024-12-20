@@ -5,18 +5,24 @@ import {
   View,
   TouchableOpacity,
   Image,
+  TextInput,
   ActivityIndicator,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Header from "../components/Header";
 import { UserContext } from "../context/Context";
-import axios from "axios";
 
 const AccountScreen = ({ navigation }) => {
-  const { user, logOut } = useContext(UserContext);
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { user, setUser, logOut } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedUser, setUpdatedUser] = useState({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    password: "",
+    phone: user?.phone || "",
+  });
 
   const handleLogOut = () => {
     logOut();
@@ -26,84 +32,42 @@ const AccountScreen = ({ navigation }) => {
     });
   };
 
-  useEffect(() => {
-    console.log("User Context:", user); // Log user data
-    if (user) {
-      fetchUserData();
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
+  const handleEditChange = (field, value) => {
+    setUpdatedUser({ ...updatedUser, [field]: value });
+  };
 
-
-  const fetchUserData = async () => {
+  const handleUpdate = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(false);
-
-      const email = "x@gmail.com";  // Replace with dynamic email
-      const password = "123456";     // Replace with dynamic password
-
-      // Send data as a POST request with JSON body
-      const response = await axios.post("https://clothing-store-vbrf.onrender.com/profile", {
-        email: email,
-        password: password
-      }, {
+      const response = await fetch("https://clothing-store-vbrf.onrender.com/edit-profile", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json', // Proper content type for POST requests
-        }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
       });
 
-      if (response.status === 200) {
-        setUserData(response.data);
-      } else {
-        throw new Error("Failed to Load Data");
+      if (!response.ok) {
+        throw new Error("Failed To Ppdate Profile.");
       }
+
+      const data = await response.json();
+
+      setUser({
+        ...user,
+        ...data,
+      });
+
+      setIsEditing(false);
+      console.log("Profile updated successfully!");
     } catch (error) {
-      console.error("Error Fetching User Data:", error.response || error.message);
-      setUserData(null);
-      setError(true);
+      console.error("Error Updating Profile :", error);
+      alert("Error Updating Profile. Please Try Again.");
     } finally {
       setLoading(false);
     }
   };
 
-
-
-
-
-
-  if (loading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#E96E6E" />
-      </View>
-    );
-  }
-
-  if (!user) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text style={styles.errorText}>
-          User Not Authenticated. Please Log In.
-        </Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text style={styles.errorText}>Failed to Load Data. Please Try Again.</Text>
-        <TouchableOpacity
-          style={styles.retryButton}
-          onPress={fetchUserData}
-        >
-          <Text style={styles.retryText}>Retry</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
 
   return (
     <LinearGradient colors={["#FDF0F3", "#FFFBFC"]} style={styles.container}>
@@ -112,50 +76,87 @@ const AccountScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.contentContainer}>
-        {userData && (
-          <>
-            <View style={styles.profileHeader}>
-              <Image
-                source={{
-                  uri:
-                    userData.profileImage ||
-                    "https://clothing-store-vbrf.onrender.com/images/Ellipse2.png",
-                }}
-                style={styles.profileImage}
-              />
-              <Text style={styles.userName}>{userData.name}</Text>
-              <Text style={styles.userEmail}>{userData.email}</Text>
+        <View style={styles.profileHeader}>
+          <Image
+            source={{
+              uri: user.profileImage || "https://clothing-store-vbrf.onrender.com/images/Ellipse2.png",
+            }}
+            style={styles.profileImage}
+          />
+        </View>
+
+        {isEditing ? (
+          <View style={styles.detailsContainer}>
+            <TextInput
+              style={styles.inputField}
+              value={updatedUser.firstName}
+              onChangeText={(text) => handleEditChange("firstName", text)}
+              placeholder="Enter Your First Name"
+            />
+            <TextInput
+              style={styles.inputField}
+              value={updatedUser.lastName}
+              onChangeText={(text) => handleEditChange("lastName", text)}
+              placeholder="Enter Your Last Name"
+            />
+            <TextInput
+              style={styles.inputField}
+              value={updatedUser.email}
+              onChangeText={(text) => handleEditChange("email", text)}
+              placeholder="Enter Your E-mail"
+              keyboardType="email-address"
+            />
+            <TextInput
+              style={styles.inputField}
+              value={updatedUser.password}
+              onChangeText={(text) => handleEditChange("password", text)}
+              placeholder="Enter New password"
+              secureTextEntry
+            />
+            <TextInput
+              style={styles.inputField}
+              value={updatedUser.phone}
+              onChangeText={(text) => handleEditChange("phone", text)}
+              placeholder="Enter Your Phone Number"
+              keyboardType="phone-pad"
+            />
+            <TouchableOpacity style={styles.updateButton} onPress={handleUpdate}>
+              {loading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Update</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.detailsContainer}>
+            <View style={styles.flexRowContainer}>
+              <Text style={styles.detailsTitle}>First Name :</Text>
+              <Text style={styles.detailsValue}>{user.firstName || "Not Available"}</Text>
             </View>
-
-            <View style={styles.detailsContainer}>
-              <View style={styles.flexRowContainer}>
-                <Text style={styles.detailsTitle}>Phone :</Text>
-                <Text style={styles.detailsValue}>
-                  {userData.phone || "Loading..."}
-                </Text>
-              </View>
-
-              <View style={styles.flexRowContainer}>
-                <Text style={styles.detailsTitle}>Address :</Text>
-                <Text style={styles.detailsValue}>
-                  {userData.address || "Loading..."}
-                </Text>
-              </View>
-
-              <View style={styles.flexRowContainer}>
-                <Text style={styles.detailsTitle}>Joined :</Text>
-                <Text style={styles.detailsValue}>
-                  {userData.joinedDate || "Loading..."}
-                </Text>
-              </View>
+            <View style={styles.flexRowContainer}>
+              <Text style={styles.detailsTitle}>Last Name :</Text>
+              <Text style={styles.detailsValue}>{user.lastName || "Not Available"}</Text>
             </View>
-          </>
+            <View style={styles.flexRowContainer}>
+              <Text style={styles.detailsTitle}>E-Mail :</Text>
+              <Text style={styles.detailsValue}>{user.email || "Not Available"}</Text>
+            </View>
+            <View style={styles.flexRowContainer}>
+              <Text style={styles.detailsTitle}>Phone :</Text>
+              <Text style={styles.detailsValue}>{user.phone || "Not Available"}</Text>
+            </View>
+            <View style={styles.flexRowContainer}>
+              <Text style={styles.detailsTitle}>Joined :</Text>
+              <Text style={styles.detailsValue}>{user.joined || "Not Available"}</Text>
+            </View>
+            <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+              <Text style={styles.buttonText}>Edit Details</Text>
+            </TouchableOpacity>
+          </View>
         )}
 
-        <TouchableOpacity
-          style={styles.logOutButton}
-          onPress={handleLogOut}
-        >
+        <TouchableOpacity style={styles.logOutButton} onPress={handleLogOut}>
           <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>
       </View>
@@ -217,12 +218,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 20,
-    marginTop: 30,
+  },
+  editButton: {
+    backgroundColor: "#4CAF50",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    marginTop: 20,
+  },
+  updateButton: {
+    backgroundColor: "#E96E6E",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    marginTop: 20,
   },
   buttonText: {
     fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "700",
+  },
+  inputField: {
+    height: 45,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
   },
   loaderContainer: {
     flex: 1,
@@ -233,19 +258,6 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     fontSize: 16,
-  },
-  retryText: {
-    fontSize: 20,
-    color: "#FFFFFF",
-    fontWeight: "700",
-  },
-  retryButton: {
-    backgroundColor: "#E96E6E",
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-    marginTop: 20,
   },
 });
 
