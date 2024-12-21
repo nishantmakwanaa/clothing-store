@@ -5,6 +5,12 @@ import { View, Text, Animated, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import HomeScreen from "../screens/HomeScreen";
 import ProductDetail from "../screens/ProductDetailsScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import CartScreen from "../screens/CartScreen";
+import SearchScreen from "../screens/SearchScreen";
+import LoginScreen from "../screens/LoginScreen";
+import SignUpScreen from "../screens/SignUpScreen";
+import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import { RootStackParamList } from "../types";
 import fonts from "../config/fonts";
 
@@ -64,7 +70,13 @@ function RootNavigator() {
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Product-detail" component={ProductDetail} />
+      <Stack.Screen name="Product-Details" component={ProductDetail} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Cart" component={CartScreen} />
+      <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );
 }

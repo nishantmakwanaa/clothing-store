@@ -26,14 +26,17 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       >
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Image source={user.image} style={styles.userImage} />
+            <TouchableOpacity onPress={() => navigate("Profile")}>
+              <Image source={user.image} style={styles.userImage} />
+            </TouchableOpacity>
             <Text style={styles.userName}>Hi, {user.name}</Text>
           </View>
           <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity onPress={() => navigate("Search")} style={styles.iconButton}>
               <Ionicons name="search-outline" size={Spacing * 3} color={Colors.text} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
+
+            <TouchableOpacity onPress={() => navigate("Cart")} style={styles.iconButton}>
               <Ionicons name="cart-outline" size={Spacing * 3} color={Colors.text} />
             </TouchableOpacity>
           </View>
