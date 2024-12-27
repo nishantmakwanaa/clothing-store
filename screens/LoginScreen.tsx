@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
@@ -43,6 +43,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
     }, 2000);
   };
 
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -79,7 +80,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
           <Text style={styles.errorText}>{error}</Text>
         )}
 
-        <TouchableOpacity onPress={() => navigate("ForgotPassword")} style={styles.forgotPassword}>
+        <TouchableOpacity onPress={() => navigate("Forgot Password")} style={styles.forgotPassword}>
           <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
         </TouchableOpacity>
 
@@ -100,7 +101,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
           Don't Have An Account ?{" "}
           <Text
             style={styles.signUpText}
-            onPress={() => navigate("SignUp")}
+            onPress={() => navigate("Sign Up")}
           >
             Sign Up
           </Text>
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-start",
   },
-  
+
   title: {
     fontSize: Spacing * 3.5,
     fontFamily: Font["poppins-bold"],

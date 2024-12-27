@@ -48,7 +48,7 @@ const SearchScreen: React.FC<Props> = ({ navigation: { navigate, goBack } }) => 
   };
 
   const handleProductPress = (product: Product) => {
-    navigate("ProductDetails", { product });
+    navigate("Product Details", { product });
   };
 
   const handleSearchSubmit = () => {

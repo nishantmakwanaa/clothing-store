@@ -12,7 +12,6 @@ import { categories, products, user } from "../data/index";
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 
@@ -85,7 +84,7 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
               <TouchableOpacity
                 key={product.id}
                 onPress={() =>
-                  navigate("ProductDetails", { product: product })
+                  navigate("Product Details", { product: product })
                 }
                 style={styles.productItem}
               >

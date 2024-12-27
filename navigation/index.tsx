@@ -105,11 +105,12 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
       {!isLoggedIn ? (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+          <Stack.Screen name="Sign Up" component={SignUpScreen} />
+          <Stack.Screen name="Forgot Password" component={ForgotPasswordScreen} />
         </>
       ) : (
         <>
+
           <Stack.Screen name="Home">
             {props => (
               <View style={{ flex: 1 }}>
@@ -120,7 +121,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="ProductDetails">
+          <Stack.Screen name="Product Details">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -140,7 +141,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="CheckOut">
+          <Stack.Screen name="Check Out">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -150,7 +151,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="OrderHistory">
+          <Stack.Screen name="Order History">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -160,7 +161,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="OrderTracking">
+          <Stack.Screen name="Order Tracking">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -190,7 +191,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="RatingReview">
+          <Stack.Screen name="Rating & Review">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -230,7 +231,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="ShippingAddress">
+          <Stack.Screen name="Shipping Address">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -240,7 +241,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="Notification">
+          <Stack.Screen name="Notifications">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -250,7 +251,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="HelpSupport">
+          <Stack.Screen name="Help & Support">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -260,7 +261,7 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="AdminPanel">
+          <Stack.Screen name="Admin Panel">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />

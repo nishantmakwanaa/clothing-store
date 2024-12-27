@@ -26,7 +26,7 @@ const HeaderScreen: React.FC = () => {
           <TouchableOpacity onPress={() => navigation.navigate("Search")} style={styles.iconButton}>
             <Ionicons name="search-outline" size={Spacing * 3} color={Colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Notification")} style={styles.iconButton}>
+          <TouchableOpacity onPress={() => navigation.navigate("Notifications")} style={styles.iconButton}>
             <Ionicons name="notifications-outline" size={Spacing * 3} color={Colors.text} />
           </TouchableOpacity>
         </View>

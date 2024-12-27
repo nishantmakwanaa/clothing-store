@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
@@ -9,23 +9,50 @@ type ShippingAddressScreenProps = NativeStackScreenProps<any, "ShippingAddress">
 
 const ShippingAddressScreen = ({ navigation }: ShippingAddressScreenProps) => {
   const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
 
   const handleSaveAddress = () => {
-    console.log("Address Saved:", address);
+    if (!address || !city || !state) {
+      Alert.alert("Error", "Please fill out all the required fields.");
+      return;
+    }
+
+    console.log("Address Saved :", {
+      address,
+      city,
+      state,
+    });
+    navigation.navigate("Checkout");
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Shipping Address</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your address"
-        value={address}
-        onChangeText={setAddress}
-      />
-      <TouchableOpacity style={styles.saveButton} onPress={handleSaveAddress}>
-        <Text style={styles.saveButtonText}>Save Address</Text>
-      </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your address"
+          value={address}
+          onChangeText={setAddress}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your city"
+          value={city}
+          onChangeText={setCity}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your state"
+          value={state}
+          onChangeText={setState}
+        />
+
+        <TouchableOpacity style={styles.saveButton} onPress={handleSaveAddress}>
+          <Text style={styles.saveButtonText}>Save Address</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -41,6 +68,11 @@ const styles = StyleSheet.create({
     fontSize: Spacing * 3.5,
     fontFamily: Font["poppins-bold"],
     color: Colors.text,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    paddingBottom: Spacing * 3,
   },
   input: {
     borderWidth: 1,

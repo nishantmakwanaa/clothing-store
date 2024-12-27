@@ -123,7 +123,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* My Orders Section */}
                 <View style={styles.ordersSection}>
                     <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>
                         My Orders
@@ -138,7 +137,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("AdminPanel")}
+                        onPress={() => navigation.navigate("Admin Panel")}
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
                             Admin Panel
@@ -146,7 +145,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("Wishlist")}
+                        onPress={() => navigation.navigate("WishList")}
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
                             Wishlist
@@ -154,7 +153,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("ShippingAddress")}
+                        onPress={() => navigation.navigate("Shipping Address")}
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
                             Shipping Address
@@ -162,7 +161,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("OrderTracking")}
+                        onPress={() => navigation.navigate("Order Tracking")}
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
                             Order Tracking
@@ -170,7 +169,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("OrderHistory")}
+                        onPress={() => navigation.navigate("Order History")}
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
                             Order History
@@ -178,10 +177,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("Checkout")}
+                        onPress={() => navigation.navigate("Check Out")}
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Checkout
+                            Check Out
                         </Text>
                     </TouchableOpacity>
                 </View>

@@ -15,10 +15,14 @@ import Font from "../constants/Font";
 import Spacing from "../constants/Spacing";
 import { useCart } from "../context/Context";
 import { products } from "../data";
+import CustomAlert from "./components/AlertBox";
 
 const CartScreen: React.FC = () => {
   const navigation = useNavigation();
   const { cartItems, previousOrders, addToCart, removeFromCart, addOrder } = useCart();
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const getRandomProducts = () => {
     const shuffled = [...products].sort(() => 0.5 - Math.random());
@@ -26,27 +30,37 @@ const CartScreen: React.FC = () => {
   };
 
   const handleCompleteOrder = () => {
-    if (cartItems.length > 0) {
-      const order = {
-        id: Math.random(),
-        product: cartItems[0].product,
-        color: cartItems[0].color,
-        size: cartItems[0].size,
-        image: cartItems[0].image,
-        date: new Date().toISOString(),
-        status: 'Completed',
-      };
-      addOrder(order);
-      cartItems.forEach((item) => removeFromCart(item.id));
-      navigation.navigate('CheckOut');
+    if (cartItems.length === 0) {
+      setAlertMessage('Your Cart Is Empty, Please Add Items To Complete The Order.');
+      setShowAlert(true);
+      return;
     }
+
+    const order = {
+      id: Math.random(),
+      product: cartItems[0].product,
+      color: cartItems[0].color,
+      size: cartItems[0].size,
+      image: cartItems[0].image,
+      date: new Date().toISOString(),
+      status: 'Completed',
+    };
+  
+    addOrder(order);
+    cartItems.forEach((item) => removeFromCart(item.id));
+    navigation.navigate('Check Out');
   };
 
   const totalPrice = cartItems.reduce((total, item) => total + item.product.price, 0);
 
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
+        
         <View>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Cart Items</Text>
           {cartItems.length > 0 ? (
@@ -121,7 +135,7 @@ const CartScreen: React.FC = () => {
             Complete Order
           </Text>
         </TouchableOpacity>
-
+        <CustomAlert visible={showAlert} message={alertMessage} onClose={handleCloseAlert} />
       </ScrollView>
     </SafeAreaView>
   );

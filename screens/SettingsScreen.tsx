@@ -39,14 +39,14 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                     </View>
                     <TouchableOpacity 
                         style={styles.settingsItem} 
-                        onPress={() => navigation.navigate('HelpSupport')}
+                        onPress={() => navigation.navigate('Help & Support')}
                     >
                         <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>Help & Support</Text>
                         <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={styles.settingsItem} 
-                        onPress={() => navigation.navigate('RatingReview')}
+                        onPress={() => navigation.navigate('Rating & Review')}
                     >
                         <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>Rating & Review</Text>
                         <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
