@@ -15,18 +15,14 @@ const HeaderScreen: React.FC = () => {
   return (
     <View style={styles.header}>
       <View style={styles.headerLeft}>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Image source={user.image} style={styles.userImage} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back-outline" size={Spacing * 3} color={Colors.text} />
         </TouchableOpacity>
         <Text style={styles.userName}>Hi, {firstName}</Text>
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity onPress={() => navigation.navigate("Search")} style={styles.iconButton}>
           <Ionicons name="search-outline" size={Spacing * 3} color={Colors.text} />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate("Cart")} style={styles.iconButton}>
-          <Ionicons name="cart-outline" size={Spacing * 3} color={Colors.text} />
         </TouchableOpacity>
       </View>
     </View>
@@ -45,10 +41,6 @@ const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  userImage: {
-    width: Spacing * 4,
-    height: Spacing * 4,
   },
   userName: {
     fontFamily: Font["poppins-semiBold"],
