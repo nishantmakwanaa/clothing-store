@@ -63,8 +63,9 @@ const OrderTrackingScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
-    padding: Spacing * 2,
+    paddingHorizontal: Spacing * 2,
+    marginTop: 0,
+    marginBottom: 0,
   },
   header: {
     marginBottom: Spacing * 3,

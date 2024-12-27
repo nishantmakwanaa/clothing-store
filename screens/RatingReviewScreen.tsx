@@ -61,8 +61,9 @@ const RatingReviewScreen = ({ navigation }: RatingReviewScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing * 2,
-    backgroundColor: Colors.background,
+    paddingHorizontal: Spacing * 2,
+    marginTop: 0,
+    marginBottom: 0,
   },
   title: {
     fontSize: Spacing * 3.5,

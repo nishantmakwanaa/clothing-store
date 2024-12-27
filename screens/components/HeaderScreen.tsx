@@ -10,13 +10,15 @@ import { user } from "../../data/index";
 const HeaderScreen: React.FC = () => {
   const navigation = useNavigation();
 
+  const firstName = user.name.split(" ")[0];
+
   return (
     <View style={styles.header}>
       <View style={styles.headerLeft}>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <Image source={user.image} style={styles.userImage} />
         </TouchableOpacity>
-        <Text style={styles.userName}>Hi, {user.name}</Text>
+        <Text style={styles.userName}>Hi, {firstName}</Text>
       </View>
       <View style={styles.headerRight}>
         <TouchableOpacity onPress={() => navigation.navigate("Search")} style={styles.iconButton}>
@@ -36,6 +38,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginTop: Spacing * 2,
+    paddingHorizontal: Spacing * 2,
+    paddingBottom: Spacing * 2,
   },
   headerLeft: {
     flexDirection: "row",

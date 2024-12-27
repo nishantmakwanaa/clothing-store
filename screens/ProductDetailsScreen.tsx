@@ -114,6 +114,9 @@ export default ProductDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: Spacing * 2,
+    marginTop: 0,
+    marginBottom: 0,
   },
   header: {
     flexDirection: "row",

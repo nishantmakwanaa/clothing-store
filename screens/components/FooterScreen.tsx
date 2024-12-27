@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderTopWidth: 1,
     borderTopColor: Colors.border,
+    marginTop: 0,
   },
   iconButton: {
     padding: Spacing / 2,

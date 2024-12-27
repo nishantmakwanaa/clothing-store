@@ -134,10 +134,12 @@ const CartScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing * 2,
+    paddingHorizontal: Spacing * 2,
+    marginTop: 0,
+    marginBottom: 0,
   },
   scrollViewContent: {
-    paddingBottom: Spacing * 4,
+    paddingBottom: 0,
   },
   header: {
     flexDirection: "row",
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   cartSection: {
-    marginBottom: Spacing * 4,
+    marginBottom: 0,
   },
   sectionTitle: {
     fontSize: Spacing * 2,
@@ -191,7 +193,7 @@ const styles = StyleSheet.create({
     color: Colors.gray,
   },
   previousOrderSection: {
-    marginBottom: Spacing * 4,
+    marginBottom: 0,
   },
   orderItem: {
     marginBottom: Spacing * 2,
@@ -207,7 +209,7 @@ const styles = StyleSheet.create({
     color: Colors.gray,
   },
   trackOrderSection: {
-    marginBottom: Spacing * 4,
+    marginBottom: 0,
   },
   map: {
     width: "100%",
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
     borderRadius: Spacing,
   },
   paymentSection: {
-    marginBottom: Spacing * 4,
+    marginBottom: 0,
   },
   paymentMethods: {
     flexDirection: "row",

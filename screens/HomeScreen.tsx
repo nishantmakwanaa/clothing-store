@@ -82,7 +82,9 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing * 2,
+    paddingHorizontal: Spacing * 2,
+    marginTop: 0,
+    marginBottom: 0,
   },
   exploreSection: {
     paddingVertical: Spacing * 4,
