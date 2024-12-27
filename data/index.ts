@@ -88,7 +88,7 @@ export const products: Product[] = [
     id: 1,
     name: "Second-Hand Blazer",
     price: 1200,
-    category: categories[0],
+    category: categories.find((cat) => cat.id === 1)!,
     description:
       "Gently Used, Perfect For Office Or Casual Wear. Good Condition, Minimal Signs Of Wear.",
     image: require("../assets/images/products/yellow-ss.jpg"),
@@ -102,7 +102,7 @@ export const products: Product[] = [
     id: 2,
     name: "Pre-Owned Men’s Sportswear",
     price: 4000,
-    category: categories[0],
+    category: categories.find((cat) => cat.id === 1)!,
     description:
       "Lightly Worn Sports-Wear Suitable For Both Casual And Work-Out Wear. Comfortable And Durable.",
     image: require("../assets/images/products/green-j.jpg"),
@@ -116,7 +116,7 @@ export const products: Product[] = [
     id: 3,
     name: "Used Violet Hoodie",
     price: 1800,
-    category: categories[0],
+    category: categories.find((cat) => cat.id === 1)!,
     description:
       "Pre-Loved Hoodie In Excellent Condition. Soft Fabric, Great For Casual Outings.",
     image: require("../assets/images/products/hdd.jpg"),
@@ -130,7 +130,7 @@ export const products: Product[] = [
     id: 4,
     name: "Gently Used Skinny Fit Blazer",
     price: 2500,
-    category: categories[1],
+    category: categories.find((cat) => cat.id === 2)!, 
     description:
       "Second-Hand Blazer In Very Good Condition. Stylish And Versatile For Both Formal And Casual Looks.",
     image: require("../assets/images/products/blue-ish-w.jpg"),

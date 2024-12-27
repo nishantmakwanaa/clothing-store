@@ -1,4 +1,12 @@
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { categories, products, user } from "../data/index";
 import Spacing from "../constants/Spacing";
@@ -15,6 +23,14 @@ type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(0);
+
+  const filteredProducts =
+    activeCategoryIndex === 0
+      ? products
+      : products.filter(
+          (product) =>
+            product.category.id === categories[activeCategoryIndex - 1].id
+        );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,9 +55,17 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
               <TouchableOpacity
                 key={category.id}
                 onPress={() => setActiveCategoryIndex(index)}
-                style={[styles.categoryButton, activeCategoryIndex === index && styles.activeCategoryButton]}
+                style={[
+                  styles.categoryButton,
+                  activeCategoryIndex === index && styles.activeCategoryButton,
+                ]}
               >
-                <Text style={[styles.categoryText, activeCategoryIndex === index && styles.activeCategoryText]}>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    activeCategoryIndex === index && styles.activeCategoryText,
+                  ]}
+                >
                   {category.name}
                 </Text>
               </TouchableOpacity>
@@ -57,10 +81,12 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.productList}>
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <TouchableOpacity
                 key={product.id}
-                onPress={() => navigate("ProductDetails", { product: product })}
+                onPress={() =>
+                  navigate("ProductDetails", { product: product })
+                }
                 style={styles.productItem}
               >
                 <Image style={styles.productImage} source={product.image} />
