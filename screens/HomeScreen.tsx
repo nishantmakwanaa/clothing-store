@@ -148,16 +148,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   productItem: {
+    width: "48%",
     marginVertical: Spacing,
   },
   productImage: {
-    width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
+    width: IMAGE_WIDTH / 1.1,
+    height: IMAGE_HEIGHT / 1.1,
     borderRadius: Spacing * 2,
   },
   productName: {
     fontFamily: Font["poppins-semiBold"],
     fontSize: Spacing * 1.4,
+    width: IMAGE_WIDTH / 1.1,
     color: Colors.text,
     marginVertical: Spacing,
   },

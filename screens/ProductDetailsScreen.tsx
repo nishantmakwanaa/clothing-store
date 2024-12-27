@@ -44,22 +44,9 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-          <Ionicons name="arrow-back-outline" size={Spacing * 3} color={Colors.text} />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Product Details</Text>
-
-        <TouchableOpacity style={styles.iconButton}>
-          <Ionicons name="cart-outline" size={Spacing * 3} color={Colors.text} />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <Image source={product.image} style={styles.productImage} />
+
         <View style={styles.productInfo}>
           <Text style={styles.productName}>{product.name}</Text>
 
@@ -96,15 +83,14 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
+        <View style={styles.priceContainer}>
+          <Text style={styles.price}>₹ {product.price}</Text>
+          <TouchableOpacity style={styles.addToCartButton}>
+            <Ionicons name="cart-outline" size={Spacing * 2} color={Colors.onPrimary} />
+            <Text style={styles.addToCartText}>Add To Cart</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-
-      <View style={styles.footer}>
-        <Text style={styles.price}>₹ {product.price}</Text>
-        <TouchableOpacity style={styles.addToCartButton}>
-          <Ionicons name="cart-outline" size={Spacing * 3} color={Colors.onPrimary} />
-          <Text style={styles.addToCartText}>Add To Cart</Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };
@@ -118,21 +104,6 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 0,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: Spacing * 2,
-    paddingTop: Spacing,
-  },
-  iconButton: {
-    padding: Spacing / 2,
-  },
-  title: {
-    fontFamily: Font["poppins-semiBold"],
-    fontSize: Spacing * 2,
-    color: Colors.text,
-  },
   scrollContent: {
     paddingHorizontal: Spacing * 2,
   },
@@ -140,13 +111,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: IMAGE_HEIGHT,
     borderRadius: Spacing * 6,
-    marginVertical: Spacing,
+    marginVertical: Spacing * 2,
   },
   productInfo: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: Spacing,
+    paddingVertical: Spacing * 2,
   },
   productName: {
     fontSize: Spacing * 3,
@@ -156,6 +127,7 @@ const styles = StyleSheet.create({
   colorWrapper: {
     flexDirection: "row",
     alignItems: "center",
+    marginVertical: Spacing,
   },
   colorCircleWrapper: {
     margin: Spacing / 5,
@@ -170,10 +142,11 @@ const styles = StyleSheet.create({
     color: Colors.text,
     fontFamily: Font["poppins-regular"],
     fontSize: Spacing * 1.4,
+    marginVertical: Spacing,
   },
   ratingContainer: {
     flexDirection: "row",
-    marginVertical: Spacing,
+    marginVertical: Spacing * 2,
   },
   ratingText: {
     marginLeft: Spacing,
@@ -187,7 +160,9 @@ const styles = StyleSheet.create({
   },
   sizeWrapper: {
     flexDirection: "row",
-    marginVertical: Spacing,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: Spacing * 2,
   },
   sizeButton: {
     paddingHorizontal: Spacing * 2,
@@ -209,22 +184,21 @@ const styles = StyleSheet.create({
   activeSizeText: {
     color: Colors.onPrimary,
   },
-  footer: {
-    paddingHorizontal: Spacing * 2,
-    paddingVertical: Spacing * 1.5,
+  priceContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "center", 
+    paddingVertical: Spacing * 2,
   },
   price: {
     fontFamily: Font["poppins-bold"],
-    fontSize: Spacing * 3.5,
+    fontSize: Spacing * 2.5,
     color: Colors.text,
+    flex: 1,
   },
   addToCartButton: {
     backgroundColor: Colors.primary,
-    paddingHorizontal: Spacing * 3,
-    paddingVertical: Spacing * 2,
+    paddingHorizontal: Spacing * 2.5,
+    paddingVertical: Spacing * 1.5,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
