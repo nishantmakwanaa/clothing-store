@@ -13,7 +13,6 @@ const OrderHistoryScreen: React.FC = () => {
       </View>
 
       <View style={styles.orderList}>
-        {/* Example Order */}
         <View style={styles.orderItem}>
           <Text style={styles.orderTitle}>Order #12345</Text>
           <Text style={styles.orderDetails}>3 Items - Total: $45</Text>

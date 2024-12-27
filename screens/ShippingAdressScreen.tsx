@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Colors, Spacing, Font } from "../constants"; // Ensure constants are defined
+import Colors from "../constants/Colors";
+import Spacing from "../constants/Spacing";
+import Font from "../constants/Font";
 
 type ShippingAddressScreenProps = NativeStackScreenProps<any, "ShippingAddress">;
 
@@ -9,7 +11,6 @@ const ShippingAddressScreen = ({ navigation }: ShippingAddressScreenProps) => {
   const [address, setAddress] = useState("");
 
   const handleSaveAddress = () => {
-    // Save address logic
     console.log("Address Saved:", address);
   };
 

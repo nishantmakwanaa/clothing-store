@@ -6,8 +6,6 @@ import {
     Text,
     TouchableOpacity,
     View,
-    Switch,
-    TextInput,
     Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -45,8 +43,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
             navigation.navigate("Login");
         }
     }, [loggedIn, navigation]);
-
-    const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
     const handleInputChange = (field: keyof UserData, value: string) => {
         setUserData((prev) => ({ ...prev, [field]: value }));
@@ -86,27 +82,21 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                                 value={userData.name}
                                 onChangeText={(text) => handleInputChange("name", text)}
                                 placeholder="Name"
-                                placeholderTextColor={
-                                    isDarkMode ? Colors.gray : Colors.lightGray
-                                }
+                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.lightGray}
                             />
                             <TextInput
                                 style={[styles.input, isDarkMode && styles.darkInput]}
                                 value={userData.email}
                                 onChangeText={(text) => handleInputChange("email", text)}
                                 placeholder="Email"
-                                placeholderTextColor={
-                                    isDarkMode ? Colors.gray : Colors.lightGray
-                                }
+                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.lightGray}
                             />
                             <TextInput
                                 style={[styles.input, isDarkMode && styles.darkInput]}
                                 value={userData.phone}
                                 onChangeText={(text) => handleInputChange("phone", text)}
                                 placeholder="Phone"
-                                placeholderTextColor={
-                                    isDarkMode ? Colors.gray : Colors.lightGray
-                                }
+                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.lightGray}
                             />
                         </>
                     ) : (
@@ -135,57 +125,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                         <Text style={styles.editButtonText}>
                             {editing ? "Save" : "Edit"}
                         </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.settingsSection}>
-                    <Text
-                        style={[styles.sectionTitle, isDarkMode && styles.darkText]}
-                    >
-                        Settings
-                    </Text>
-                    <View style={styles.settingsItem}>
-                        <Text
-                            style={[styles.settingsText, isDarkMode && styles.darkText]}
-                        >
-                            Dark Mode
-                        </Text>
-                        <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
-                    </View>
-                    <TouchableOpacity style={styles.settingsItem}>
-                        <Text
-                            style={[styles.settingsText, isDarkMode && styles.darkText]}
-                        >
-                            General
-                        </Text>
-                        <Ionicons
-                            name="chevron-forward"
-                            size={Spacing * 2.5}
-                            color={isDarkMode ? Colors.light : Colors.text}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingsItem}>
-                        <Text
-                            style={[styles.settingsText, isDarkMode && styles.darkText]}
-                        >
-                            Privacy
-                        </Text>
-                        <Ionicons
-                            name="chevron-forward"
-                            size={Spacing * 2.5}
-                            color={isDarkMode ? Colors.light : Colors.text}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingsItem}>
-                        <Text
-                            style={[styles.settingsText, isDarkMode && styles.darkText]}
-                        >
-                            About
-                        </Text>
-                        <Ionicons
-                            name="chevron-forward"
-                            size={Spacing * 2.5}
-                            color={isDarkMode ? Colors.light : Colors.text}
-                        />
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -256,7 +195,6 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.light,
         color: Colors.light,
     },
-
     editButton: {
         backgroundColor: Colors.primary,
         paddingVertical: Spacing,
@@ -267,28 +205,6 @@ const styles = StyleSheet.create({
         fontFamily: Font["poppins-semiBold"],
         color: Colors.onPrimary,
         fontSize: Spacing * 1.6,
-    },
-    settingsSection: {
-        marginTop: Spacing * 4,
-    },
-    sectionTitle: {
-        fontFamily: Font["poppins-semiBold"],
-        fontSize: Spacing * 2,
-        marginBottom: Spacing * 2,
-        color: Colors.text,
-    },
-    settingsItem: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: Spacing * 1.5,
-        borderBottomWidth: 1,
-        borderBottomColor: Colors.border,
-    },
-    settingsText: {
-        fontFamily: Font["poppins-regular"],
-        fontSize: Spacing * 1.8,
-        color: Colors.text,
     },
 });
 

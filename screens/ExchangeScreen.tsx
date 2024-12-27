@@ -1,7 +1,9 @@
 import React from "react";
 import { SafeAreaView, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Colors, Spacing, Font } from "../constants"; // Ensure constants are defined
+import Colors from "../constants/Colors";
+import Spacing from "../constants/Spacing";
+import Font from "../constants/Font";
 
 type ExchangeScreenProps = NativeStackScreenProps<any, "Exchange">;
 

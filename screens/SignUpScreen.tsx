@@ -89,6 +89,8 @@ const styles = StyleSheet.create({
   },
   header: {
     marginVertical: Spacing * 4,
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   title: {
     fontSize: Spacing * 3.5,
@@ -125,6 +127,7 @@ const styles = StyleSheet.create({
     padding: Spacing * 2,
     borderRadius: Spacing * 2,
     alignItems: "center",
+    marginVertical: Spacing * 2,
   },
   signUpButtonText: {
     fontFamily: Font["poppins-semiBold"],
@@ -144,6 +147,26 @@ const styles = StyleSheet.create({
     fontFamily: Font["poppins-semiBold"],
     fontSize: Spacing * 1.6,
     color: Colors.primary,
+  },
+  signUpText: {
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 1.6,
+    color: Colors.primary,
+  },
+  sectionTitle: {
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 2,
+    color: Colors.text,
+  },
+  iconButton: {
+    padding: Spacing / 2,
+  },
+  separator: {
+    width: Spacing / 2,
+    height: Spacing / 2,
+    backgroundColor: Colors.gray,
+    borderRadius: Spacing / 4,
+    marginHorizontal: Spacing,
   },
 });
 

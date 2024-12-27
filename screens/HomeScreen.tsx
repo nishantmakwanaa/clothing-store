@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, ScrollView, ScrollViewComponent, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { categories, products, user } from "../data/index";
 import Spacing from "../constants/Spacing";
@@ -24,24 +24,6 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <TouchableOpacity onPress={() => navigate("Profile")}>
-              <Image source={user.image} style={styles.userImage} />
-            </TouchableOpacity>
-            <Text style={styles.userName}>Hi, {user.name}</Text>
-          </View>
-          <View style={styles.headerRight}>
-            <TouchableOpacity onPress={() => navigate("Search")} style={styles.iconButton}>
-              <Ionicons name="search-outline" size={Spacing * 3} color={Colors.text} />
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => navigate("Cart")} style={styles.iconButton}>
-              <Ionicons name="cart-outline" size={Spacing * 3} color={Colors.text} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
         <View style={styles.exploreSection}>
           <Text style={styles.exploreTitle}>
             Explore The Best
@@ -57,17 +39,9 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
               <TouchableOpacity
                 key={category.id}
                 onPress={() => setActiveCategoryIndex(index)}
-                style={[
-                  styles.categoryButton,
-                  activeCategoryIndex === index && styles.activeCategoryButton,
-                ]}
+                style={[styles.categoryButton, activeCategoryIndex === index && styles.activeCategoryButton]}
               >
-                <Text
-                  style={[
-                    styles.categoryText,
-                    activeCategoryIndex === index && styles.activeCategoryText,
-                  ]}
-                >
+                <Text style={[styles.categoryText, activeCategoryIndex === index && styles.activeCategoryText]}>
                   {category.name}
                 </Text>
               </TouchableOpacity>
@@ -109,32 +83,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Spacing * 2,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  userImage: {
-    width: Spacing * 4,
-    height: Spacing * 4,
-  },
-  userName: {
-    fontFamily: Font["poppins-semiBold"],
-    fontSize: Spacing * 2,
-    color: Colors.text,
-    marginLeft: Spacing,
-  },
-  headerRight: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  iconButton: {
-    padding: Spacing / 2,
   },
   exploreSection: {
     paddingVertical: Spacing * 4,

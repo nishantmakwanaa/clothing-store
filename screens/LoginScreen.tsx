@@ -6,12 +6,42 @@ import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
 const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async () => {
+    setError(null);
+    setLoading(true);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please Enter A Valid E-Mail.");
+      setLoading(false);
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password Must Be At Least 6 Characters.");
+      setLoading(false);
+      return;
+    }
+    setTimeout(async () => {
+      const success = email === "test@gmail.com" && password === "123456";
+      if (success) {
+        await AsyncStorage.setItem('isLoggedIn', 'true');
+        navigate("Home");
+      } else {
+        setError("Invalid E-mail Or Password.");
+      }
+      setLoading(false);
+    }, 2000);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,15 +75,23 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
           />
         </View>
 
+        {error && (
+          <Text style={styles.errorText}>{error}</Text>
+        )}
+
         <TouchableOpacity onPress={() => navigate("ForgotPassword")} style={styles.forgotPassword}>
           <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigate("Home")}
+          onPress={handleLogin}
           style={styles.loginButton}
         >
-          <Text style={styles.loginButtonText}>Log In</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color={Colors.onPrimary} />
+          ) : (
+            <Text style={styles.loginButtonText}>Log In</Text>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -80,7 +118,10 @@ const styles = StyleSheet.create({
   },
   header: {
     marginVertical: Spacing * 4,
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
+  
   title: {
     fontSize: Spacing * 3.5,
     fontFamily: Font["poppins-bold"],
@@ -125,6 +166,7 @@ const styles = StyleSheet.create({
     padding: Spacing * 2,
     borderRadius: Spacing * 2,
     alignItems: "center",
+    marginVertical: Spacing * 2,
   },
   loginButtonText: {
     fontFamily: Font["poppins-semiBold"],
@@ -144,6 +186,21 @@ const styles = StyleSheet.create({
     fontFamily: Font["poppins-semiBold"],
     fontSize: Spacing * 1.6,
     color: Colors.primary,
+  },
+  sectionTitle: {
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 2,
+    color: Colors.text,
+  },
+  iconButton: {
+    padding: Spacing / 2,
+  },
+  separator: {
+    width: Spacing / 2,
+    height: Spacing / 2,
+    backgroundColor: Colors.gray,
+    borderRadius: Spacing / 4,
+    marginHorizontal: Spacing,
   },
 });
 
