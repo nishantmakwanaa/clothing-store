@@ -60,7 +60,7 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             {products.map((product) => (
               <TouchableOpacity
                 key={product.id}
-                onPress={() => navigate("Product-detail", { product: product })}
+                onPress={() => navigate("Product-Details", { product: product })}
                 style={styles.productItem}
               >
                 <Image style={styles.productImage} source={product.image} />

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
     "target": "ES6",
     "module": "commonjs",
     "strict": true,
@@ -13,7 +14,7 @@
     "noImplicitAny": false
   },
   "include": [
-    "src/**/*"
+    "./src/**/*"
   ],
   "exclude": [
     "node_modules"

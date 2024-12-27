@@ -9,7 +9,7 @@ declare global {
 
 export type RootStackParamList = {
   Home: undefined;
-  "Product-detail": { product: Product };
+  "Product-Details": { product: Product };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
