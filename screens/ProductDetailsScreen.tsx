@@ -7,7 +7,7 @@ import Spacing from "../constants/Spacing";
 import Colors from "../constants/Colors";
 import Font from "../constants/Font";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Product-Details">;
+type Props = NativeStackScreenProps<RootStackParamList, "ProductDetails">;
 
 const IMAGE_HEIGHT = 440;
 
