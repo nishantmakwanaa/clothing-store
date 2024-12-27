@@ -10,6 +10,23 @@ declare global {
 export type RootStackParamList = {
   Home: undefined;
   "ProductDetails": { product: Product };
+  Cart: undefined;
+  Login: undefined;
+  SignUp: undefined;
+  ForgotPassword: undefined;
+  CheckOut: undefined;
+  OrderHistory: undefined;
+  OrderTracking: undefined;
+  Exchange: undefined;
+  WishList: undefined;
+  RatingReview: undefined;
+  Profile: undefined;
+  Settings: undefined;
+  ShippingAdress: undefined;
+  Notification: undefined;
+  HelpSupport: undefined;
+  AdminPanel: undefined;
+
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

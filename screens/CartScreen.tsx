@@ -42,6 +42,8 @@ const CartScreen: React.FC = () => {
     }
   };
 
+  const totalPrice = cartItems.reduce((total, item) => total + item.product.price, 0);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
@@ -66,18 +68,28 @@ const CartScreen: React.FC = () => {
           )}
         </View>
 
+        {cartItems.length > 0 && (
+          <View style={{ marginTop: 20, alignItems: 'flex-start' }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Total Price</Text>
+            <Text style={{ fontSize: 16, color: '#333' }}>₹ {totalPrice.toFixed(2)}</Text>
+          </View>
+        )}
+
         <View style={{ marginTop: 20 }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Add Products to Cart</Text>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Recommendations</Text>
           {getRandomProducts().map((product) => (
             <View key={product.id} style={{ flexDirection: 'row', marginTop: 10 }}>
-              <Image source={product.image} style={{ width: 60, height: 60, marginRight: 10 }} />
+              <Image source={product.image} style={styles.productImage} />
               <View style={{ flex: 1 }}>
                 <Text>{product.name}</Text>
                 <Text>₹ {product.price}</Text>
                 <Text>{product.brand}</Text>
               </View>
-              <TouchableOpacity onPress={() => addToCart(product, 'Red', 'M')} style={{ marginLeft: 10 }}>
-                <Text style={{ color: '#00F' }}>Add to Cart</Text>
+              <TouchableOpacity
+                onPress={() => addToCart(product, 'Red', 'M')}
+                style={styles.addToCartButton}
+              >
+                <Text style={styles.addToCartText}>Add to Cart</Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -98,10 +110,18 @@ const CartScreen: React.FC = () => {
         </View>
 
         {cartItems.length > 0 && (
-          <TouchableOpacity onPress={handleCompleteOrder} style={{ marginTop: 20, backgroundColor: '#00F', padding: 10 }}>
-            <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Complete Order</Text>
-          </TouchableOpacity>
+          <View style={{ marginTop: 20, alignItems: 'flex-start' }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Total Price</Text>
+            <Text style={{ fontSize: 16, color: '#333' }}>₹ {totalPrice.toFixed(2)}</Text>
+          </View>
         )}
+
+        <TouchableOpacity style={styles.completeOrderButton} onPress={handleCompleteOrder}>
+          <Text style={styles.completeOrderText} numberOfLines={1}>
+            Complete Order
+          </Text>
+        </TouchableOpacity>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -113,6 +133,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing * 2,
     marginTop: 0,
     marginBottom: 0,
+  },
+  parentContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: Spacing,
   },
   scrollViewContent: {
     paddingBottom: 0,
@@ -227,6 +253,45 @@ const styles = StyleSheet.create({
     fontFamily: Font["poppins-regular"],
     fontSize: Spacing * 1.6,
     color: Colors.gray,
+  },
+  completeOrderButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: Spacing * 5,
+    paddingVertical: Spacing * 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    borderRadius: Spacing * 5,
+    marginTop: Spacing * 2,
+  },
+  completeOrderText: {
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 1.6,
+    color: Colors.onPrimary,
+    textAlign: "center",
+    whiteSpace: "nowrap",
+  },
+  productImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  addToCartButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: Spacing * 2.5,
+    paddingVertical: Spacing * 0.5,
+    borderRadius: Spacing * 3,
+    marginLeft: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addToCartText: {
+    color: Colors.onPrimary,
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 1.4,
+    textAlign: "center",
   },
 });
 
