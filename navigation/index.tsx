@@ -82,7 +82,7 @@ export default function Navigation() {
   } else {
     return (
       <NavigationContainer>
-        <RootNavigator isLoggedIn={isLoggedIn} />
+        <RootNavigator isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       </NavigationContainer>
     );
   }
@@ -92,9 +92,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 interface RootNavigatorProps {
   isLoggedIn: boolean | null;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
+function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -104,13 +105,14 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
     >
       {!isLoggedIn ? (
         <>
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Login">
+            {props => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+          </Stack.Screen>
           <Stack.Screen name="Sign Up" component={SignUpScreen} />
           <Stack.Screen name="Forgot Password" component={ForgotPasswordScreen} />
         </>
       ) : (
         <>
-
           <Stack.Screen name="Home">
             {props => (
               <View style={{ flex: 1 }}>
@@ -221,16 +223,6 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="Settings">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <SettingsScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
           <Stack.Screen name="Shipping Address">
             {props => (
               <View style={{ flex: 1 }}>
@@ -266,6 +258,16 @@ function RootNavigator({ isLoggedIn }: RootNavigatorProps) {
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
                 <AdminPanelScreen {...props} />
+                <FooterScreen />
+              </View>
+            )}
+          </Stack.Screen>
+
+          <Stack.Screen name="Settings">
+            {props => (
+              <View style={{ flex: 1 }}>
+                <HeaderScreen />
+                <SettingsScreen {...props} setIsLoggedIn={setIsLoggedIn} />
                 <FooterScreen />
               </View>
             )}

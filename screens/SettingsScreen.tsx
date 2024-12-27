@@ -13,18 +13,27 @@ import { Ionicons } from "@expo/vector-icons";
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 interface SettingsScreenProps {
     navigation: {
         goBack: () => void;
         navigate: (screen: string) => void;
     };
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLoggedIn }) => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
     const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+
+    const handleLogout = async () => {
+        await AsyncStorage.removeItem('isLoggedIn');
+        setIsLoggedIn(false);
+        navigation.navigate('Login');
+    };
 
     return (
         <SafeAreaView
@@ -59,7 +68,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                         <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                     <Text style={styles.logoutText}>Log Out</Text>
                 </TouchableOpacity>
                 <View style={styles.versionSection}>

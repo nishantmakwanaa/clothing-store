@@ -8,9 +8,11 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+type Props = NativeStackScreenProps<RootStackParamList, "Login"> & {
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
+};
 
-const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
+const LoginScreen: React.FC<Props> = ({ navigation: { navigate }, setIsLoggedIn }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,6 +37,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       const success = email === "test@gmail.com" && password === "123456";
       if (success) {
         await AsyncStorage.setItem('isLoggedIn', 'true');
+        setIsLoggedIn(true);
         navigate("Home");
       } else {
         setError("Invalid E-mail Or Password.");
@@ -42,7 +45,6 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       setLoading(false);
     }, 2000);
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
