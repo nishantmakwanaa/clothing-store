@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     Switch,
     View,
+    Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Spacing from "../constants/Spacing";
@@ -16,6 +17,7 @@ import Colors from "../constants/Colors";
 interface SettingsScreenProps {
     navigation: {
         goBack: () => void;
+        navigate: (screen: string) => void;
     };
 }
 
@@ -29,30 +31,39 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             style={[styles.container, isDarkMode && styles.darkModeContainer]}
         >
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-                        <Ionicons name="arrow-back" size={Spacing * 3} color={isDarkMode ? Colors.light : Colors.text} />
-                    </TouchableOpacity>
-                    <Text style={[styles.headerTitle, isDarkMode && styles.darkText]}>Settings</Text>
-                </View>
                 <View style={styles.settingsSection}>
                     <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>Settings</Text>
                     <View style={styles.settingsItem}>
                         <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>Dark Mode</Text>
                         <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
                     </View>
-                    <TouchableOpacity style={styles.settingsItem}>
-                        <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>General</Text>
-                        <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.light : Colors.text} />
+                    <TouchableOpacity 
+                        style={styles.settingsItem} 
+                        onPress={() => navigation.navigate('HelpSupport')}
+                    >
+                        <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>Help & Support</Text>
+                        <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingsItem}>
-                        <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>Privacy</Text>
-                        <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.light : Colors.text} />
+                    <TouchableOpacity 
+                        style={styles.settingsItem} 
+                        onPress={() => navigation.navigate('RatingReview')}
+                    >
+                        <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>Rating & Review</Text>
+                        <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.settingsItem}>
+                    <TouchableOpacity 
+                        style={styles.settingsItem} 
+                        onPress={() => Linking.openURL('https://nishantworldwide.in')}
+                    >
                         <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>About</Text>
-                        <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.light : Colors.text} />
+                        <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
                     </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.logoutText}>Log Out</Text>
+                </TouchableOpacity>
+                <View style={styles.versionSection}>
+                    <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>App Version : 1.0</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -65,9 +76,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: Spacing * 2,
         marginTop: 0,
         marginBottom: 0,
-      },
+    },
     darkModeContainer: {
-        backgroundColor: Colors.darkBackground,
+        backgroundColor: Colors.background,
     },
     scrollViewContent: {
         paddingBottom: Spacing * 4,
@@ -87,10 +98,10 @@ const styles = StyleSheet.create({
         marginLeft: Spacing,
     },
     darkText: {
-        color: Colors.light,
+        color: Colors.text,
     },
     settingsSection: {
-        marginTop: Spacing * 3,
+        marginTop: Spacing * 1,
     },
     sectionTitle: {
         fontFamily: Font["poppins-semiBold"],
@@ -104,12 +115,29 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingVertical: Spacing * 1.5,
         borderBottomWidth: 1,
-        borderBottomColor: Colors.lightGray,
+        borderBottomColor: Colors.gray,
     },
     settingsText: {
         fontFamily: Font["poppins-regular"],
         fontSize: Spacing * 1.6,
         color: Colors.text,
+    },
+    logoutButton: {
+        backgroundColor: "#FF0000",
+        paddingVertical: Spacing * 1.5,
+        paddingHorizontal: Spacing * 2,
+        borderRadius: Spacing,
+        marginTop: Spacing * 3,
+        alignItems: "center",
+    },
+    logoutText: {
+        color: "#FFF",
+        fontSize: Spacing * 1.8,
+        textAlign: "center",
+    },    
+    versionSection: {
+        marginTop: Spacing * 3,
+        alignItems: "center",
     },
 });
 

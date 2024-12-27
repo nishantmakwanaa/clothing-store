@@ -9,9 +9,9 @@ type NotificationsScreenProps = NativeStackScreenProps<any, "Notifications">;
 
 const NotificationsScreen = ({ navigation }: NotificationsScreenProps) => {
   const notifications = [
-    { id: "1", message: "Your order has been shipped!" },
-    { id: "2", message: "Sale! 20% off on selected items." },
-    { id: "3", message: "New products added to the store!" },
+    { id: "1", message: "Your Order Has Been Shipped !" },
+    { id: "2", message: "Sale! 20% Off On Selected Items." },
+    { id: "3", message: "New Products Added To The Store !" },
   ];
 
   const renderNotification = ({ item }: { item: { message: string } }) => (
@@ -22,7 +22,6 @@ const NotificationsScreen = ({ navigation }: NotificationsScreenProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Notifications</Text>
       <FlatList
         data={notifications}
         keyExtractor={(item) => item.id}
@@ -40,17 +39,12 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 0,
   },
-  title: {
-    fontSize: Spacing * 3.5,
-    fontFamily: Font["poppins-bold"],
-    color: Colors.text,
-  },
   notificationsList: {
     marginTop: Spacing * 3,
   },
   notificationContainer: {
     padding: Spacing * 2,
-    backgroundColor: Colors.cardBackground,
+    backgroundColor: Colors.background,
     borderRadius: Spacing * 2,
     marginBottom: Spacing * 2,
   },
@@ -58,6 +52,30 @@ const styles = StyleSheet.create({
     fontFamily: Font["poppins-regular"],
     fontSize: Spacing * 2,
     color: Colors.text,
+  },
+  sectionTitle: {
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 2,
+    color: Colors.text,
+  },
+  exploreSection: {
+    paddingVertical: Spacing * 4,
+  },
+  exploreTitle: {
+    fontSize: Spacing * 3.5,
+    fontFamily: Font["poppins-bold"],
+    color: Colors.text,
+  },
+  exploreHighlighted: {
+    fontSize: Spacing * 4,
+    color: Colors.primary,
+  },
+  viewAllButton: {
+    paddingVertical: Spacing,
+  },
+  viewAllText: {
+    fontFamily: Font["poppins-regular"],
+    fontSize: Spacing * 1.6,
   },
 });
 

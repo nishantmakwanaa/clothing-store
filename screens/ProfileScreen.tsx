@@ -18,6 +18,14 @@ import Colors from "../constants/Colors";
 type RootStackParamList = {
     Profile: undefined;
     Login: undefined;
+    Orders: undefined; // Assuming this navigation exists
+    Exchange: undefined;
+    AdminPanel: undefined;
+    Wishlist: undefined;
+    ShippingAddress: undefined;
+    OrderTracking: undefined;
+    OrderHistory: undefined;
+    Checkout: undefined;
 };
 
 interface ProfileScreenProps {
@@ -60,23 +68,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                 contentContainerStyle={styles.scrollViewContent}
                 showsVerticalScrollIndicator={false}
             >
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                        style={styles.iconButton}
-                    >
-                        <Ionicons
-                            name="arrow-back"
-                            size={Spacing * 3}
-                            color={isDarkMode ? Colors.light : Colors.text}
-                        />
-                    </TouchableOpacity>
-                    <Text
-                        style={[styles.headerTitle, isDarkMode && styles.darkText]}
-                    >
-                        Profile
-                    </Text>
-                </View>
                 <View style={styles.userSection}>
                     <Image source={userData.image} style={styles.userImage} />
                     {editing ? (
@@ -131,6 +122,69 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+
+                {/* My Orders Section */}
+                <View style={styles.ordersSection}>
+                    <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>
+                        My Orders
+                    </Text>
+                    <TouchableOpacity
+                        style={styles.orderItem}
+                        onPress={() => navigation.navigate("Exchange")}
+                    >
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
+                            Exchange
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.orderItem}
+                        onPress={() => navigation.navigate("AdminPanel")}
+                    >
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
+                            Admin Panel
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.orderItem}
+                        onPress={() => navigation.navigate("Wishlist")}
+                    >
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
+                            Wishlist
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.orderItem}
+                        onPress={() => navigation.navigate("ShippingAddress")}
+                    >
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
+                            Shipping Address
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.orderItem}
+                        onPress={() => navigation.navigate("OrderTracking")}
+                    >
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
+                            Order Tracking
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.orderItem}
+                        onPress={() => navigation.navigate("OrderHistory")}
+                    >
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
+                            Order History
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.orderItem}
+                        onPress={() => navigation.navigate("Checkout")}
+                    >
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
+                            Checkout
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </SafeAreaView>
     );
@@ -142,29 +196,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: Spacing * 2,
         marginTop: 0,
         marginBottom: 0,
-      },
+    },
     darkModeContainer: {
         backgroundColor: Colors.darkBackground,
     },
     scrollViewContent: {
         paddingBottom: Spacing * 4,
-    },
-    header: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: Spacing * 3,
-    },
-    iconButton: {
-        padding: Spacing / 2,
-    },
-    headerTitle: {
-        fontFamily: Font["poppins-semiBold"],
-        fontSize: Spacing * 2.5,
-        color: Colors.text,
-        marginLeft: Spacing,
-    },
-    darkText: {
-        color: Colors.light,
     },
     userSection: {
         alignItems: "center",
@@ -210,6 +247,28 @@ const styles = StyleSheet.create({
         fontFamily: Font["poppins-semiBold"],
         color: Colors.onPrimary,
         fontSize: Spacing * 1.6,
+    },
+    ordersSection: {
+        marginTop: Spacing * 4,
+    },
+    sectionTitle: {
+        fontFamily: Font["poppins-bold"],
+        fontSize: Spacing * 2,
+        color: Colors.text,
+        marginBottom: Spacing * 2,
+    },
+    orderItem: {
+        paddingVertical: Spacing * 1.2,
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.lightGray,
+    },
+    orderText: {
+        fontFamily: Font["poppins-regular"],
+        fontSize: Spacing * 1.6,
+        color: Colors.text,
+    },
+    darkText: {
+        color: Colors.light,
     },
 });
 

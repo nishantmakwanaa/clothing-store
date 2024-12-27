@@ -47,7 +47,7 @@ const CartScreen: React.FC = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
-        <View style={{ marginTop: 20 }}>
+        <View>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Cart Items</Text>
           {cartItems.length > 0 ? (
             cartItems.map((item) => (
@@ -143,11 +143,6 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingBottom: 0,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: Spacing * 2,
-  },
   iconButton: {
     marginRight: Spacing,
   },
@@ -206,12 +201,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: Spacing * 2,
-  },
-  productImage: {
-    width: 80,
-    height: 80,
-    borderRadius: Spacing,
-    marginRight: Spacing,
   },
   productInfo: {
     flex: 1,

@@ -112,9 +112,6 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 0,
   },
-  exploreSection: {
-    paddingVertical: Spacing * 4,
-  },
   exploreTitle: {
     fontSize: Spacing * 3.5,
     fontFamily: Font["poppins-bold"],

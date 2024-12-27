@@ -4,6 +4,7 @@ const dark = "#1E1E1E";
 const green = "#89B601";
 const gray = "#9A9A9A";
 const yellow = "#FFD747";
+const red = "#FF0000";
 
 export default {
   darkText: black,
