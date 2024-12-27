@@ -7,24 +7,28 @@ import {
     TouchableOpacity,
     View,
     Image,
+    TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { StackNavigationProp } from '@react-navigation/stack';
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
+
+type RootStackParamList = {
+    Profile: undefined;
+    Login: undefined;
+};
+
+interface ProfileScreenProps {
+    navigation: StackNavigationProp<RootStackParamList, 'Profile'>;
+}
 
 interface UserData {
     name: string;
     email: string;
     phone: string;
     image: any;
-}
-
-interface ProfileScreenProps {
-    navigation: {
-        navigate: (screen: string) => void;
-        goBack: () => void;
-    };
 }
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
