@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -13,119 +13,95 @@ import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/Colors";
 import Font from "../constants/Font";
 import Spacing from "../constants/Spacing";
-import MapView, { Marker } from "react-native-maps";
+import { useCart } from "../context/Context";
+import { products } from "../data";
 
 const CartScreen: React.FC = () => {
   const navigation = useNavigation();
+  const { cartItems, previousOrders, addToCart, removeFromCart, addOrder } = useCart();
 
-  const cartItems = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: 599,
-      brand: "Brand A",
-      image: require("../assets/images/products/blue-ish-w.jpg"),
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 899,
-      brand: "Brand B",
-      image: require("../assets/images/products/green-j.jpg"),
-    },
-  ];
+  const getRandomProducts = () => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 3);
+  };
 
-  const previousOrders = [
-    { id: 1, name: "Order 1", status: "Delivered", date: "2024-12-10" },
-    { id: 2, name: "Order 2", status: "In Progress", date: "2024-12-18" },
-  ];
+  const handleCompleteOrder = () => {
+    if (cartItems.length > 0) {
+      const order = {
+        id: Math.random(),
+        product: cartItems[0].product,
+        color: cartItems[0].color,
+        size: cartItems[0].size,
+        image: cartItems[0].image,
+        date: new Date().toISOString(),
+        status: 'Completed',
+      };
+      addOrder(order);
+      cartItems.forEach((item) => removeFromCart(item.id));
+      navigation.navigate('CheckOut');
+    }
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.iconButton}
-          >
-            <Ionicons
-              name="arrow-back"
-              size={Spacing * 3}
-              color={Colors.text}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>My Cart</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Cart Items</Text>
+          {cartItems.length > 0 ? (
+            cartItems.map((item) => (
+              <View key={item.id} style={{ flexDirection: 'row', marginTop: 10 }}>
+                <Image source={item.product.image} style={{ width: 60, height: 60, marginRight: 10 }} />
+                <View style={{ flex: 1 }}>
+                  <Text>{item.product.name}</Text>
+                  <Text>₹ {item.product.price}</Text>
+                  <Text>{item.product.brand}</Text>
+                </View>
+                <TouchableOpacity onPress={() => removeFromCart(item.id)}>
+                  <Ionicons name="trash-outline" size={30} color="#F00" />
+                </TouchableOpacity>
+              </View>
+            ))
+          ) : (
+            <Text>Your Cart Is Empty</Text>
+          )}
         </View>
 
-        <View style={styles.cartSection}>
-          <Text style={styles.sectionTitle}>Cart Items</Text>
-          {cartItems.map((item) => (
-            <View key={item.id} style={styles.cartItem}>
-              <Image source={item.image} style={styles.cartImage} />
-              <View style={styles.cartInfo}>
-                <Text style={styles.cartName}>{item.name}</Text>
-                <Text style={styles.cartPrice}>₹ {item.price}</Text>
-                <Text style={styles.cartBrand}>{item.brand}</Text>
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Add Products to Cart</Text>
+          {getRandomProducts().map((product) => (
+            <View key={product.id} style={{ flexDirection: 'row', marginTop: 10 }}>
+              <Image source={product.image} style={{ width: 60, height: 60, marginRight: 10 }} />
+              <View style={{ flex: 1 }}>
+                <Text>{product.name}</Text>
+                <Text>₹ {product.price}</Text>
+                <Text>{product.brand}</Text>
               </View>
-              <TouchableOpacity>
-                <Ionicons
-                  name="trash-outline"
-                  size={Spacing * 3}
-                  color={Colors.error}
-                />
+              <TouchableOpacity onPress={() => addToCart(product, 'Red', 'M')} style={{ marginLeft: 10 }}>
+                <Text style={{ color: '#00F' }}>Add to Cart</Text>
               </TouchableOpacity>
             </View>
           ))}
         </View>
 
-        <View style={styles.previousOrderSection}>
-          <Text style={styles.sectionTitle}>Previous Orders</Text>
-          {previousOrders.map((order) => (
-            <View key={order.id} style={styles.orderItem}>
-              <Text style={styles.orderName}>{order.name}</Text>
-              <Text style={styles.orderDetails}>
-                {order.status} - {order.date}
-              </Text>
-            </View>
-          ))}
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Previous Orders</Text>
+          {previousOrders.length > 0 ? (
+            previousOrders.map((order) => (
+              <View key={order.id} style={{ marginTop: 10 }}>
+                <Text>{order.product.name}</Text>
+                <Text>{order.status} - {order.date}</Text>
+              </View>
+            ))
+          ) : (
+            <Text>No Previous Orders Found.</Text>
+          )}
         </View>
 
-        <View style={styles.trackOrderSection}>
-          <Text style={styles.sectionTitle}>Track Order</Text>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: 37.7749,
-              longitude: -122.4194,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          >
-            <Marker
-              coordinate={{ latitude: 37.7749, longitude: -122.4194 }}
-              title="Order Location"
-              description="Your Order Is Here"
-            />
-          </MapView>
-        </View>
-
-        <View style={styles.paymentSection}>
-          <Text style={styles.sectionTitle}>Payment Methods</Text>
-          <View style={styles.paymentMethods}>
-            <TouchableOpacity style={styles.paymentButton}>
-              <Text style={styles.paymentText}>Credit/Debit Card</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.paymentButton}>
-              <Text style={styles.paymentText}>UPI</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.paymentButton}>
-              <Text style={styles.paymentText}>Cash on Delivery</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        {cartItems.length > 0 && (
+          <TouchableOpacity onPress={handleCompleteOrder} style={{ marginTop: 20, backgroundColor: '#00F', padding: 10 }}>
+            <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Complete Order</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -192,11 +168,55 @@ const styles = StyleSheet.create({
     fontSize: Spacing * 1.4,
     color: Colors.gray,
   },
+  emptyCart: {
+    fontFamily: Font["poppins-regular"],
+    fontSize: Spacing * 1.6,
+    color: Colors.gray,
+  },
+  productSection: {
+    marginBottom: 0,
+  },
+  productItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: Spacing * 2,
+  },
+  productImage: {
+    width: 80,
+    height: 80,
+    borderRadius: Spacing,
+    marginRight: Spacing,
+  },
+  productInfo: {
+    flex: 1,
+  },
+  productName: {
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 1.8,
+    color: Colors.text,
+  },
+  productPrice: {
+    fontFamily: Font["poppins-regular"],
+    fontSize: Spacing * 1.6,
+    color: Colors.primary,
+  },
+  addButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: Spacing * 1,
+    paddingHorizontal: Spacing * 2,
+    borderRadius: Spacing,
+    marginTop: Spacing,
+  },
+  addButtonText: {
+    color: Colors.onPrimary,
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 1.6,
+  },
   previousOrderSection: {
     marginBottom: 0,
   },
   orderItem: {
-    marginBottom: Spacing * 2,
+    marginBottom: Spacing * 1.5,
   },
   orderName: {
     fontFamily: Font["poppins-semiBold"],
@@ -205,36 +225,8 @@ const styles = StyleSheet.create({
   },
   orderDetails: {
     fontFamily: Font["poppins-regular"],
-    fontSize: Spacing * 1.4,
-    color: Colors.gray,
-  },
-  trackOrderSection: {
-    marginBottom: 0,
-  },
-  map: {
-    width: "100%",
-    height: 200,
-    borderRadius: Spacing,
-  },
-  paymentSection: {
-    marginBottom: 0,
-  },
-  paymentMethods: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  paymentButton: {
-    flex: 1,
-    backgroundColor: Colors.primary,
-    padding: Spacing,
-    borderRadius: Spacing,
-    marginHorizontal: Spacing / 2,
-    alignItems: "center",
-  },
-  paymentText: {
-    fontFamily: Font["poppins-semiBold"],
-    color: Colors.onPrimary,
     fontSize: Spacing * 1.6,
+    color: Colors.gray,
   },
 });
 

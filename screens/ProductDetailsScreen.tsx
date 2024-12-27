@@ -6,6 +6,7 @@ import { RootStackParamList } from "../types";
 import Spacing from "../constants/Spacing";
 import Colors from "../constants/Colors";
 import Font from "../constants/Font";
+import { useCart } from "../context/Context";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ProductDetails">;
 
@@ -30,6 +31,7 @@ const ColorCircle: React.FC<{ color: string; isActive: boolean; onPress: () => v
 
 const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
   const product = route.params.product;
+  const { addToCart } = useCart();
 
   const [activeColorIndex, setActiveColorIndex] = useState<number>(0);
   const [activeSizeIndex, setActiveSizeIndex] = useState<number>(0);
@@ -41,6 +43,12 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
   const handleSizeSelect = useCallback((index: number) => {
     setActiveSizeIndex(index);
   }, []);
+
+  const handleAddToCart = () => {
+    const selectedColor = product.colors[activeColorIndex].code;
+    const selectedSize = product.sizes[activeSizeIndex].name;
+    addToCart(product, selectedColor, selectedSize);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -85,7 +93,7 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
         </View>
         <View style={styles.priceContainer}>
           <Text style={styles.price}>₹ {product.price}</Text>
-          <TouchableOpacity style={styles.addToCartButton}>
+          <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
             <Ionicons name="cart-outline" size={Spacing * 2} color={Colors.onPrimary} />
             <Text style={styles.addToCartText}>Add To Cart</Text>
           </TouchableOpacity>
