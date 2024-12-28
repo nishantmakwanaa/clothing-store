@@ -8,7 +8,6 @@ import { RootStackParamList } from "../types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CartScreen from "../screens/CartScreen";
-import CheckOutScreen from "../screens/CheckOutScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import HelpSupportScreen from "../screens/HelpSupportScreen";
 import HomeScreen from "../screens/HomeScreen";
@@ -19,7 +18,6 @@ import ProfileScreen from "../screens/ProfileScreen";
 import RatingReviewScreen from "../screens/RatingReviewScreen";
 import SearchScreen from "../screens/SearchScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import ShippingAdressScreen from "../screens/ShippingAdressScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import AddProductsScreen from "../screens/AddProductsScreen";
 
@@ -139,16 +137,6 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="Check Out">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <CheckOutScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
           <Stack.Screen name="Add Products">
             {props => (
               <View style={{ flex: 1 }}>
@@ -184,16 +172,6 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
                 <ProfileScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
-          <Stack.Screen name="Shipping Adress">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <ShippingAdressScreen {...props} />
                 <FooterScreen />
               </View>
             )}

@@ -14,11 +14,9 @@ export type RootStackParamList = {
   "Login": undefined;
   "Sign Up": undefined;
   "Forgot Password": undefined;
-  "Check Out": { cartItems: Product[] };
   "Rating & Review": undefined;
   "Profile": undefined;
   "Settings": undefined;
-  "Shipping Adress": undefined;
   "Notification": undefined;
   "Search": undefined;
   "Help & Support": undefined;

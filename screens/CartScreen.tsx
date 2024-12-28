@@ -24,7 +24,7 @@ const CartScreen: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const totalPrice = cartItems.reduce((total, item) => total + item.product.price, 0);
-c
+
   const getRandomProducts = () => {
     const shuffled = [...products].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 3);

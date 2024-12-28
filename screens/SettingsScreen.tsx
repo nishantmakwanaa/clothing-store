@@ -71,7 +71,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLogged
                         style={styles.settingsItem} 
                         onPress={() => Linking.openURL('https://nishantworldwide.in')}
                     >
-                        <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>About</Text>
+                        <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>About Developer</Text>
                         <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
                     </TouchableOpacity>
                 </View>
