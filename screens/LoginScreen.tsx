@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
@@ -8,6 +9,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import axios from "axios";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login"> & {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -34,17 +36,27 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate }, setIsLoggedIn 
       setLoading(false);
       return;
     }
-    setTimeout(async () => {
-      const success = email === "test@gmail.com" && password === "123456";
-      if (success) {
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/users/login', {
+        email,
+        password
+      });
+
+      const { status, message } = response.data;
+
+      if (status === 'success') {
         await AsyncStorage.setItem('isLoggedIn', 'true');
         setIsLoggedIn(true);
         navigate("Home");
       } else {
-        setError("Invalid E-mail Or Password.");
+        setError(message || "Invalid Email or Password");
       }
-      setLoading(false);
-    }, 2000);
+    } catch (error) {
+      setError("Something went wrong. Please try again later.");
+    }
+
+    setLoading(false);
   };
 
   return (

@@ -11,80 +11,146 @@ import { RootStackParamList } from "../types";
 type Props = NativeStackScreenProps<RootStackParamList, "Sign Up">;
 
 const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match');
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage('');
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password, // You may want to hash the password on the backend for security
+        }),
+      });
+
+      const data = await response.json();
+      setIsLoading(false);
+
+      if (response.ok) {
+        // Navigate to login or home screen after successful sign-up
+        navigate('Home');
+      } else {
+        setErrorMessage(data.error || 'Something went wrong');
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setErrorMessage('Failed to sign up. Please try again later.');
+    }
+  };
 
   return (
-     <KeyboardAwareScrollView
-          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-          keyboardShouldPersistTaps="handled"
-          enableOnAndroid
-        >
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>Sign Up to Get Started</Text>
-      </View>
-
-      <View style={styles.form}>
-        <View style={styles.inputContainer}>
-          <Ionicons name="mail-outline" size={Spacing * 3} color={Colors.gray} />
-          <TextInput
-            style={styles.input}
-            placeholder="E-Mail"
-            placeholderTextColor={Colors.gray}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.subtitle}>Sign Up to Get Started</Text>
         </View>
 
-        <View style={styles.inputContainer}>
-          <Ionicons name="lock-closed-outline" size={Spacing * 3} color={Colors.gray} />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor={Colors.gray}
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Ionicons name="person-outline" size={Spacing * 3} color={Colors.gray} />
+            <TextInput
+              style={styles.input}
+              placeholder="First Name"
+              placeholderTextColor={Colors.gray}
+              value={firstName}
+              onChangeText={setFirstName}
+            />
+          </View>
 
-        <View style={styles.inputContainer}>
-          <Ionicons name="lock-closed-outline" size={Spacing * 3} color={Colors.gray} />
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm Password"
-            placeholderTextColor={Colors.gray}
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-          />
-        </View>
+          <View style={styles.inputContainer}>
+            <Ionicons name="person-outline" size={Spacing * 3} color={Colors.gray} />
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+              placeholderTextColor={Colors.gray}
+              value={lastName}
+              onChangeText={setLastName}
+            />
+          </View>
 
-        <TouchableOpacity
-          onPress={() => navigate("Home")}
-          style={styles.signUpButton}
-        >
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.inputContainer}>
+            <Ionicons name="mail-outline" size={Spacing * 3} color={Colors.gray} />
+            <TextInput
+              style={styles.input}
+              placeholder="E-Mail"
+              placeholderTextColor={Colors.gray}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
+          </View>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Already Have An Account ?{" "}
-          <Text
-            style={styles.loginText}
-            onPress={() => navigate("Login")}
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={Spacing * 3} color={Colors.gray} />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor={Colors.gray}
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={Spacing * 3} color={Colors.gray} />
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              placeholderTextColor={Colors.gray}
+              secureTextEntry
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+          </View>
+
+          {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
+          <TouchableOpacity
+            onPress={handleSignUp}
+            style={styles.signUpButton}
+            disabled={isLoading}
           >
-            Log In
+            <Text style={styles.signUpButtonText}>
+              {isLoading ? 'Signing Up...' : 'Sign Up'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Already Have An Account?{' '}
+            <Text style={styles.loginText} onPress={() => navigate('Login')}>
+              Log In
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </SafeAreaView>
-      </KeyboardAwareScrollView >
+        </View>
+      </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 };
 
