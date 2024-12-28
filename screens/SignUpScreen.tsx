@@ -21,7 +21,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match');
+      setErrorMessage('Passwords Do Not Match.');
       return;
     }
 
@@ -38,7 +38,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
           firstName,
           lastName,
           email,
-          password, // You may want to hash the password on the backend for security
+          password,
         }),
       });
 
@@ -46,14 +46,13 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       setIsLoading(false);
 
       if (response.ok) {
-        // Navigate to login or home screen after successful sign-up
         navigate('Home');
       } else {
-        setErrorMessage(data.error || 'Something went wrong');
+        setErrorMessage(data.error || 'Something Went Wrong.');
       }
     } catch (error) {
       setIsLoading(false);
-      setErrorMessage('Failed to sign up. Please try again later.');
+      setErrorMessage('Failed To Sign Up. Please Try Again Later.');
     }
   };
 

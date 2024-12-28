@@ -6,16 +6,46 @@ import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Forgot Password">;
 
-const ForgotPasswordScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const [email, setEmail] = useState<string>("");
+const ForgotPasswordScreen: React.FC<Props> = () => {
+  const [email, setEmail] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const navigation = useNavigation();
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError('Please enter an email address.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setMessage('');
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/users/forgot-password', { email });
+
+      if (response.status === 200) {
+        setMessage(response.data.message);
+        setTimeout(() => navigation.navigate('Login'), 2000);
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'An Error Occurred, Please Try Again Later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <SafeAreaView style={styles.container}>
         <ScrollView
@@ -40,22 +70,26 @@ const ForgotPasswordScreen: React.FC<Props> = ({ navigation: { navigate } }) => 
               />
             </View>
 
+            {error && <Text style={styles.errorText}>{error}</Text>}
+            {message && <Text style={styles.successText}>{message}</Text>}
+
             <TouchableOpacity
-              onPress={() => {
-                navigate("Login");
-              }}
+              onPress={handleForgotPassword}
               style={styles.resetButton}
+              disabled={loading}
             >
-              <Text style={styles.resetButtonText}>Send Reset Link</Text>
+              <Text style={styles.resetButtonText}>
+                {loading ? 'Sending...' : 'Send Reset Link'}
+              </Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>
-              Remember Your Password ?{" "}
+              Remember Your Password?{' '}
               <Text
                 style={styles.loginText}
-                onPress={() => navigate("Login")}
+                onPress={() => navigation.navigate('Login')}
               >
                 Log In
               </Text>

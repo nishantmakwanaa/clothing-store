@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/Colors";
 import Font from "../constants/Font";
 import Spacing from "../constants/Spacing";
-import { useCart } from "../context/Context";
+import { useCart } from "../context/UserProvider";
 import { products } from "../data";
 import CustomAlert from "./components/AlertBox";
 

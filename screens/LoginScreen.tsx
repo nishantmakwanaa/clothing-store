@@ -43,17 +43,19 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate }, setIsLoggedIn 
         password
       });
 
-      const { status, message } = response.data;
+      const { status, message, userId } = response.data;
 
       if (status === 'success') {
         await AsyncStorage.setItem('isLoggedIn', 'true');
+        await AsyncStorage.setItem('userId', userId);
+
         setIsLoggedIn(true);
-        navigate("Home");
+        navigate("Home",);
       } else {
-        setError(message || "Invalid Email or Password");
+        setError(message || "Invalid E-Mail Or Password");
       }
     } catch (error) {
-      setError("Something went wrong. Please try again later.");
+      setError("Something Went Wrong. Please Try Again Later.");
     }
 
     setLoading(false);

@@ -16,8 +16,12 @@ import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
 import { RootStackParamList } from "../types";
+import axios from "axios";
+import { RouteProp } from '@react-navigation/native';
+import { useUser } from "../context/UserProvider";
 
 interface ProfileScreenProps {
+    route: RouteProp<RootStackParamList, 'Profile'>;
     navigation: StackNavigationProp<RootStackParamList, 'Profile'>;
 }
 
@@ -25,33 +29,45 @@ interface UserData {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
+    phone: string | null;
     photo: any;
-    address: string;
-    age: number;
-    whatsappNumber: string;
+    address: string | null;
+    age: number | null;
+    whatsappNumber: string | null;
 }
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
+const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [loggedIn, setLoggedIn] = useState<boolean>(true);
     const [userData, setUserData] = useState<UserData>({
-        firstName: "Nishant",
-        lastName: "Makwana",
-        email: "nishantmakwana@gmail.com",
-        phone: "+91 1234567890",
-        photo: require("../assets/images/user/avatar.png"),
-        address: "1234 Main St, City, Country",
-        age: 20,
-        whatsappNumber: "+91 1234567890",
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        photo: require("/assets/images/user/avatar.png"),
+        address: "",
+        age: 0,
+        whatsappNumber: "",
     });
 
+    const { user } = useUser();
+  
+    const userId = user?.userId;
+    
     useEffect(() => {
         if (!loggedIn) {
             navigation.navigate("Login");
+        } else {
+            axios.get(`http://localhost:5000/api/users/${userId}`)
+                .then(response => {
+                    setUserData(response.data);
+                })
+                .catch(error => {
+                    console.error("Error Fetching User Data.", error);
+                });
         }
-    }, [loggedIn, navigation]);
+    }, [loggedIn, navigation, userId]);
 
     const handleInputChange = (field: keyof UserData, value: string) => {
         setUserData((prev) => ({ ...prev, [field]: value }));
@@ -73,6 +89,26 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
         }
     };
 
+    const handleSaveChanges = () => {
+        axios.put(`http://localhost:5000/api/users/${userId}`, {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            email: userData.email,
+            phone: userData.phone,
+            photo: userData.photo.uri,
+            address: userData.address,
+            age: userData.age,
+            whatsappNumber: userData.whatsappNumber,
+        })
+            .then(response => {
+                console.log('User Data Updated : ', response.data);
+                setEditing(false);
+            })
+            .catch(error => {
+                console.error("Error Updating User Data.", error);
+            });
+    };
+
     return (
         <SafeAreaView style={[styles.container, isDarkMode && styles.darkModeContainer]}>
             <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
@@ -85,11 +121,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                             </TouchableOpacity>
                         )}
                     </View>
-
                     {editing ? (
                         <>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>First :</Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>First : </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
                                     value={userData.firstName}
@@ -116,7 +151,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                                 <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Phone :</Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
-                                    value={userData.phone}
+                                    value={userData.phone || ""}
                                     onChangeText={(text) => handleInputChange("phone", text)}
                                 />
                             </View>
@@ -124,7 +159,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                                 <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Address :</Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
-                                    value={userData.address}
+                                    value={userData.address || ""}
                                     onChangeText={(text) => handleInputChange("address", text)}
                                 />
                             </View>
@@ -132,7 +167,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                                 <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Age :</Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
-                                    value={userData.age.toString()}
+                                    value={userData.age !== null ? userData.age.toString() : ""}
                                     onChangeText={(text) => handleInputChange("age", text)}
                                     keyboardType="numeric"
                                 />
@@ -141,24 +176,36 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                                 <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>WhatsApp :</Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
-                                    value={userData.whatsappNumber}
+                                    value={userData.whatsappNumber || ""}
                                     onChangeText={(text) => handleInputChange("whatsappNumber", text)}
                                 />
                             </View>
                         </>
                     ) : (
                         <>
-                            <Text style={[styles.userName, isDarkMode && styles.darkText]}>{userData.firstName} {userData.lastName}</Text>
-                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>E-Mail : {userData.email}</Text>
-                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>Phone : {userData.phone}</Text>
-                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>Adress : {userData.address}</Text>
-                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>Age : {userData.age}</Text>
-                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>Whatsapp : {userData.whatsappNumber}</Text>
+                            <Text style={[styles.userName, isDarkMode && styles.darkText]}>
+                                Name : {userData.firstName || "N/A"} {userData.lastName || "N/A"}
+                            </Text>
+                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>
+                                E-Mail : {userData.email}
+                            </Text>
+                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>
+                                Phone : {userData.phone || "N/A"}
+                            </Text>
+                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>
+                                Address : {userData.address || "N/A"}
+                            </Text>
+                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>
+                                Age : {userData.age !== null ? userData.age : "N/A"}
+                            </Text>
+                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>
+                                WhatsApp : {userData.whatsappNumber || "N/A"}
+                            </Text>
                         </>
                     )}
                     <TouchableOpacity
                         style={styles.editButton}
-                        onPress={() => setEditing((prev) => !prev)}
+                        onPress={() => editing ? handleSaveChanges() : setEditing((prev) => !prev)}
                     >
                         <Text style={styles.editButtonText}>{editing ? "Save" : "Edit"}</Text>
                     </TouchableOpacity>
@@ -198,7 +245,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         borderRadius: 60,
-        marginBottom: Spacing * 3, 
+        marginBottom: Spacing * 3,
         justifyContent: "center",
         alignSelf: "center",
     },

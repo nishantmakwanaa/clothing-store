@@ -7,13 +7,21 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const cors = require('cors');
 require('dotenv').config();
+const multer = require("multer");
+const path = require("path");
 
 const app = express();
 const port = 5000;
 
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 dotenv.config();
 app.use(cors());
+app.use(express.json());
 app.use(bodyParser.json());
+
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -36,6 +44,33 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+});
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "assets/images/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/upload", upload.single("image"), (req, res) => {
+  if (req.file) {
+    const imagePath = "uploads/" + req.file.filename;
+    const userId = 1;
+    const query = "UPDATE users SET image = ? WHERE id = ?";
+    db.query(query, [imagePath, userId], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: "Error Saving Image Path." });
+      }
+      res.status(200).json({ message: "Image Uploaded And Path Saved." });
+    });
+  } else {
+    res.status(400).json({ error: "No Image File Uploaded." });
+  }
 });
 
 app.get('/api/users', (req, res) => {
@@ -113,6 +148,25 @@ app.post('/api/users', (req, res) => {
         res.status(201).json({ id: result.insertId, firstName, lastName, email, phone, photo, address, age, whatsappNumber });
       });
     });
+  });
+});
+
+app.put('/api/users/:id', (req, res) => {
+  const { firstName, lastName, email, phone, photo, address, age, whatsappNumber } = req.body;
+  const userId = req.params.id;
+
+  const query = `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, photo = ?, address = ?, age = ?, whatsapp_number = ? WHERE id = ?`;
+  
+  db.query(query, [firstName, lastName, email, phone, photo, address, age, whatsappNumber, userId], (err, result) => {
+      if (err) {
+          console.error('Database Error:', err);
+          return res.status(500).json({ error: 'Database update failed', details: err.message });
+      }
+      if (result.affectedRows > 0) {
+          return res.json({ message: 'Profile Updated Successfully.' });
+      } else {
+          return res.status(404).json({ error: 'User Not Found.' });
+      }
   });
 });
 
@@ -263,6 +317,39 @@ app.post('/api/product-sizes', (req, res) => {
       return res.status(500).json({ error: err.message });
     }
     res.status(201).json({ message: 'Product Sizes Added Successfully.' });
+  });
+});
+
+app.post('/api/products/check-existence', (req, res) => {
+  const { productId } = req.body;
+
+  const query = 'SELECT * FROM products WHERE id = ?';
+  db.query(query, [productId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ status: 'error', message: 'Product Not Found.' });
+    }
+
+    res.status(200).json({ status: 'success', message: 'Product exists.' });
+  });
+});
+
+app.post('/api/check-image', (req, res) => {
+  const { productId } = req.body;
+  const query = 'SELECT image FROM products WHERE id = ?';
+  db.query(query, [productId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.length === 0 || !results[0].image) {
+      return res.status(404).json({ status: 'error', message: 'Image Not Found.' });
+    }
+
+    res.status(200).json({ status: 'success', message: 'Image exists.', image: results[0].image });
   });
 });
 
