@@ -7,17 +7,14 @@ import fonts from "../config/fonts";
 import { RootStackParamList } from "../types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import AdminPanelScreen from "../screens/AdminPanelScreen";
+import MyProducts from "../screens/MyProducts";
 import CartScreen from "../screens/CartScreen";
 import CheckOutScreen from "../screens/CheckOutScreen";
-import ExchangeScreen from "../screens/ExchangeScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import HelpSupportScreen from "../screens/HelpSupportScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import NotificationScreen from "../screens/NotificationScreen";
-import OrderHistoryScreen from "../screens/OrderHistoryScreen";
-import OrderTrackingScreen from "../screens/OrderTrackingScreen";
 import ProductDetailsScreen from "../screens/ProductDetailsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import RatingReviewScreen from "../screens/RatingReviewScreen";
@@ -25,7 +22,6 @@ import SearchScreen from "../screens/SearchScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ShippingAdressScreen from "../screens/ShippingAdressScreen";
 import SignUpScreen from "../screens/SignUpScreen";
-import WishListScreen from "../screens/WishListScreen";
 
 import HeaderScreen from "../screens/components/HeaderScreen";
 import FooterScreen from "../screens/components/FooterScreen";
@@ -153,46 +149,6 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="Order History">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <OrderHistoryScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
-          <Stack.Screen name="Order Tracking">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <OrderTrackingScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
-          <Stack.Screen name="Exchange">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <ExchangeScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
-          <Stack.Screen name="WishList">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <WishListScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
           <Stack.Screen name="Rating & Review">
             {props => (
               <View style={{ flex: 1 }}>
@@ -253,11 +209,11 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="Admin Panel">
+          <Stack.Screen name="My Products">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
-                <AdminPanelScreen {...props} />
+                <MyProducts {...props} />
                 <FooterScreen />
               </View>
             )}

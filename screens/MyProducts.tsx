@@ -5,9 +5,9 @@ import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 
-type AdminPanelSellScreenProps = NativeStackScreenProps<any, "AdminPanelSell">;
+type AdminPanelSellScreenProps = NativeStackScreenProps<any, "MyProducts">;
 
-const AdminPanelSellScreen = ({ navigation }: AdminPanelSellScreenProps) => {
+const MyProducts = ({ navigation }: AdminPanelSellScreenProps) => {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [products, setProducts] = useState([]);
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminPanelSellScreen;
+export default MyProducts;

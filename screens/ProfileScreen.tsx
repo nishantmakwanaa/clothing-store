@@ -9,24 +9,11 @@ import {
     Image,
     TextInput,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { StackNavigationProp } from '@react-navigation/stack';
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
-
-type RootStackParamList = {
-    Profile: undefined;
-    Login: undefined;
-    Orders: undefined; // Assuming this navigation exists
-    Exchange: undefined;
-    AdminPanel: undefined;
-    Wishlist: undefined;
-    ShippingAddress: undefined;
-    OrderTracking: undefined;
-    OrderHistory: undefined;
-    Checkout: undefined;
-};
+import { RootStackParamList } from "../types";
 
 interface ProfileScreenProps {
     navigation: StackNavigationProp<RootStackParamList, 'Profile'>;
@@ -61,13 +48,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView
-            style={[styles.container, isDarkMode && styles.darkModeContainer]}
-        >
-            <ScrollView
-                contentContainerStyle={styles.scrollViewContent}
-                showsVerticalScrollIndicator={false}
-            >
+        <SafeAreaView style={[styles.container, isDarkMode && styles.darkModeContainer]}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
                 <View style={styles.userSection}>
                     <Image source={userData.image} style={styles.userImage} />
                     {editing ? (
@@ -77,38 +59,32 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                                 value={userData.name}
                                 onChangeText={(text) => handleInputChange("name", text)}
                                 placeholder="Name"
-                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.lightGray}
+                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.gray}
                             />
                             <TextInput
                                 style={[styles.input, isDarkMode && styles.darkInput]}
                                 value={userData.email}
                                 onChangeText={(text) => handleInputChange("email", text)}
                                 placeholder="Email"
-                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.lightGray}
+                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.gray}
                             />
                             <TextInput
                                 style={[styles.input, isDarkMode && styles.darkInput]}
                                 value={userData.phone}
                                 onChangeText={(text) => handleInputChange("phone", text)}
                                 placeholder="Phone"
-                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.lightGray}
+                                placeholderTextColor={isDarkMode ? Colors.gray : Colors.gray}
                             />
                         </>
                     ) : (
                         <>
-                            <Text
-                                style={[styles.userName, isDarkMode && styles.darkText]}
-                            >
+                            <Text style={[styles.userName, isDarkMode && styles.darkText]}>
                                 {userData.name}
                             </Text>
-                            <Text
-                                style={[styles.userInfo, isDarkMode && styles.darkText]}
-                            >
+                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>
                                 {userData.email}
                             </Text>
-                            <Text
-                                style={[styles.userInfo, isDarkMode && styles.darkText]}
-                            >
+                            <Text style={[styles.userInfo, isDarkMode && styles.darkText]}>
                                 {userData.phone}
                             </Text>
                         </>
@@ -124,64 +100,24 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                 </View>
 
                 <View style={styles.ordersSection}>
-                    <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>
-                        My Orders
-                    </Text>
+                    <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>My Products</Text>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("Exchange")}
+                        onPress={() => navigation.navigate("My Products")}
                     >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Exchange
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.orderItem}
-                        onPress={() => navigation.navigate("Admin Panel")}
-                    >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Admin Panel
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.orderItem}
-                        onPress={() => navigation.navigate("WishList")}
-                    >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Wishlist
-                        </Text>
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Sell Products</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
                         onPress={() => navigation.navigate("Shipping Address")}
                     >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Shipping Address
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.orderItem}
-                        onPress={() => navigation.navigate("Order Tracking")}
-                    >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Order Tracking
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.orderItem}
-                        onPress={() => navigation.navigate("Order History")}
-                    >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Order History
-                        </Text>
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Shipping Address</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
                         onPress={() => navigation.navigate("Check Out")}
                     >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>
-                            Check Out
-                        </Text>
+                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Check Out</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -197,7 +133,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     darkModeContainer: {
-        backgroundColor: Colors.darkBackground,
+        backgroundColor: Colors.background,
     },
     scrollViewContent: {
         paddingBottom: Spacing * 4,
@@ -233,8 +169,8 @@ const styles = StyleSheet.create({
         color: Colors.text,
     },
     darkInput: {
-        borderBottomColor: Colors.light,
-        color: Colors.light,
+        borderBottomColor: Colors.gray,
+        color: Colors.text,
     },
     editButton: {
         backgroundColor: Colors.primary,
@@ -259,7 +195,7 @@ const styles = StyleSheet.create({
     orderItem: {
         paddingVertical: Spacing * 1.2,
         borderBottomWidth: 1,
-        borderBottomColor: Colors.lightGray,
+        borderBottomColor: Colors.gray,
     },
     orderText: {
         fontFamily: Font["poppins-regular"],
@@ -267,7 +203,7 @@ const styles = StyleSheet.create({
         color: Colors.text,
     },
     darkText: {
-        color: Colors.light,
+        color: Colors.text,
     },
 });
 

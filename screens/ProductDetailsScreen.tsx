@@ -8,7 +8,7 @@ import Colors from "../constants/Colors";
 import Font from "../constants/Font";
 import { useCart } from "../context/Context";
 
-type Props = NativeStackScreenProps<RootStackParamList, "ProductDetails">;
+type Props = NativeStackScreenProps<RootStackParamList, "Product Details">;
 
 const IMAGE_HEIGHT = 440;
 

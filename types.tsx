@@ -12,20 +12,16 @@ export type RootStackParamList = {
   "Product Details": { product: Product };
   Cart: undefined;
   Login: undefined;
-  SignUp: undefined;
-  ForgotPassword: undefined;
-  CheckOut: undefined;
-  OrderHistory: undefined;
-  OrderTracking: undefined;
-  Exchange: undefined;
-  WishList: undefined;
-  RatingReview: undefined;
+  "Sign Up": undefined;
+  "ForgotPassword": undefined;
+  "Check Out": undefined;
+  "Rating & Review": undefined;
   Profile: undefined;
   Settings: undefined;
-  ShippingAdress: undefined;
+  "Shipping Adress": undefined;
   Notification: undefined;
-  HelpSupport: undefined;
-  AdminPanel: undefined;
+  "Help & Support": undefined;
+  "My Products" : undefined;
 
 };
 
