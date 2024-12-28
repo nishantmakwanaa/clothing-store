@@ -10,7 +10,7 @@ type AdminPanelSellScreenProps = NativeStackScreenProps<any, "MyProducts">;
 const MyProducts = ({ navigation }: AdminPanelSellScreenProps) => {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<{ name: string; price: string }[]>([]);
 
   const handleAddProduct = () => {
     setProducts([...products, { name: productName, price: productPrice }]);
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     padding: Spacing * 2,
-    backgroundColor: Colors.cardBackground,
+    backgroundColor: Colors.background,
     borderRadius: Spacing * 2,
     marginBottom: Spacing * 2,
   },

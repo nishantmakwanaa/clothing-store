@@ -109,7 +109,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.orderItem}
-                        onPress={() => navigation.navigate("Shipping Address")}
+                        onPress={() => navigation.navigate("Shipping Adress")}
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Shipping Address</Text>
                     </TouchableOpacity>

@@ -63,7 +63,7 @@ const CheckoutScreen: React.FC = () => {
             <Text style={styles.shippingAddressText}>No Shipping Address Added</Text>
           )}
 
-          <TouchableOpacity style={styles.addShippingAddressButton} onPress={() => navigation.navigate("Shipping Address")}>
+          <TouchableOpacity style={styles.addShippingAddressButton} onPress={() => navigation.navigate("Shipping Adress")}>
             <Text style={styles.addShippingAddressText}>Add/Edit Address</Text>
           </TouchableOpacity>
         </View>

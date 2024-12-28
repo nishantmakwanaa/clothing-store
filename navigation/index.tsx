@@ -179,7 +179,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="Shipping Address">
+          <Stack.Screen name="Shipping Adress">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
@@ -189,7 +189,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="Notifications">
+          <Stack.Screen name="Notification">
             {props => (
               <View style={{ flex: 1 }}>
                 <HeaderScreen />

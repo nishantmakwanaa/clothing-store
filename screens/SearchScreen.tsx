@@ -64,8 +64,8 @@ const SearchScreen: React.FC<Props> = ({ navigation: { navigate, goBack } }) => 
     26: require("../assets/images/products/blue-ish-w.jpg"),
   };
   
-  const getProductImage = (image: number) => {
-    return imageMapping[image] || require("../assets/images/products/yellow-ss.jpg");
+  const getProductImage = (imageId: number) => {
+      return imageMapping[imageId] || require("../assets/images/products/yellow-ss.jpg");
   };
     
   return (
@@ -118,7 +118,7 @@ const SearchScreen: React.FC<Props> = ({ navigation: { navigate, goBack } }) => 
                   onPress={() => handleProductPress(product)}
                 >
                   <View style={styles.productInfo}>
-                  <Image source={getProductImage(product.image)} style={styles.productImage} />
+                  <Image source={getProductImage(product.id)} style={styles.productImage} />
                     <Text style={styles.productName}>{product.name || "No Name Available"}</Text>
                     <Text style={styles.productPrice}>{`₹ ${product.price}` || "No Price Available"}</Text>
                     <Text style={styles.productBrand}>{product.brand || "No Brand Available"}</Text>

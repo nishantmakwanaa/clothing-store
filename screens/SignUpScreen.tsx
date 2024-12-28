@@ -8,7 +8,7 @@ import Font from "../constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 
-type Props = NativeStackScreenProps<RootStackParamList, "SignUp">;
+type Props = NativeStackScreenProps<RootStackParamList, "Sign Up">;
 
 const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [email, setEmail] = useState<string>("");

@@ -8,18 +8,19 @@ declare global {
 }
 
 export type RootStackParamList = {
-  Home: undefined;
+  "Home": undefined;
   "Product Details": { product: Product };
-  Cart: undefined;
-  Login: undefined;
+  "Cart": undefined;
+  "Login": undefined;
   "Sign Up": undefined;
-  "ForgotPassword": undefined;
-  "Check Out": undefined;
+  "Forgot Password": undefined;
+  "Check Out": { cartItems: Product[] };
   "Rating & Review": undefined;
-  Profile: undefined;
-  Settings: undefined;
+  "Profile": undefined;
+  "Settings": undefined;
   "Shipping Adress": undefined;
-  Notification: undefined;
+  "Notification": undefined;
+  "Search": undefined;
   "Help & Support": undefined;
   "My Products" : undefined;
 
