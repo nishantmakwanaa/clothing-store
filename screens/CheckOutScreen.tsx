@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Linking, Modal } from "react-native";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
-import QRCode from 'react-native-qrcode-svg';
 import Font from "../constants/Font";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -71,7 +70,10 @@ const CheckoutScreen: React.FC = () => {
       <Modal visible={showQRCodeModal} animationType="slide" transparent={true}>
         <View style={styles.overlay}>
           <View style={styles.qrCodeContainer}>
-            <QRCode value="upi://pay?pa=nishantmakwanacreations@oksbi&pn=Nishant+Makwana&mc=1234&tid=12345&amt=1.00&cu=INR" size={200} />
+            <Image 
+              source={{ uri: 'https://drive.google.com/file/d/1pZfWnl7ghvfmlwK-1NtTuY_zMgVETz39/view?usp=sharing' }}
+              style={{ width: 200, height: 200 }} 
+            />
             <TouchableOpacity
               onPress={() => setShowQRCodeModal(false)}
               style={styles.closeButton}
@@ -85,6 +87,7 @@ const CheckoutScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
