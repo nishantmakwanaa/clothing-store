@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Image, Linking, Modal } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Linking, Modal } from "react-native";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
 import QRCode from 'react-native-qrcode-svg';
