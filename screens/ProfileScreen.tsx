@@ -113,12 +113,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                     >
                         <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Shipping Address</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.orderItem}
-                        onPress={() => navigation.navigate("Check Out")}
-                    >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Check Out</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -164,7 +158,7 @@ const styles = StyleSheet.create({
         fontSize: Spacing * 1.6,
         borderBottomWidth: 1,
         borderBottomColor: Colors.gray,
-        width: "80%",
+        width: "100%",
         marginBottom: Spacing,
         color: Colors.text,
     },
