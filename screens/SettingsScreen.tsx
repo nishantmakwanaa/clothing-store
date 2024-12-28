@@ -14,7 +14,7 @@ import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import CustomAlert from "./components/AlertBox";
 
 interface SettingsScreenProps {
     navigation: {
@@ -26,8 +26,16 @@ interface SettingsScreenProps {
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLoggedIn }) => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+    const [alertVisible, setAlertVisible] = useState(false);
 
-    const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+    const toggleDarkMode = () => {
+        setIsDarkMode((prev) => !prev);
+        setAlertVisible(true);
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 2000);
+        setIsDarkMode(false);
+    };
 
     const handleLogout = async () => {
         await AsyncStorage.removeItem('isLoggedIn');
@@ -75,9 +83,15 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLogged
                     <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>App Version : 1.0</Text>
                 </View>
             </ScrollView>
+            <CustomAlert 
+                visible={alertVisible} 
+                message="Dark Mode Is Coming Soon !" 
+                onClose={() => setAlertVisible(false)} 
+            />
         </SafeAreaView>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {

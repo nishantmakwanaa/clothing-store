@@ -9,7 +9,7 @@ declare global {
 
 export type RootStackParamList = {
   Home: undefined;
-  "ProductDetails": { product: Product };
+  "Product Details": { product: Product };
   Cart: undefined;
   Login: undefined;
   SignUp: undefined;

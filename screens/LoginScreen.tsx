@@ -7,6 +7,7 @@ import Font from "../constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login"> & {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -47,84 +48,91 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate }, setIsLoggedIn 
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Welcome Back</Text>
-        <Text style={styles.subtitle}>Log In To Your Account</Text>
-      </View>
-
-      <View style={styles.form}>
-        <View style={styles.inputContainer}>
-          <Ionicons name="mail-outline" size={Spacing * 3} color={Colors.gray} />
-          <TextInput
-            style={styles.input}
-            placeholder="E-Mail"
-            placeholderTextColor={Colors.gray}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.subtitle}>Log In To Your Account</Text>
         </View>
 
-        <View style={styles.inputContainer}>
-          <Ionicons name="lock-closed-outline" size={Spacing * 3} color={Colors.gray} />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor={Colors.gray}
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Ionicons name="mail-outline" size={Spacing * 3} color={Colors.gray} />
+            <TextInput
+              style={styles.input}
+              placeholder="E-Mail"
+              placeholderTextColor={Colors.gray}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
+          </View>
 
-        {error && (
-          <Text style={styles.errorText}>{error}</Text>
-        )}
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={Spacing * 3} color={Colors.gray} />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor={Colors.gray}
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
 
-        <TouchableOpacity onPress={() => navigate("Forgot Password")} style={styles.forgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={handleLogin}
-          style={styles.loginButton}
-        >
-          {loading ? (
-            <ActivityIndicator size="small" color={Colors.onPrimary} />
-          ) : (
-            <Text style={styles.loginButtonText}>Log In</Text>
+          {error && (
+            <Text style={styles.errorText}>{error}</Text>
           )}
-        </TouchableOpacity>
-      </View>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Don't Have An Account ?{" "}
-          <Text
-            style={styles.signUpText}
-            onPress={() => navigate("Sign Up")}
+          <TouchableOpacity onPress={() => navigate("Forgot Password")} style={styles.forgotPassword}>
+            <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleLogin}
+            style={styles.loginButton}
           >
-            Sign Up
+            {loading ? (
+              <ActivityIndicator size="small" color={Colors.onPrimary} />
+            ) : (
+              <Text style={styles.loginButtonText}>Log In</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Don't Have An Account ?{" "}
+            <Text
+              style={styles.signUpText}
+              onPress={() => navigate("Sign Up")}
+            >
+              Sign Up
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing * 2,
     backgroundColor: Colors.background,
+    paddingHorizontal: Spacing * 2,
+    paddingVertical: Spacing * 2,
+    justifyContent: "center",
   },
   header: {
     marginVertical: Spacing * 4,
     flexDirection: "column",
     alignItems: "flex-start",
   },
-
   title: {
     fontSize: Spacing * 3.5,
     fontFamily: Font["poppins-bold"],
@@ -147,6 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: Spacing * 2,
     paddingHorizontal: Spacing,
     marginBottom: Spacing * 2,
+    height: Spacing * 6,
   },
   input: {
     flex: 1,
@@ -154,6 +163,10 @@ const styles = StyleSheet.create({
     fontFamily: Font["poppins-regular"],
     fontSize: Spacing * 1.6,
     color: Colors.text,
+    textAlignVertical: "center",
+    paddingVertical: 0,
+    height: "100%",
+    textAlign: "center",
   },
   forgotPassword: {
     alignItems: "flex-end",
@@ -190,20 +203,12 @@ const styles = StyleSheet.create({
     fontSize: Spacing * 1.6,
     color: Colors.primary,
   },
-  sectionTitle: {
-    fontFamily: Font["poppins-semiBold"],
-    fontSize: Spacing * 2,
-    color: Colors.text,
-  },
-  iconButton: {
-    padding: Spacing / 2,
-  },
-  separator: {
-    width: Spacing / 2,
-    height: Spacing / 2,
-    backgroundColor: Colors.gray,
-    borderRadius: Spacing / 4,
-    marginHorizontal: Spacing,
+  errorText: {
+    fontFamily: Font["poppins-regular"],
+    fontSize: Spacing * 1.6,
+    color: Colors.background,
+    marginTop: Spacing,
+    textAlign: "center",
   },
 });
 

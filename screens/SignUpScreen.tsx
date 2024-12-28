@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
@@ -15,6 +16,11 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   return (
+     <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+          keyboardShouldPersistTaps="handled"
+          enableOnAndroid
+        >
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Create Account</Text>
@@ -78,14 +84,15 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
         </Text>
       </View>
     </SafeAreaView>
+      </KeyboardAwareScrollView >
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing * 2,
     backgroundColor: Colors.background,
+    padding: Spacing * 2,
   },
   header: {
     marginVertical: Spacing * 4,
@@ -114,6 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: Spacing * 2,
     paddingHorizontal: Spacing,
     marginBottom: Spacing * 2,
+    height: Spacing * 6,
   },
   input: {
     flex: 1,
@@ -121,6 +129,10 @@ const styles = StyleSheet.create({
     fontFamily: Font["poppins-regular"],
     fontSize: Spacing * 1.6,
     color: Colors.text,
+    textAlignVertical: "center",
+    paddingVertical: 0,
+    height: "100%",
+    textAlign: "center",
   },
   signUpButton: {
     backgroundColor: Colors.primary,

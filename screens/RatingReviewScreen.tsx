@@ -1,24 +1,34 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, View } from "react-native";
+import { SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, View, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AirbnbRating } from "react-native-ratings";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
+import CustomAlert from "./components/AlertBox";
 
 type RatingReviewScreenProps = NativeStackScreenProps<any, "RatingReview">;
 
 const RatingReviewScreen = ({ navigation }: RatingReviewScreenProps) => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const reviews = [
     { id: "1", username: "John", rating: 4, text: "Great App, Really Helpful !" },
+    { id: "2", username: "Sarah", rating: 5, text: "I love this app! Very intuitive and easy to use." },
+    { id: "3", username: "Michael", rating: 3, text: "The App Is Good, But It Can Improve A Little More." },
+    { id: "4", username: "Emily", rating: 5, text: "Amazing Experience ! Works Perfectly." },
   ];
 
   const handleSubmitReview = () => {
-    console.log("Rating:", rating);
-    console.log("Review:", review);
+    console.log("Rating :", rating);
+    console.log("Review :", review);
+    setAlertVisible(true);
+    setReview("");
+    setTimeout(() => {
+      setAlertVisible(false);
+    }, 2000);
   };
 
   const renderReview = ({ item }: { item: { username: string; rating: number; text: string } }) => (
@@ -36,46 +46,57 @@ const RatingReviewScreen = ({ navigation }: RatingReviewScreenProps) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.ratingContainer}>
-        <AirbnbRating
-          count={5}
-          reviews={["Terrible", "Bad", "Okay", "Good", "Amazing"]}
-          defaultRating={rating}
-          onFinishRating={setRating}
-          size={25}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Write A Review"
-          value={review}
-          onChangeText={setReview}
-        />
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmitReview}>
-          <Text style={styles.submitButtonText}>Submit Review</Text>
-        </TouchableOpacity>
-      </View>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.ratingContainer}>
+          <AirbnbRating
+            count={5}
+            reviews={["Terrible", "Bad", "Okay", "Good", "Amazing"]}
+            defaultRating={rating}
+            onFinishRating={setRating}
+            size={25}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Write A Review"
+            value={review}
+            onChangeText={setReview}
+          />
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmitReview}>
+            <Text style={styles.submitButtonText}>Submit Review</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.reviewsContainer}>
-        <Text style={styles.reviewsTitle}>Reviews</Text>
-        <FlatList
-          data={reviews}
-          keyExtractor={(item) => item.id}
-          renderItem={renderReview}
-          contentContainerStyle={styles.reviewsList}
-        />
-      </View>
-    </SafeAreaView>
+        <View style={styles.reviewsContainer}>
+          <Text style={styles.reviewsTitle}>Reviews</Text>
+          <FlatList
+            data={reviews}
+            keyExtractor={(item) => item.id}
+            renderItem={renderReview}
+            contentContainerStyle={styles.reviewsList}
+          />
+        </View>
+      </ScrollView>
+      <CustomAlert 
+        visible={alertVisible} 
+        message="Review Submitted !" 
+        onClose={() => setAlertVisible(false)} 
+      />
+    </KeyboardAvoidingView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: Spacing * 2,
   },
+  scrollView: {
+    flexGrow: 1,
+  },
   ratingContainer: {
-    height: "40%",
+    height: "20%",
     justifyContent: "center",
   },
   input: {
@@ -104,6 +125,7 @@ const styles = StyleSheet.create({
   reviewsContainer: {
     flex: 1,
     paddingTop: Spacing * 6,
+    paddingBottom: Spacing * 1,
   },
   reviewsTitle: {
     fontFamily: Font["poppins-bold"],
@@ -115,6 +137,7 @@ const styles = StyleSheet.create({
     padding: Spacing * 2,
     backgroundColor: Colors.background,
     borderRadius: Spacing * 2,
+    marginBottom: Spacing * 4,
   },
   username: {
     fontFamily: Font["poppins-bold"],

@@ -23,6 +23,7 @@ const CartScreen: React.FC = () => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const totalPrice = cartItems.reduce((total, item) => total + item.product.price, 0);
 
   const getRandomProducts = () => {
     const shuffled = [...products].sort(() => 0.5 - Math.random());
@@ -45,13 +46,12 @@ const CartScreen: React.FC = () => {
       date: new Date().toISOString(),
       status: 'Completed',
     };
-  
+
     addOrder(order);
     cartItems.forEach((item) => removeFromCart(item.id));
-    navigation.navigate('Check Out');
-  };
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.product.price, 0);
+    navigation.navigate('Check Out', { cartItems });
+  };
 
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -60,7 +60,7 @@ const CartScreen: React.FC = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
-        
+
         <View>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Cart Items</Text>
           {cartItems.length > 0 ? (
