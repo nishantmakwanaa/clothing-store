@@ -36,6 +36,17 @@ const FooterScreen: React.FC = () => {
           color={getIconColor("Profile")}
         />
       </TouchableOpacity>
+      
+      <TouchableOpacity
+        style={[styles.iconButton, styles.centerButton]}
+        onPress={() => navigation.navigate("Add Products")}
+      >
+        <Ionicons
+          name="add"
+          size={Spacing * 4}
+          color={Colors.background}
+        />
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.iconButton}
@@ -71,10 +82,23 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderTopWidth: 1,
     borderTopColor: Colors.border,
-    marginTop: 0,
   },
   iconButton: {
     padding: Spacing / 2,
+  },
+  centerButton: {
+    backgroundColor: Colors.primary,
+    width: Spacing * 6,
+    height: Spacing * 6,
+    borderRadius: Spacing * 3,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: Spacing,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
 

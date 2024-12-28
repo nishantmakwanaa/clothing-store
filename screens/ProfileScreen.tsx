@@ -32,7 +32,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [userData, setUserData] = useState<UserData>({
         name: "Nishant Makwana",
-        email: "nishantmakwanacreations@gmail.com",
+        email: "nishantmakwana@gmail.com",
         phone: "+91 6355976454",
         image: require("../assets/images/user/avatar.png"),
     });
@@ -96,22 +96,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                         <Text style={styles.editButtonText}>
                             {editing ? "Save" : "Edit"}
                         </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.ordersSection}>
-                    <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>My Products</Text>
-                    <TouchableOpacity
-                        style={styles.orderItem}
-                        onPress={() => navigation.navigate("My Products")}
-                    >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Sell Products</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.orderItem}
-                        onPress={() => navigation.navigate("Shipping Adress")}
-                    >
-                        <Text style={[styles.orderText, isDarkMode && styles.darkText]}>Shipping Address</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

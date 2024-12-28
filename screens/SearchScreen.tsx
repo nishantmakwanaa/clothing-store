@@ -75,7 +75,7 @@ const SearchScreen: React.FC<Props> = ({ navigation: { navigate, goBack } }) => 
           <Ionicons name="search-outline" size={Spacing * 2} color={Colors.text} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search For Clothes..."
+            placeholder="Search Clothes..."
             value={searchQuery}
             onChangeText={handleSearch}
             onSubmitEditing={handleSearchSubmit}
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   productName: {
-    fontFamily: Font["poppins-semibold"],
+    fontFamily: Font["poppins-Bold"],
     fontSize: Spacing * 1.8,
     color: Colors.text,
     marginBottom: Spacing / 2,

@@ -7,7 +7,6 @@ import fonts from "../config/fonts";
 import { RootStackParamList } from "../types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import MyProducts from "../screens/MyProducts";
 import CartScreen from "../screens/CartScreen";
 import CheckOutScreen from "../screens/CheckOutScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
@@ -22,6 +21,7 @@ import SearchScreen from "../screens/SearchScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ShippingAdressScreen from "../screens/ShippingAdressScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import AddProductsScreen from "../screens/AddProductsScreen";
 
 import HeaderScreen from "../screens/components/HeaderScreen";
 import FooterScreen from "../screens/components/FooterScreen";
@@ -149,6 +149,16 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
             )}
           </Stack.Screen>
 
+          <Stack.Screen name="Add Products">
+            {props => (
+              <View style={{ flex: 1 }}>
+                <HeaderScreen />
+                <AddProductsScreen {...props} />
+                <FooterScreen />
+              </View>
+            )}
+          </Stack.Screen>
+
           <Stack.Screen name="Rating & Review">
             {props => (
               <View style={{ flex: 1 }}>
@@ -204,16 +214,6 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
               <View style={{ flex: 1 }}>
                 <HeaderScreen />
                 <HelpSupportScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
-
-          <Stack.Screen name="My Products">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen />
-                <MyProducts {...props} />
                 <FooterScreen />
               </View>
             )}

@@ -22,7 +22,7 @@ export type RootStackParamList = {
   "Notification": undefined;
   "Search": undefined;
   "Help & Support": undefined;
-  "My Products" : undefined;
+  "Add Products": undefined;
 
 };
 

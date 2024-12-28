@@ -49,7 +49,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLogged
         >
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.settingsSection}>
-                    <Text style={[styles.sectionTitle, isDarkMode && styles.darkText]}>Settings</Text>
                     <View style={styles.settingsItem}>
                         <Text style={[styles.settingsText, isDarkMode && styles.darkText]}>Dark Mode</Text>
                         <Switch value={isDarkMode} onValueChange={toggleDarkMode} />

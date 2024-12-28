@@ -1,12 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import Spacing from "../constants/Spacing";
 import Colors from "../constants/Colors";
 import Font from "../constants/Font";
-import { useCart } from "../context/Context";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Product Details">;
 
@@ -19,19 +17,15 @@ const ColorCircle: React.FC<{ color: string; isActive: boolean; onPress: () => v
 }) => {
   return (
     <View
-      style={[
-        styles.colorCircleWrapper,
-        isActive && { borderWidth: Spacing / 2, borderColor: Colors.borderWithOpacity },
-      ]}
+      style={[styles.colorCircleWrapper, isActive && { borderWidth: Spacing / 2, borderColor: Colors.borderWithOpacity }]}
     >
       <TouchableOpacity onPress={onPress} style={[styles.colorCircle, { backgroundColor: color }]} />
     </View>
   );
 };
 
-const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
+const ProductDetail: React.FC<Props> = ({ route }) => {
   const product = route.params.product;
-  const { addToCart } = useCart();
 
   const [activeColorIndex, setActiveColorIndex] = useState<number>(0);
   const [activeSizeIndex, setActiveSizeIndex] = useState<number>(0);
@@ -44,12 +38,6 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
     setActiveSizeIndex(index);
   }, []);
 
-  const handleAddToCart = () => {
-    const selectedColor = product.colors[activeColorIndex].code;
-    const selectedSize = product.sizes[activeSizeIndex].name;
-    addToCart(product, selectedColor, selectedSize);
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
@@ -57,11 +45,16 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
 
         <View style={styles.productInfo}>
           <Text style={styles.productName}>{product.name}</Text>
+        </View>
 
+        <Text style={styles.productDescription}>{product.description}</Text>
+
+        <View style={styles.row}>
+          <Text style={styles.rowLabel}>Color :</Text>
           <View style={styles.colorWrapper}>
             {product.colors.map((color, index) => (
               <ColorCircle
-                key={color.id}
+                key={index}
                 color={color.code}
                 isActive={activeColorIndex === index}
                 onPress={() => handleColorSelect(index)}
@@ -70,33 +63,30 @@ const ProductDetail: React.FC<Props> = ({ route, navigation }) => {
           </View>
         </View>
 
-        <Text style={styles.productDescription}>{product.description}</Text>
-
-        <View style={styles.ratingContainer}>
-          <Ionicons name="star" color={Colors.secondary} size={Spacing * 2} />
-          <Text style={styles.ratingText}>{product.rating}</Text>
-          <Text style={styles.reviewsText}>{product.reviews} Reviews</Text>
-        </View>
-
-        <View style={styles.sizeWrapper}>
-          {product.sizes.map((size, index) => (
-            <TouchableOpacity
-              key={size.id}
-              onPress={() => handleSizeSelect(index)}
-              style={[styles.sizeButton, activeSizeIndex === index && styles.activeSizeButton]}
-            >
-              <Text style={[styles.sizeText, activeSizeIndex === index && styles.activeSizeText]}>
-                {size.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-        <View style={styles.priceContainer}>
-          <Text style={styles.price}>₹ {product.price}</Text>
-          <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
-            <Ionicons name="cart-outline" size={Spacing * 2} color={Colors.onPrimary} />
-            <Text style={styles.addToCartText}>Add To Cart</Text>
+        <View style={styles.row}>
+          <Text style={styles.rowLabel}>Size:</Text>
+          <TouchableOpacity
+            style={[styles.sizeButton, activeSizeIndex === 0 && styles.activeSizeButton]}
+            onPress={() => handleSizeSelect(0)}
+          >
+            <Text style={[styles.sizeText, activeSizeIndex === 0 && styles.activeSizeText]}>
+              {product.sizes[0].name}
+            </Text>
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.rowLabel}>Price :</Text>
+          <Text style={styles.price}>₹ {product.price}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.rowLabel}>Status :</Text>
+          {product.isSoldOut ? (
+            <Text style={styles.soldOutText}>Sold Out</Text>
+          ) : (
+            <Text style={styles.availableText}>Available</Text>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -132,10 +122,27 @@ const styles = StyleSheet.create({
     fontFamily: Font["poppins-bold"],
     color: Colors.text,
   },
+  productDescription: {
+    color: Colors.text,
+    fontFamily: Font["poppins-regular"],
+    fontSize: Spacing * 1.4,
+    marginVertical: Spacing,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: Spacing * 1.5,
+  },
+  rowLabel: {
+    fontSize: Spacing * 1.6,
+    fontFamily: Font["poppins-bold"],
+    color: Colors.text,
+    flex: 1,
+  },
   colorWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: Spacing,
   },
   colorCircleWrapper: {
     margin: Spacing / 5,
@@ -146,32 +153,6 @@ const styles = StyleSheet.create({
     width: Spacing * 2,
     borderRadius: Spacing,
   },
-  productDescription: {
-    color: Colors.text,
-    fontFamily: Font["poppins-regular"],
-    fontSize: Spacing * 1.4,
-    marginVertical: Spacing,
-  },
-  ratingContainer: {
-    flexDirection: "row",
-    marginVertical: Spacing * 2,
-  },
-  ratingText: {
-    marginLeft: Spacing,
-    color: Colors.gray,
-    fontFamily: Font["poppins-regular"],
-  },
-  reviewsText: {
-    marginLeft: Spacing,
-    color: Colors.gray,
-    fontFamily: Font["poppins-regular"],
-  },
-  sizeWrapper: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: Spacing * 2,
-  },
   sizeButton: {
     paddingHorizontal: Spacing * 2,
     paddingVertical: Spacing,
@@ -179,6 +160,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     borderRadius: Spacing * 2,
     marginRight: Spacing,
+    justifyContent: "center",
+    alignItems: "center",
   },
   activeSizeButton: {
     backgroundColor: Colors.primary,
@@ -192,31 +175,23 @@ const styles = StyleSheet.create({
   activeSizeText: {
     color: Colors.onPrimary,
   },
-  priceContainer: {
-    flexDirection: "row",
-    alignItems: "center", 
-    paddingVertical: Spacing * 2,
-  },
   price: {
     fontFamily: Font["poppins-bold"],
-    fontSize: Spacing * 2.5,
+    fontSize: Spacing * 1.6,
     color: Colors.text,
     flex: 1,
+    textAlign: "right",
   },
-  addToCartButton: {
-    backgroundColor: Colors.primary,
-    paddingHorizontal: Spacing * 2.5,
-    paddingVertical: Spacing * 1.5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "60%",
-    borderRadius: Spacing * 5,
-  },
-  addToCartText: {
+  soldOutText: {
     fontFamily: Font["poppins-semiBold"],
-    color: Colors.onPrimary,
-    fontSize: Spacing * 2,
-    marginLeft: Spacing / 2,
+    color: Colors.danger,
+    fontSize: Spacing * 1.6,
+    textAlign: "right",
+  },
+  availableText: {
+    fontFamily: Font["poppins-semiBold"],
+    color: Colors.success,
+    fontSize: Spacing * 1.6,
+    textAlign: "right",
   },
 });

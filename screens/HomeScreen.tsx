@@ -23,12 +23,19 @@ type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(0);
 
+  const categoriesWithProducts = [
+    { id: 0, name: "All" },
+    ...categories.filter((category) =>
+      products.some((product) => product.category.id === category.id)
+    ),
+  ];
+
   const filteredProducts =
     activeCategoryIndex === 0
       ? products
       : products.filter(
           (product) =>
-            product.category.id === categories[activeCategoryIndex - 1].id
+            product.category.id === categoriesWithProducts[activeCategoryIndex].id
         );
 
   return (
@@ -41,16 +48,16 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
       >
         <View style={styles.exploreSection}>
           <Text style={styles.exploreTitle}>
-            Explore The Best
-            <Text style={styles.exploreHighlighted}> Collections </Text>
-            For You
+            Sell Gently,
+            <Text style={styles.exploreHighlighted}> Used Fashion </Text>
+            Today.
           </Text>
         </View>
 
         <View style={styles.categoriesSection}>
           <Text style={styles.sectionTitle}>Categories</Text>
           <ScrollView horizontal contentContainerStyle={styles.categoriesList}>
-            {[{ id: 0, name: "All" }, ...categories].map((category, index) => (
+            {categoriesWithProducts.map((category, index) => (
               <TouchableOpacity
                 key={category.id}
                 onPress={() => setActiveCategoryIndex(index)}
@@ -74,10 +81,7 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 
         <View style={styles.popularSection}>
           <View style={styles.popularHeader}>
-            <Text style={styles.sectionTitle}>Popular</Text>
-            <TouchableOpacity style={styles.viewAllButton}>
-              <Text style={styles.viewAllText}>View All</Text>
-            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>Your Clothes</Text>
           </View>
           <View style={styles.productList}>
             {filteredProducts.map((product) => (
