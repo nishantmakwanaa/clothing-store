@@ -1,10 +1,10 @@
 import React from "react";
-import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ActivityIndicator, Text, View } from "react-native";
-import fonts from "./config/fonts";
+import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
 import { ApiProvider } from "./context/Context";
+import fonts from "./config/fonts";
 import Navigation from "./navigation";
 
 export default function App() {

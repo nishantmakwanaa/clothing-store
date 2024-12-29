@@ -5,12 +5,21 @@ import Spacing from "../../constants/Spacing";
 import Font from "../../constants/Font";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useUser } from "../../context/Context";
 
-const HeaderScreen: React.FC<{ userName: string | null }> = ({ userName }) => {
+const HeaderScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const { user } = useUser(); // Access user info from context
 
-  const firstName = (userName ? userName.split(' ')[0] : 'Guest');
+  // Log the user object to inspect its structure (for debugging purposes)
+  console.log("User object:", user);
+
+  // Extract the first name from the full name or default to 'Guest'
+  const firstName = user?.name?.split(' ')[0] || 'Guest'; // Optional chaining and fallback to 'Guest'
+
+  // Log the first name to ensure it's being extracted properly
+  console.log("Extracted first name:", firstName);
 
   return (
     <View style={styles.header}>
@@ -36,6 +45,9 @@ const HeaderScreen: React.FC<{ userName: string | null }> = ({ userName }) => {
     </View>
   );
 };
+
+
+
 
 const styles = StyleSheet.create({
   header: {

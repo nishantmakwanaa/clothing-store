@@ -32,7 +32,7 @@ const db = mysql.createConnection({
 
 function verifyToken(req, res, next) {
   const token = req.headers['authorization']?.split(' ')[1];
-  
+
   if (!token) {
     return res.status(403).json({ message: 'No Token Provided.' });
   }
@@ -41,7 +41,8 @@ function verifyToken(req, res, next) {
     if (err) {
       return res.status(401).json({ message: 'Failed To Authenticate Token.' });
     }
-    req.userId = decoded.id;
+    req.userId = decoded.userId;
+    next();
   });
 }
 
@@ -117,6 +118,7 @@ app.get('/api/users/me', verifyToken, (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+
     if (results.length === 0) {
       return res.status(404).json({ message: 'User Not found.' });
     }
@@ -126,24 +128,42 @@ app.get('/api/users/me', verifyToken, (req, res) => {
 
 app.post('/api/users/login', (req, res) => {
   const { email, password } = req.body;
+  console.log("Received Login Request :", email);
+
   const query = 'SELECT * FROM users WHERE email = ?';
   db.query(query, [email], (err, results) => {
     if (err) {
+      console.error("Database Error :", err);
       return res.status(500).json({ error: err.message });
     }
 
     if (results.length === 0) {
+      console.log("User Not Found For E-Mail:", email);
       return res.status(404).json({ status: 'error', message: 'Invalid Email or Password' });
     }
 
     const user = results[0];
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
+        console.error("Bcrypt Error :", err);
         return res.status(500).json({ error: err.message });
       }
       if (isMatch) {
-        return res.json({ status: 'success', message: 'Login Successful.' });
+        console.log("Password Match Successful. Generating Token...");
+        const token = jwt.sign(
+          { userId: user.id, email: user.email },
+          'your-secret-key',
+          { expiresIn: '1h' }
+        );
+
+        return res.json({
+          status: 'success',
+          message: 'Login Successful.',
+          token,
+          userId: user.id,
+        });
       } else {
+        console.log("Invalid Password For User :", email);
         return res.status(400).json({ status: 'error', message: 'Invalid Email or Password' });
       }
     });
@@ -186,17 +206,17 @@ app.put('/api/users/:id', (req, res) => {
   const userId = req.params.id;
 
   const query = `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, photo = ?, address = ?, age = ?, whatsapp_number = ? WHERE id = ?`;
-  
+
   db.query(query, [firstName, lastName, email, phone, photo, address, age, whatsappNumber, userId], (err, result) => {
-      if (err) {
-          console.error('Database Error:', err);
-          return res.status(500).json({ error: 'Database update failed', details: err.message });
-      }
-      if (result.affectedRows > 0) {
-          return res.json({ message: 'Profile Updated Successfully.' });
-      } else {
-          return res.status(404).json({ error: 'User Not Found.' });
-      }
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database update failed', details: err.message });
+    }
+    if (result.affectedRows > 0) {
+      return res.json({ message: 'Profile Updated Successfully.' });
+    } else {
+      return res.status(404).json({ error: 'User Not Found.' });
+    }
   });
 });
 

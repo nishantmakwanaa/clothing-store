@@ -34,12 +34,10 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLogged
         setTimeout(() => {
             setAlertVisible(false);
         }, 2000);
-        setIsDarkMode(false);
     };
 
     const handleSignOut = async () => {
-
-        localStorage.removeItem("authToken");
+        await AsyncStorage.removeItem("authToken");
         await AsyncStorage.removeItem("isLoggedIn");
         await AsyncStorage.removeItem("userId");
         setIsLoggedIn(false);
