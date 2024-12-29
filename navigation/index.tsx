@@ -1,7 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { View, Animated, StyleSheet } from "react-native";
+import { Animated, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { useFonts } from "expo-font";
 import fonts from "../config/fonts";
 import { RootStackParamList } from "../types";
@@ -21,8 +22,8 @@ import SettingsScreen from "../screens/SettingsScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import AddProductsScreen from "../screens/AddProductsScreen";
 
-import HeaderScreen from "../screens/components/HeaderScreen";
-import FooterScreen from "../screens/components/FooterScreen";
+import HeaderScreen from "components/HeaderScreen";
+import FooterScreen from "components/FooterScreen";
 
 export default function Navigation() {
   const [fontsLoaded] = useFonts(fonts);
@@ -210,8 +211,8 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn, userName }: RootNavigatorPro
     <SettingsScreen {...props} setIsLoggedIn={setIsLoggedIn} />
     <FooterScreen />
   </View>
-)}
-</Stack.Screen>
+      )}
+      </Stack.Screen>
         </>
       )}
     </Stack.Navigator>

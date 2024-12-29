@@ -1,6 +1,7 @@
 import React from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { ActivityIndicator, Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native-web";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { ApiProvider } from "./context/Context";

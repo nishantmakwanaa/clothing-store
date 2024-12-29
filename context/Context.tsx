@@ -68,19 +68,6 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (token) {
-        try {
-          const response = await axios.get(`${BASE_URL}/users/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setUser({ userId: response.data._id, token });
-        } catch (err) {
-          logoutUser();
-        }
-      }
-    };
-
     const fetchInitialData = async () => {
       try {
         const [categoriesData, colorsData, sizesData] = await Promise.all([
@@ -99,7 +86,6 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
       }
     };
 
-    fetchUser();
     fetchInitialData();
   }, [token]);
 
@@ -133,7 +119,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
           getUsers: () => apiCall("get", "/users"),
           getUserById: (id: string) => apiCall("get", `/users/${id}`),
           loginUser: (email: string, password: string) => apiCall("post", "/users/login", { email, password }),
-          registerUser: (userData: object) => apiCall("post", "/users/register", userData),
+          registerUser: (userData: object) => apiCall("post", "/users", userData),
           updateUser: (id: string, userData: object) => apiCall("put", `/users/${id}`, userData),
           forgotPassword: (email: string) => apiCall("post", "/users/forgot-password", { email }),
           resetPassword: (token: string, newPassword: string) => apiCall("post", "/users/reset-password", { token, newPassword }),
@@ -153,8 +139,8 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
           error,
           addProduct: (productData: object) => apiCall("post", "/products", productData),
           updateProductStatus: (id: string, status: object) => apiCall("put", `/products/${id}/status`, status),
-          checkProductExistence: (id: string) => apiCall("get", `/products/${id}/existence`),
-          checkImageExistence: (id: string) => apiCall("get", `/images/${id}/existence`),
+          checkProductExistence: (id: string) => apiCall("get", `/products/${id}`),
+          checkImageExistence: (id: string) => apiCall("get", `/check-image`, { productId: id }),
           addProductColors: (productId: string, colorIds: string[]) => apiCall("post", "/product-colors", { productId, colorIds }),
           addProductSizes: (productId: string, sizeIds: string[]) => apiCall("post", "/product-sizes", { productId, sizeIds })
         }}

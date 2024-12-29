@@ -14,7 +14,10 @@
     "noImplicitAny": false
   },
   "include": [
-    "src/**/*"
+    "screens/**/*.tsx",
+    "screens/**/*.ts",
+    "screens/components/**/*.ts",
+    "screens/components/**/*.tsx",
   ],
   "exclude": [
     "node_modules",

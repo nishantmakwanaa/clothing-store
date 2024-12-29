@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
-import Spacing from "../constants/Spacing";
-import Colors from "../constants/Colors";
-import Font from "../constants/Font";
+import { RootStackParamList } from "../../types";
+import Spacing from "../../constants/Spacing";
+import Colors from "../../constants/Colors";
+import Font from "../../constants/Font";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Product Details">;
 
