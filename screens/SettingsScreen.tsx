@@ -37,10 +37,13 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLogged
         setIsDarkMode(false);
     };
 
-    const handleLogout = async () => {
-        await AsyncStorage.removeItem('isLoggedIn');
+    const handleSignOut = async () => {
+
+        localStorage.removeItem("authToken");
+        await AsyncStorage.removeItem("isLoggedIn");
+        await AsyncStorage.removeItem("userId");
         setIsLoggedIn(false);
-        navigation.navigate('Login');
+        navigation.navigate("Login");
     };
 
     return (
@@ -75,7 +78,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLogged
                         <Ionicons name="chevron-forward" size={Spacing * 2.5} color={isDarkMode ? Colors.background : Colors.text} />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                <TouchableOpacity style={styles.logoutButton} onPress={handleSignOut}>
                     <Text style={styles.logoutText}>Log Out</Text>
                 </TouchableOpacity>
                 <View style={styles.versionSection}>
@@ -90,7 +93,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation, setIsLogged
         </SafeAreaView>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {

@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ActivityIndicator, Text, View } from "react-native";
 import fonts from "./config/fonts";
-import { UserProvider } from "./context/UserProvider";
+import { ApiProvider } from "./context/Context";
 import Navigation from "./navigation";
 
 export default function App() {
@@ -19,14 +19,14 @@ export default function App() {
     );
   } else {
     return (
-      <UserProvider>
+      <ApiProvider>
         <SafeAreaProvider>
           <SafeAreaView style={{ flex: 1 }}>
             <Navigation />
             <StatusBar />
           </SafeAreaView>
         </SafeAreaProvider>
-      </UserProvider>
+      </ApiProvider>
     );
   }
 }

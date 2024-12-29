@@ -5,13 +5,12 @@ import Spacing from "../../constants/Spacing";
 import Font from "../../constants/Font";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { user } from "../../data/index";
 
-const HeaderScreen: React.FC = () => {
+const HeaderScreen: React.FC<{ userName: string | null }> = ({ userName }) => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const firstName = user.name.split(" ")[0];
+  const firstName = (userName ? userName.split(' ')[0] : 'Guest');
 
   return (
     <View style={styles.header}>

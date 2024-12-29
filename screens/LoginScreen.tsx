@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from "@expo/vector-icons";
@@ -9,56 +9,61 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import axios from "axios";
+import { useApi } from "../context/Context";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login"> & {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation: { navigate }, setIsLoggedIn }) => {
+  const { loginUser, loading, error } = useApi();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const checkIfLoggedIn = () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsLoggedIn(true);
+      navigate("Home");
+    }
+  };
+
+  useEffect(() => {
+    checkIfLoggedIn();
+  }, []);
 
   const handleLogin = async () => {
-    setError(null);
-    setLoading(true);
+    setErrorMessage(null);
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Please Enter A Valid E-Mail.");
-      setLoading(false);
+      setErrorMessage("Please Enter A Valid E-Mail.");
       return;
     }
     if (password.length < 6) {
-      setError("Password Must Be At Least 6 Characters.");
-      setLoading(false);
+      setErrorMessage("Password Must Be At Least 6 Characters.");
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', {
-        email,
-        password
-      });
+      const response = await loginUser(email, password);
 
-      const { status, message, userId } = response.data;
+      const { status, message, userId, token } = response;
 
-      if (status === 'success') {
-        await AsyncStorage.setItem('isLoggedIn', 'true');
-        await AsyncStorage.setItem('userId', userId);
+      if (status === "success") {
+        localStorage.setItem("authToken", token);
+        await AsyncStorage.setItem("isLoggedIn", "true");
+        await AsyncStorage.setItem("userId", userId);
 
         setIsLoggedIn(true);
-        navigate("Home",);
+        navigate("Home");
       } else {
-        setError(message || "Invalid E-Mail Or Password");
+        setErrorMessage(message || "Invalid E-Mail Or Password");
       }
-    } catch (error) {
-      setError("Something Went Wrong. Please Try Again Later.");
+    } catch (err) {
+      setErrorMessage("Something Went Wrong. Please Try Again Later.");
     }
-
-    setLoading(false);
   };
 
   return (
@@ -98,8 +103,8 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate }, setIsLoggedIn 
             />
           </View>
 
-          {error && (
-            <Text style={styles.errorText}>{error}</Text>
+          {errorMessage && (
+            <Text style={styles.errorText}>{errorMessage}</Text>
           )}
 
           <TouchableOpacity onPress={() => navigate("Forgot Password")} style={styles.forgotPassword}>
@@ -109,6 +114,7 @@ const LoginScreen: React.FC<Props> = ({ navigation: { navigate }, setIsLoggedIn 
           <TouchableOpacity
             onPress={handleLogin}
             style={styles.loginButton}
+            disabled={loading}
           >
             {loading ? (
               <ActivityIndicator size="small" color={Colors.onPrimary} />

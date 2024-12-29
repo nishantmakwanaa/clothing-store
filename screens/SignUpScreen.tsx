@@ -7,6 +7,7 @@ import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
+import { useApi } from "../context/Context";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Sign Up">;
 
@@ -19,6 +20,8 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  const { registerUser } = useApi();
+
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
       setErrorMessage('Passwords Do Not Match.');
@@ -27,28 +30,14 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 
     setIsLoading(true);
     setErrorMessage('');
-    
-    try {
-      const response = await fetch('http://localhost:5000/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-        }),
-      });
 
-      const data = await response.json();
+    try {
+      const response = await registerUser({ firstName, lastName, email, password });
+      
       setIsLoading(false);
 
-      if (response.ok) {
-        navigate('Home');
-      } else {
-        setErrorMessage(data.error || 'Something Went Wrong.');
+      if (response) {
+        navigate('Login');
       }
     } catch (error) {
       setIsLoading(false);
@@ -142,7 +131,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Already Have An Account?{' '}
+            Already Have An Account ?{' '}
             <Text style={styles.loginText} onPress={() => navigate('Login')}>
               Log In
             </Text>
@@ -244,6 +233,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray,
     borderRadius: Spacing / 4,
     marginHorizontal: Spacing,
+  },
+  errorText: {
+    color: 'red',
+    fontFamily: Font["poppins-regular"],
+    fontSize: Spacing * 1.6,
+    marginTop: Spacing,
+    textAlign: 'center',
   },
 });
 

@@ -7,7 +7,7 @@ import Font from "../constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
+import { useApi } from "../context/Context";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Forgot Password">;
 
@@ -16,6 +16,7 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const { forgotPassword } = useApi();
   const navigation = useNavigation();
 
   const handleForgotPassword = async () => {
@@ -29,14 +30,14 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
     setMessage('');
 
     try {
-      const response = await axios.post('http://localhost:3000/api/users/forgot-password', { email });
+      const response = await forgotPassword(email);
 
-      if (response.status === 200) {
-        setMessage(response.data.message);
+      if (response?.message) {
+        setMessage(response.message);
         setTimeout(() => navigation.navigate('Login'), 2000);
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'An Error Occurred, Please Try Again Later.');
+      setError(err?.response?.data?.message || 'An Error Occurred, Please Try Again Later.');
     } finally {
       setLoading(false);
     }
@@ -47,21 +48,21 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={{ flex: 1 }}>
         <ScrollView
-          contentContainerStyle={styles.scrollViewContainer}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 16 }}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.header}>
-            <Text style={styles.title}>Forgot Password</Text>
-            <Text style={styles.subtitle}>Enter Your E-Mail To Reset Your Password</Text>
+          <View style={{ alignItems: 'center', marginBottom: 24 }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Forgot Password</Text>
+            <Text style={{ fontSize: 16, color: Colors.gray }}>Enter Your E-Mail To Reset Your Password</Text>
           </View>
 
-          <View style={styles.form}>
-            <View style={styles.inputContainer}>
+          <View style={{ marginBottom: 20 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderColor: Colors.gray, paddingBottom: 8 }}>
               <Ionicons name="mail-outline" size={Spacing * 3} color={Colors.gray} />
               <TextInput
-                style={styles.input}
+                style={{ flex: 1, paddingLeft: 10, fontSize: 16 }}
                 placeholder="E-Mail"
                 placeholderTextColor={Colors.gray}
                 value={email}
@@ -70,25 +71,31 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
               />
             </View>
 
-            {error && <Text style={styles.errorText}>{error}</Text>}
-            {message && <Text style={styles.successText}>{message}</Text>}
+            {error && <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text>}
+            {message && <Text style={{ color: 'green', marginTop: 10 }}>{message}</Text>}
 
             <TouchableOpacity
               onPress={handleForgotPassword}
-              style={styles.resetButton}
+              style={{
+                backgroundColor: Colors.primary,
+                paddingVertical: 12,
+                marginTop: 20,
+                borderRadius: 5,
+                alignItems: 'center',
+              }}
               disabled={loading}
             >
-              <Text style={styles.resetButtonText}>
+              <Text style={{ color: 'white', fontSize: 16 }}>
                 {loading ? 'Sending...' : 'Send Reset Link'}
               </Text>
             </TouchableOpacity>
           </View>
 
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              Remember Your Password?{' '}
+          <View style={{ marginTop: 20, alignItems: 'center' }}>
+            <Text style={{ fontSize: 14 }}>
+              Remember Your Password ?{' '}
               <Text
-                style={styles.loginText}
+                style={{ color: Colors.primary, fontWeight: 'bold' }}
                 onPress={() => navigation.navigate('Login')}
               >
                 Log In

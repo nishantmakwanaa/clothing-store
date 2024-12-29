@@ -15,28 +15,12 @@ import * as ImagePicker from 'expo-image-picker';
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Font";
 import Colors from "../constants/Colors";
-import { RootStackParamList } from "../types";
-import axios from "axios";
-import { RouteProp } from '@react-navigation/native';
-import { useUser } from "../context/UserProvider";
 
-interface ProfileScreenProps {
-    route: RouteProp<RootStackParamList, 'Profile'>;
-    navigation: StackNavigationProp<RootStackParamList, 'Profile'>;
-}
+import { useApi } from "../context/Context";
 
-interface UserData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string | null;
-    photo: any;
-    address: string | null;
-    age: number | null;
-    whatsappNumber: string | null;
-}
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
+    const { getUserById, updateUser, loading, error } = useApi();
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
     const [loggedIn, setLoggedIn] = useState<boolean>(true);
@@ -45,29 +29,56 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
         lastName: "",
         email: "",
         phone: "",
-        photo: require("/assets/images/user/avatar.png"),
+        photo: require("../assets/images/user/avatar.png"),
         address: "",
         age: 0,
         whatsappNumber: "",
     });
+    const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
-    const { user } = useUser();
+    const userId = route.params?.userId || "1";
   
-    const userId = user?.userId;
-    
     useEffect(() => {
-        if (!loggedIn) {
-            navigation.navigate("Login");
-        } else {
-            axios.get(`http://localhost:5000/api/users/${userId}`)
-                .then(response => {
-                    setUserData(response.data);
-                })
-                .catch(error => {
-                    console.error("Error Fetching User Data.", error);
-                });
-        }
-    }, [loggedIn, navigation, userId]);
+        // Fetch user data on initial load
+        const fetchUserData = () => {
+            if (!loggedIn) {
+                navigation.navigate("Login");
+            } else {
+                getUserById(userId)
+                    .then(response => {
+                        console.log('User Data Fetched:', response);
+                        setUserData({
+                            firstName: response.first_name || "",
+                            lastName: response.last_name || "",
+                            email: response.email || "",
+                            phone: response.phone || null,
+                            photo: response.photo || require("../assets/images/user/avatar.png"),
+                            address: response.address || null,
+                            age: response.age || null,
+                            whatsappNumber: response.whatsappNumber || null,
+                        });
+                        setTimeout(() => {
+                            setImageLoaded(true);
+                        }, 2000);
+                    })
+                    .catch(error => {
+                        console.error("Error Fetching User Data.", error);
+                    });
+            }
+        };
+
+        // Fetch data on initial render
+        fetchUserData();
+
+        // Set up the interval to fetch data every 1 minute, but ensure it doesn't get set repeatedly
+        const intervalId = setInterval(() => {
+            fetchUserData(); // Re-fetch data every minute
+        }, 60000);
+
+        // Cleanup: clear interval when the component unmounts or if loggedIn changes
+        return () => clearInterval(intervalId);
+
+    }, [loggedIn, userId, navigation, getUserById]);
 
     const handleInputChange = (field: keyof UserData, value: string) => {
         setUserData((prev) => ({ ...prev, [field]: value }));
@@ -90,7 +101,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
     };
 
     const handleSaveChanges = () => {
-        axios.put(`http://localhost:5000/api/users/${userId}`, {
+        const updatedData = {
             firstName: userData.firstName,
             lastName: userData.lastName,
             email: userData.email,
@@ -99,9 +110,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
             address: userData.address,
             age: userData.age,
             whatsappNumber: userData.whatsappNumber,
-        })
+        };
+
+        updateUser(userId, updatedData)
             .then(response => {
-                console.log('User Data Updated : ', response.data);
+                console.log('User Data Updated : ', response);
                 setEditing(false);
             })
             .catch(error => {
@@ -114,7 +127,11 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
             <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
                 <View style={styles.userSection}>
                     <View style={styles.row}>
-                        <Image source={userData.photo} style={styles.userImage} />
+                        {imageLoaded ? (
+                            <Image source={userData.photo} style={styles.userImage} />
+                        ) : (
+                            <Ionicons name="camera" size={32} color="#AAAAAA" />
+                        )}
                         {editing && (
                             <TouchableOpacity onPress={handlePhotoChange} style={styles.photoOverlay}>
                                 <Ionicons name="camera" size={32} color="#FFFFFF" />
@@ -124,7 +141,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                     {editing ? (
                         <>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>First : </Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>First: </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
                                     value={userData.firstName}
@@ -132,7 +149,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                                 />
                             </View>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Last :</Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Last: </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
                                     value={userData.lastName}
@@ -140,7 +157,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                                 />
                             </View>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>E-Mail :</Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>E-Mail: </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
                                     value={userData.email}
@@ -148,7 +165,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                                 />
                             </View>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Phone :</Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Phone: </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
                                     value={userData.phone || ""}
@@ -156,7 +173,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                                 />
                             </View>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Address :</Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Address: </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
                                     value={userData.address || ""}
@@ -164,16 +181,16 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                                 />
                             </View>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Age :</Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>Age: </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
-                                    value={userData.age !== null ? userData.age.toString() : ""}
+                                    value={userData.age !== null && userData.age !== undefined ? userData.age.toString() : ""}
                                     onChangeText={(text) => handleInputChange("age", text)}
                                     keyboardType="numeric"
                                 />
                             </View>
                             <View style={styles.row}>
-                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>WhatsApp :</Text>
+                                <Text style={[styles.fieldLabel, isDarkMode && styles.darkText]}>WhatsApp: </Text>
                                 <TextInput
                                     style={[styles.input, isDarkMode && styles.darkInput]}
                                     value={userData.whatsappNumber || ""}
@@ -207,7 +224,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                         style={styles.editButton}
                         onPress={() => editing ? handleSaveChanges() : setEditing((prev) => !prev)}
                     >
-                        <Text style={styles.editButtonText}>{editing ? "Save" : "Edit"}</Text>
+                        <Text style={styles.editButtonText}>{editing ? "Save Changes" : "Edit Profile"}</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

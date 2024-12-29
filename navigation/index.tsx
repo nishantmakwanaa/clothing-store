@@ -29,7 +29,23 @@ export default function Navigation() {
   const [showSplash, setShowSplash] = React.useState(true);
   const [isLoggedIn, setIsLoggedIn] = React.useState<boolean | null>(null);
   const opacity = React.useRef(new Animated.Value(0)).current;
+  const [userName, setUserName] = React.useState<string | null>(null);
 
+  const checkLoginStatus = async () => {
+    try {
+      const loggedIn = await AsyncStorage.getItem('isLoggedIn');
+      setIsLoggedIn(loggedIn === 'true');
+      
+      if (loggedIn === 'true') {
+        const userName = await AsyncStorage.getItem('userName');
+        console.log("Fetched userName :", userName);
+        setUserName(userName ?? null);
+      }
+    } catch (error) {
+      console.error('Error Fetching Login Status :', error);
+    }
+  };
+  
   React.useEffect(() => {
     if (fontsLoaded) {
       Animated.sequence([
@@ -48,16 +64,6 @@ export default function Navigation() {
 
       setTimeout(() => setShowSplash(false), 5000);
     }
-
-    const checkLoginStatus = async () => {
-      try {
-        const loggedIn = await AsyncStorage.getItem('isLoggedIn');
-        setIsLoggedIn(loggedIn === 'true');
-      } catch (error) {
-        console.error('Error fetching login status:', error);
-      }
-    };
-
     checkLoginStatus();
   }, [fontsLoaded]);
 
@@ -76,7 +82,7 @@ export default function Navigation() {
   } else {
     return (
       <NavigationContainer>
-        <RootNavigator isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <RootNavigator isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userName={userName} />
       </NavigationContainer>
     );
   }
@@ -87,9 +93,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 interface RootNavigatorProps {
   isLoggedIn: boolean | null;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
+  userName?: string | null;
 }
 
-function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
+function RootNavigator({ isLoggedIn, setIsLoggedIn, userName }: RootNavigatorProps) {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -110,7 +117,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Home">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <HomeScreen {...props} />
                 <FooterScreen />
               </View>
@@ -120,7 +127,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Product Details">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <ProductDetailsScreen {...props} />
                 <FooterScreen />
               </View>
@@ -130,7 +137,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Cart">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <CartScreen {...props} />
                 <FooterScreen />
               </View>
@@ -140,7 +147,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Add Products">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <AddProductsScreen {...props} />
                 <FooterScreen />
               </View>
@@ -150,7 +157,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Rating & Review">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <RatingReviewScreen {...props} />
                 <FooterScreen />
               </View>
@@ -160,7 +167,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Search">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <SearchScreen {...props} />
                 <FooterScreen />
               </View>
@@ -170,7 +177,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Profile">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <ProfileScreen {...props} />
                 <FooterScreen />
               </View>
@@ -180,7 +187,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Notification">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <NotificationScreen {...props} />
                 <FooterScreen />
               </View>
@@ -190,7 +197,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Help & Support">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <HelpSupportScreen {...props} />
                 <FooterScreen />
               </View>
@@ -200,7 +207,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn }: RootNavigatorProps) {
           <Stack.Screen name="Settings">
             {props => (
               <View style={{ flex: 1 }}>
-                <HeaderScreen />
+                <HeaderScreen userName={userName} />
                 <SettingsScreen {...props} setIsLoggedIn={setIsLoggedIn} />
                 <FooterScreen />
               </View>
