@@ -30,22 +30,20 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-function verifyToken(req, res, next) {
-  const token = req.headers['authorization']?.split(' ')[1];
-
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Get the token from Authorization header
   if (!token) {
-    return res.status(403).json({ message: 'No Token Provided.' });
+    return res.status(403).json({ message: 'No token provided.' });
   }
 
-  jwt.verify(token, 'your_jwt_secret', (err, decoded) => {
+  jwt.verify(token, 'your_secret_key', (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: 'Failed To Authenticate Token.' });
+      return res.status(401).json({ message: 'Invalid token.' });
     }
-    req.userId = decoded.userId;
+    req.userId = decoded.id;  // Make sure the user ID is set in the request object
     next();
   });
-}
-
+};
 db.connect((err) => {
   if (err) {
     console.error('Database Connection Error: ', err);
@@ -112,7 +110,7 @@ app.get('/api/users/:id', (req, res) => {
 
 app.get('/api/users/me', verifyToken, (req, res) => {
   const query = 'SELECT * FROM users WHERE id = ?';
-  const userId = req.userId;
+  const userId = req.userId; // Assuming the user ID is set in `req.userId` by verifyToken
 
   db.query(query, [userId], (err, results) => {
     if (err) {
@@ -122,7 +120,7 @@ app.get('/api/users/me', verifyToken, (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ message: 'User Not found.' });
     }
-    res.json(results[0]);
+    res.json(results[0]); // Send the user data as JSON
   });
 });
 

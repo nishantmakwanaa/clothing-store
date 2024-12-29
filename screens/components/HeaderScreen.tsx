@@ -12,14 +12,8 @@ const HeaderScreen: React.FC = () => {
   const route = useRoute();
   const { user } = useUser(); // Access user info from context
 
-  // Log the user object to inspect its structure (for debugging purposes)
-  console.log("User object:", user);
-
-  // Extract the first name from the full name or default to 'Guest'
-  const firstName = user?.name?.split(' ')[0] || 'Guest'; // Optional chaining and fallback to 'Guest'
-
-  // Log the first name to ensure it's being extracted properly
-  console.log("Extracted first name:", firstName);
+  // Fallback to 'Guest' if user is not available
+  const firstName = user?.name?.split(' ')[0] || "Guest"; // Extract first name safely
 
   return (
     <View style={styles.header}>
@@ -28,6 +22,7 @@ const HeaderScreen: React.FC = () => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backIconButton}>
             <Ionicons name="arrow-back-outline" size={Spacing * 3} color={Colors.text} />
           </TouchableOpacity>
+          {/* Use the first name dynamically */}
           <Text style={styles.userName}>Hi, {firstName}</Text>
         </View>
         <View style={styles.headerRight}>
@@ -45,9 +40,6 @@ const HeaderScreen: React.FC = () => {
     </View>
   );
 };
-
-
-
 
 const styles = StyleSheet.create({
   header: {
