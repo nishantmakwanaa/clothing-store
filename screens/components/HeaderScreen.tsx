@@ -10,10 +10,46 @@ import { useUser } from "../../context/Context";
 const HeaderScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { user } = useUser(); // Access user info from context
+  const { user } = useUser();
 
-  // Fallback to 'Guest' if user is not available
-  const firstName = user?.name?.split(' ')[0] || "Guest"; // Extract first name safely
+  const [firstName, setFirstName] = React.useState<string>("Guest");
+
+  React.useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (user?.userId) {
+        try {
+          const response = await fetch(`http://10.0.2.2:5000/api/users/1`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              "Content-Type": "application/json",
+            },
+          });
+    
+          if (!response.ok) {
+            throw new Error("Failed to fetch user details");
+          }
+    
+          const userData = await response.json();
+          console.log("Fetched userData:", userData);
+    
+          if (userData?.name) {
+            const nameParts = userData.name.split(" ");
+            setFirstName(nameParts[0]);
+          } else {
+            console.log("User name not found in the response");
+            setFirstName("Guest");
+          }
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+          setFirstName("Guest");
+        }
+      }
+    };
+    
+
+    fetchUserDetails();
+  }, [user?.userId]);
 
   return (
     <View style={styles.header}>
@@ -22,7 +58,6 @@ const HeaderScreen: React.FC = () => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backIconButton}>
             <Ionicons name="arrow-back-outline" size={Spacing * 3} color={Colors.text} />
           </TouchableOpacity>
-          {/* Use the first name dynamically */}
           <Text style={styles.userName}>Hi, {firstName}</Text>
         </View>
         <View style={styles.headerRight}>

@@ -123,96 +123,95 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn, userName }: RootNavigatorPro
               </View>
             )}
           </Stack.Screen>
-
           <Stack.Screen name="Product Details">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <ProductDetailsScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <ProductDetailsScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Cart">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <CartScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Cart">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <CartScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Add Products">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <AddProductsScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Add Products">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <AddProductsScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Rating & Review">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <RatingReviewScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Rating & Review">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <RatingReviewScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Search">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <SearchScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Search">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <SearchScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Profile">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <ProfileScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Profile">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <ProfileScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Notification">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <NotificationScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Notification">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <NotificationScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Help & Support">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <HelpSupportScreen {...props} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Help & Support">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <HelpSupportScreen {...props} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
 
-          <Stack.Screen name="Settings">
-            {props => (
-              <View style={{ flex: 1 }}>
-                <HeaderScreen userName={userName} />
-                <SettingsScreen {...props} setIsLoggedIn={setIsLoggedIn} />
-                <FooterScreen />
-              </View>
-            )}
-          </Stack.Screen>
+<Stack.Screen name="Settings">
+{props => (
+  <View style={{ flex: 1 }}>
+    <HeaderScreen userName={userName} />
+    <SettingsScreen {...props} setIsLoggedIn={setIsLoggedIn} />
+    <FooterScreen />
+  </View>
+)}
+</Stack.Screen>
         </>
       )}
     </Stack.Navigator>

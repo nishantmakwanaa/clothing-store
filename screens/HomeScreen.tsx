@@ -14,6 +14,8 @@ import Font from "../constants/Font";
 import Colors from "../constants/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
+import { useUser, useApi } from "../context/Context";
+import { useEffect } from "react";
 
 const IMAGE_WIDTH = 190;
 const IMAGE_HEIGHT = 250;
@@ -21,19 +23,37 @@ const IMAGE_HEIGHT = 250;
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
+  const { user, token } = useUser();
   const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(0);
+  const [userProducts, setUserProducts] = useState<any[]>([]);
+  const { loading, error, getCategories } = useApi();
+
+  useEffect(() => {
+    const fetchUserProducts = async () => {
+      if (user.userId) {
+        try {
+          const productsData = [];
+          setUserProducts(productsData);
+        } catch (err) {
+          console.error("Error Fetching User Products :", err);
+        }
+      }
+    };
+
+    fetchUserProducts();
+  }, [user.userId]);
 
   const categoriesWithProducts = [
     { id: 0, name: "All" },
     ...categories.filter((category) =>
-      products.some((product) => product.category.id === category.id)
+      userProducts.some((product) => product.category.id === category.id)
     ),
   ];
 
   const filteredProducts =
     activeCategoryIndex === 0
-      ? products
-      : products.filter(
+      ? userProducts
+      : userProducts.filter(
           (product) =>
             product.category.id === categoriesWithProducts[activeCategoryIndex].id
         );

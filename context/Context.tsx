@@ -1,11 +1,10 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import axios, { AxiosError } from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ApiContextType {
   getUsers: () => Promise<any>;
   getUserById: (id: string) => Promise<any>;
-  getMyData: () => Promise<any>;
   loginUser: (email: string, password: string) => Promise<any>;
   registerUser: (userData: object) => Promise<any>;
   updateUser: (id: string, userData: object) => Promise<any>;
@@ -21,6 +20,12 @@ interface ApiContextType {
   sizes: any;
   loading: boolean;
   error: string | null;
+  addProduct: (productData: object) => Promise<any>;
+  updateProductStatus: (id: string, status: object) => Promise<any>;
+  checkProductExistence: (id: string) => Promise<any>;
+  checkImageExistence: (id: string) => Promise<any>;
+  addProductColors: (productId: string, colorIds: string[]) => Promise<any>;
+  addProductSizes: (productId: string, sizeIds: string[]) => Promise<any>;
 }
 
 interface UserContextType {
@@ -116,60 +121,9 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
     } catch (err) {
       setLoading(false);
       const axiosError = err as AxiosError;
-      setError((axiosError.response?.data as string) || "Something Went Wrong!");
-      throw err;
-    }
-  };
-
-  const loginUser = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/users/login`, { email, password });
-
-      if (!response.data.token) {
-        throw new Error("Missing token in response");
-      }
-
-      const { token, userId } = response.data;
-
-      // Save token in AsyncStorage
-      await AsyncStorage.setItem("authToken", token);
-      setToken(token);
-
-      const userData = await apiCall("get", `/users/${userId}`);
-      const fullName = `${userData.first_name} ${userData.last_name}`;
-      setUser({ userId, token, name: fullName });
-
-      return { userId, token, name: fullName };
-    } catch (err) {
-      const axiosError = err as AxiosError;
       setError((axiosError.response?.data as string) || "Something Went Wrong !");
       throw err;
     }
-  };
-
-  const getMyData = async () => {
-    if (!user.userId) {
-      throw new Error("User Not Logged In.");
-    }
-
-    try {
-      const userData = await apiCall("get", `/users/${user.userId}`);
-      const fullName = `${userData.first_name} ${userData.last_name}`;
-      setUser((prevState) => ({
-        ...prevState,
-        name: fullName,
-      }));
-      return userData;
-    } catch (err) {
-      setError("Failed To Fetch User Data.");
-      throw err;
-    }
-  };
-
-  const logoutUser = async () => {
-    setToken(null);
-    setUser({ userId: null, token: null });
-    await AsyncStorage.removeItem("authToken");
   };
 
   return (
@@ -178,22 +132,31 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
         value={{
           getUsers: () => apiCall("get", "/users"),
           getUserById: (id: string) => apiCall("get", `/users/${id}`),
-          getMyData,
-          loginUser,
-          registerUser: (userData: object) => apiCall("post", "/users", userData),
+          loginUser: (email: string, password: string) => apiCall("post", "/users/login", { email, password }),
+          registerUser: (userData: object) => apiCall("post", "/users/register", userData),
           updateUser: (id: string, userData: object) => apiCall("put", `/users/${id}`, userData),
           forgotPassword: (email: string) => apiCall("post", "/users/forgot-password", { email }),
           resetPassword: (token: string, newPassword: string) => apiCall("post", "/users/reset-password", { token, newPassword }),
           uploadImage: (formData: FormData) => apiCall("post", "/upload", formData),
-          getCategories: () => apiCall("get", "/categories"),
-          getColors: () => apiCall("get", "/colors"),
-          getSizes: () => apiCall("get", "/sizes"),
-          logoutUser,
+          getCategories: () => categories,
+          getColors: () => colors,
+          getSizes: () => sizes,
+          logoutUser: () => {
+            AsyncStorage.removeItem("authToken");
+            setToken(null);
+            setUser({ userId: null, token: null });
+          },
           categories,
           colors,
           sizes,
           loading,
           error,
+          addProduct: (productData: object) => apiCall("post", "/products", productData),
+          updateProductStatus: (id: string, status: object) => apiCall("put", `/products/${id}/status`, status),
+          checkProductExistence: (id: string) => apiCall("get", `/products/${id}/existence`),
+          checkImageExistence: (id: string) => apiCall("get", `/images/${id}/existence`),
+          addProductColors: (productId: string, colorIds: string[]) => apiCall("post", "/product-colors", { productId, colorIds }),
+          addProductSizes: (productId: string, sizeIds: string[]) => apiCall("post", "/product-sizes", { productId, sizeIds })
         }}
       >
         {children}
@@ -205,7 +168,7 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
 export const useApi = (): ApiContextType => {
   const context = useContext(ApiContext);
   if (!context) {
-    throw new Error("useApi Must Be Used Within An ApiProvider");
+    throw new Error("useApi Must Be Used Within An ApiProvider.");
   }
   return context;
 };
@@ -213,7 +176,11 @@ export const useApi = (): ApiContextType => {
 export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useUser Must Be Used Within A UserProvider");
+    throw new Error("useUser Must Be Used Within A UserProvider.");
   }
   return context;
 };
+
+function logoutUser() {
+  throw new Error("Function Not Implemented.");
+}

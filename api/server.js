@@ -6,7 +6,6 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const cors = require('cors');
-require('dotenv').config();
 const multer = require("multer");
 const path = require("path");
 
@@ -19,8 +18,6 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 dotenv.config();
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.json());
-
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 const db = mysql.createConnection({
@@ -30,27 +27,28 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Get the token from Authorization header
-  if (!token) {
-    return res.status(403).json({ message: 'No token provided.' });
-  }
-
-  jwt.verify(token, 'your_secret_key', (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Invalid token.' });
-    }
-    req.userId = decoded.id;  // Make sure the user ID is set in the request object
-    next();
-  });
-};
 db.connect((err) => {
   if (err) {
-    console.error('Database Connection Error: ', err);
+    console.error('Database Connection Error : ', err);
   } else {
     console.log('Connected To MySQL DataBase.');
   }
 });
+
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) {
+    return res.status(403).json({ message: 'No Token Provided.' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid Token.' });
+    }
+    req.userId = decoded.id;
+    next();
+  });
+};
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -74,7 +72,7 @@ const upload = multer({ storage: storage });
 app.post("/upload", upload.single("image"), (req, res) => {
   if (req.file) {
     const imagePath = "uploads/" + req.file.filename;
-    const userId = 1;
+    const userId = req.userId;
     const query = "UPDATE users SET image = ? WHERE id = ?";
     db.query(query, [imagePath, userId], (err, results) => {
       if (err) {
@@ -87,7 +85,7 @@ app.post("/upload", upload.single("image"), (req, res) => {
   }
 });
 
-app.get('/api/users', (req, res) => {
+app.get('/api/users', verifyToken, (req, res) => {
   const query = 'SELECT * FROM users';
   db.query(query, (err, results) => {
     if (err) {
@@ -97,9 +95,9 @@ app.get('/api/users', (req, res) => {
   });
 });
 
-app.get('/api/users/:id', (req, res) => {
-  const query = 'SELECT * FROM users WHERE id = ?';
+app.get('/api/users/:id', verifyToken, (req, res) => {
   const userId = req.params.id;
+  const query = 'SELECT * FROM users WHERE id = ?';
   db.query(query, [userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -108,35 +106,66 @@ app.get('/api/users/:id', (req, res) => {
   });
 });
 
-app.get('/api/users/me', verifyToken, (req, res) => {
-  const query = 'SELECT * FROM users WHERE id = ?';
-  const userId = req.userId; // Assuming the user ID is set in `req.userId` by verifyToken
-
-  db.query(query, [userId], (err, results) => {
+app.post('/api/users', (req, res) => {
+  const { firstName, lastName, email, password, phone, photo, address, age, whatsappNumber } = req.body;
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({ error: 'Please Fill All Required Fields.' });
+  }
+  const checkEmailQuery = 'SELECT * FROM users WHERE email = ?';
+  db.query(checkEmailQuery, [email], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
 
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'User Not found.' });
+    if (results.length > 0) {
+      return res.status(400).json({ error: 'Email Already In Use.' });
     }
-    res.json(results[0]); // Send the user data as JSON
+
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error Hashing Password.' });
+      }
+
+      const query = 'INSERT INTO users (first_name, last_name, email, password, phone, photo, address, age, whatsapp_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      db.query(query, [firstName, lastName, email, hashedPassword, phone, photo, address, age, whatsappNumber], (err, result) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        res.status(201).json({ id: result.insertId, firstName, lastName, email, phone, photo, address, age, whatsappNumber });
+      });
+    });
+  });
+});
+
+app.put('/api/users/:id', verifyToken, (req, res) => {
+  const { firstName, lastName, email, phone, photo, address, age, whatsappNumber } = req.body;
+  const userId = req.params.id;
+
+  const query = 'UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, photo = ?, address = ?, age = ?, whatsapp_number = ? WHERE id = ?';
+  db.query(query, [firstName, lastName, email, phone, photo, address, age, whatsappNumber, userId], (err, result) => {
+    if (err) {
+      console.error('Database Error:', err);
+      return res.status(500).json({ error: 'Database Update Failed', details: err.message });
+    }
+    if (result.affectedRows > 0) {
+      return res.json({ message: 'Profile Updated Successfully.' });
+    } else {
+      return res.status(404).json({ error: 'User Not Found.' });
+    }
   });
 });
 
 app.post('/api/users/login', (req, res) => {
   const { email, password } = req.body;
-  console.log("Received Login Request :", email);
-
   const query = 'SELECT * FROM users WHERE email = ?';
   db.query(query, [email], (err, results) => {
     if (err) {
-      console.error("Database Error :", err);
+      console.error("DataBase Error :", err);
       return res.status(500).json({ error: err.message });
     }
 
     if (results.length === 0) {
-      console.log("User Not Found For E-Mail:", email);
+      console.log("User Not Found For E-Mail :", email);
       return res.status(404).json({ status: 'error', message: 'Invalid Email or Password' });
     }
 
@@ -150,7 +179,7 @@ app.post('/api/users/login', (req, res) => {
         console.log("Password Match Successful. Generating Token...");
         const token = jwt.sign(
           { userId: user.id, email: user.email },
-          'your-secret-key',
+          process.env.JWT_SECRET,
           { expiresIn: '1h' }
         );
 
@@ -165,56 +194,6 @@ app.post('/api/users/login', (req, res) => {
         return res.status(400).json({ status: 'error', message: 'Invalid Email or Password' });
       }
     });
-  });
-});
-
-app.post('/api/users', (req, res) => {
-  const { firstName, lastName, email, password, phone, photo, address, age, whatsappNumber } = req.body;
-  if (!firstName || !lastName || !email || !password) {
-    return res.status(400).json({ error: 'Please fill all required fields.' });
-  }
-  const checkEmailQuery = 'SELECT * FROM users WHERE email = ?';
-  db.query(checkEmailQuery, [email], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-
-    if (results.length > 0) {
-      return res.status(400).json({ error: 'Email already in use.' });
-    }
-
-    bcrypt.hash(password, 10, (err, hashedPassword) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error hashing password.' });
-      }
-
-      const query = 'INSERT INTO users (first_name, last_name, email, password, phone, photo, address, age, whatsapp_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-      db.query(query, [firstName, lastName, email, hashedPassword, phone, photo, address, age, whatsappNumber], (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-        res.status(201).json({ id: result.insertId, firstName, lastName, email, phone, photo, address, age, whatsappNumber });
-      });
-    });
-  });
-});
-
-app.put('/api/users/:id', (req, res) => {
-  const { firstName, lastName, email, phone, photo, address, age, whatsappNumber } = req.body;
-  const userId = req.params.id;
-
-  const query = `UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, photo = ?, address = ?, age = ?, whatsapp_number = ? WHERE id = ?`;
-
-  db.query(query, [firstName, lastName, email, phone, photo, address, age, whatsappNumber, userId], (err, result) => {
-    if (err) {
-      console.error('Database Error:', err);
-      return res.status(500).json({ error: 'Database update failed', details: err.message });
-    }
-    if (result.affectedRows > 0) {
-      return res.json({ message: 'Profile Updated Successfully.' });
-    } else {
-      return res.status(404).json({ error: 'User Not Found.' });
-    }
   });
 });
 
@@ -311,8 +290,8 @@ app.get('/api/products', (req, res) => {
 });
 
 app.get('/api/products/:id', (req, res) => {
-  const query = 'SELECT * FROM products WHERE id = ?';
   const productId = req.params.id;
+  const query = 'SELECT * FROM products WHERE id = ?';
   db.query(query, [productId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -370,7 +349,6 @@ app.post('/api/product-sizes', (req, res) => {
 
 app.post('/api/products/check-existence', (req, res) => {
   const { productId } = req.body;
-
   const query = 'SELECT * FROM products WHERE id = ?';
   db.query(query, [productId], (err, results) => {
     if (err) {
@@ -381,7 +359,7 @@ app.post('/api/products/check-existence', (req, res) => {
       return res.status(404).json({ status: 'error', message: 'Product Not Found.' });
     }
 
-    res.status(200).json({ status: 'success', message: 'Product exists.' });
+    res.status(200).json({ status: 'success', message: 'Product Exists.' });
   });
 });
 
@@ -397,7 +375,7 @@ app.post('/api/check-image', (req, res) => {
       return res.status(404).json({ status: 'error', message: 'Image Not Found.' });
     }
 
-    res.status(200).json({ status: 'success', message: 'Image exists.', image: results[0].image });
+    res.status(200).json({ status: 'success', message: 'Image Exists.', image: results[0].image });
   });
 });
 

@@ -21,7 +21,7 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
 
   const handleForgotPassword = async () => {
     if (!email) {
-      setError('Please enter an email address.');
+      setError('Please Enter An E-Mail Address.');
       return;
     }
 
