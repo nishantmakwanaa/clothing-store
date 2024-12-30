@@ -1,12 +1,11 @@
 import React from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { SafeAreaView } from "react-native";
-import { ActivityIndicator, Text, View } from "react-native-web";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { ActivityIndicator, Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { ApiProvider } from "./context/Context";
 import Fonts from "./assets/constants/Fonts";
-import Navigation from "./index";
+import Navigation from "./Index";
 
 export default function App() {
   const [fontsLoaded] = useFonts(Fonts);
@@ -22,9 +21,9 @@ export default function App() {
     return (
       <ApiProvider>
         <SafeAreaProvider>
-          <SafeAreaView style={{ flex: 1 }}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+            <StatusBar style="auto" />
             <Navigation />
-            <StatusBar />
           </SafeAreaView>
         </SafeAreaProvider>
       </ApiProvider>
