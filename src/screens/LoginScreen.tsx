@@ -5,24 +5,20 @@ import { SafeAreaView } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../Types";
+import Font from "../constants/Fonts";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useApi, useUser } from "../context/Context";
+import { useApi } from "../context/Context";
 import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../App';
 
-// Define Props with NativeStackScreenProps directly for the "Login" screen
 type Props = NativeStackScreenProps<RootStackParamList, "Login"> & {
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 };
 
-const LoginScreen: React.FC<Props> = ({
-  navigation,
-  setIsLoggedIn,
-}) => {
-  const { loginUser, loading, error } = useApi();
-  const { setToken, setUser } = useUser();
+const LoginScreen: React.FC<Props> = ({ navigation, setIsLoggedIn }) => {
+  const { loginUser, loading, user, error } = useApi();
+  
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -61,20 +57,15 @@ const LoginScreen: React.FC<Props> = ({
     if (!validateInputs()) return;
 
     try {
-      const response = await loginUser(email, password);
+      await loginUser(email, password);
 
-      const { userId, token } = response;
-
-      if (!userId || !token) {
-        setErrorMessage("Something went wrong. Missing user information.");
+      if (!user?.userId || !user?.token) {
+        setErrorMessage("Something Went Wrong. Missing User Information.");
         return;
       }
 
-      setToken(token);
-      setUser({ userId, token });
-
-      await AsyncStorage.setItem("authToken", token);
-      await AsyncStorage.setItem("userId", JSON.stringify(userId));
+      await AsyncStorage.setItem("authToken", user.token);
+      await AsyncStorage.setItem("userId", user.userId);
       await AsyncStorage.setItem("isLoggedIn", "true");
 
       setIsLoggedIn(true);
@@ -91,63 +82,70 @@ const LoginScreen: React.FC<Props> = ({
       enableOnAndroid
       enableAutomaticScroll
     >
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Log In To Your Account</Text>
+      <SafeAreaView style={{ flex: 1, padding: 20 }}>
+        <View style={{ marginBottom: 30 }}>
+          <Text style={{ fontSize: 32, fontWeight: "bold" }}>Welcome Back</Text>
+          <Text style={{ fontSize: 18, color: "#777" }}>Log In To Your Account</Text>
         </View>
 
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Ionicons name="mail-outline" size={Spacing * 3} color={Colors.gray} />
+        <View>
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+            <Ionicons name="mail-outline" size={24} color="#888" />
             <TextInput
-              style={styles.input}
+              style={{
+                flex: 1,
+                borderBottomWidth: 1,
+                borderBottomColor: "#ddd",
+                marginLeft: 10,
+                paddingVertical: 8,
+                paddingHorizontal: 12,
+              }}
               placeholder="E-Mail"
-              placeholderTextColor={Colors.gray}
+              placeholderTextColor="#888"
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={Spacing * 3} color={Colors.gray} />
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
+            <Ionicons name="lock-closed-outline" size={24} color="#888" />
             <TextInput
-              style={styles.input}
+              style={{
+                flex: 1,
+                borderBottomWidth: 1,
+                borderBottomColor: "#ddd",
+                marginLeft: 10,
+                paddingVertical: 8,
+                paddingHorizontal: 12,
+              }}
               placeholder="Password"
-              placeholderTextColor={Colors.gray}
+              placeholderTextColor="#888"
               secureTextEntry
               value={password}
               onChangeText={setPassword}
             />
           </View>
 
-          {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+          {errorMessage && <Text style={{ color: "red", marginBottom: 10 }}>{errorMessage}</Text>}
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Forgot Password")}
-            style={styles.forgotPassword}
-          >
-            <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")} style={{ marginBottom: 20 }}>
+            <Text style={{ color: "#007bff" }}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={handleLogin}
-            style={styles.loginButton}
-            disabled={loading}
-          >
+          <TouchableOpacity onPress={handleLogin} style={{ backgroundColor: "#007bff", paddingVertical: 12, borderRadius: 5 }}>
             {loading ? (
-              <ActivityIndicator size="small" color={Colors.onPrimary} />
+              <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text style={styles.loginButtonText}>Log In</Text>
+              <Text style={{ color: "#fff", textAlign: "center", fontSize: 18 }}>Log In</Text>
             )}
           </TouchableOpacity>
         </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Don't Have An Account ?{" "}
-            <Text style={styles.signUpText} onPress={() => navigation.navigate("Sign Up")}>
+        <View style={{ marginTop: 20, alignItems: "center" }}>
+          <Text style={{ fontSize: 16 }}>
+            Don't Have An Account?{" "}
+            <Text style={{ color: "#007bff" }} onPress={() => navigation.navigate("SignUp")}>
               Sign Up
             </Text>
           </Text>

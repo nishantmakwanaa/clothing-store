@@ -3,13 +3,13 @@ import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyb
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../Types";
+import { RootStackParamList } from "../App";
 import { useNavigation } from "@react-navigation/native";
 import { useApi } from "../context/Context";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Forgot Password">;
+type Props = NativeStackScreenProps<RootStackParamList, "ForgotPassword">;
 
 const ForgotPasswordScreen: React.FC<Props> = () => {
   const [email, setEmail] = useState<string>('');
@@ -17,7 +17,7 @@ const ForgotPasswordScreen: React.FC<Props> = () => {
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
   const { forgotPassword } = useApi();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackScreenProps<RootStackParamList>['navigation']>();
 
   const handleForgotPassword = async () => {
     if (!email) {

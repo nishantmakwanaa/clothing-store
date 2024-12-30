@@ -11,9 +11,11 @@ interface User {
 interface ApiContextType {
   loginUser: (email: string, password: string) => Promise<void>;
   logoutUser: () => void;
+  registerUser: (userData: { firstName: string; lastName: string; email: string; password: string }) => Promise<boolean>;
   fetchUserDetails: () => Promise<void>;
   fetchUserProducts: () => Promise<void>;
   fetchUserNotifications: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<{ message: string } | null>;
   user: User | null;
   products: any[];
   notifications: any[];
@@ -58,6 +60,36 @@ const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }
   };
 
+  const registerUser = async (userData: { firstName: string; lastName: string; email: string; password: string }) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${BASE_URL}/users/signup`, userData);
+      const { token, userId } = response.data;
+      const newUser = { token, userId, email: userData.email };
+      setUser(newUser);
+      await AsyncStorage.setItem("user", JSON.stringify(newUser));
+      return true;
+    } catch (error) {
+      setError("Failed to Sign Up.");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const forgotPassword = async (email: string) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${BASE_URL}/users/forgot-password`, { email });
+      return { message: response.data.message };
+    } catch (error) {
+      setError('Failed To Send Reset Link.');
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+    
   const logoutUser = async () => {
     setUser(null);
     await AsyncStorage.removeItem("user");
@@ -114,6 +146,8 @@ const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       fetchUserDetails,
       fetchUserProducts,
       fetchUserNotifications,
+      registerUser,
+      forgotPassword,
       user,
       products,
       notifications,

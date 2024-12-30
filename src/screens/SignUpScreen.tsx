@@ -4,12 +4,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../Types";
+import { RootStackParamList } from "../App";
 import { useApi } from "../context/Context";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Sign Up">;
+type Props = NativeStackScreenProps<RootStackParamList, "SignUp">;
 
 const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [email, setEmail] = useState<string>('');
@@ -33,7 +33,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 
     try {
       const response = await registerUser({ firstName, lastName, email, password });
-      
+
       setIsLoading(false);
 
       if (response) {
