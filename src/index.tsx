@@ -5,7 +5,7 @@ import { Animated, StyleSheet } from "react-native";
 import { View } from "react-native";
 import { useFonts } from "expo-font";
 import fonts from "./assets/constants/Fonts";
-import { RootStackParamList } from "./types";
+import { RootStackParamList } from "./Types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CartScreen from "./screens/CartScreen";
@@ -38,7 +38,7 @@ export default function Navigation() {
       setIsLoggedIn(loggedIn === 'true');
       
       if (loggedIn === 'true') {
-        const userName = await AsyncStorage.getItem('userName');
+        const userName = "Nishant";
         console.log("Fetched userName :", userName);
         setUserName(userName ?? null);
       }
@@ -194,7 +194,7 @@ function RootNavigator({ isLoggedIn, setIsLoggedIn, userName }: RootNavigatorPro
 )}
 </Stack.Screen>
 
-<Stack.Screen name="Help & Support">
+<Stack.Screen name="HelpSupport">
 {props => (
   <View style={{ flex: 1 }}>
     <HeaderScreen userName={userName} />

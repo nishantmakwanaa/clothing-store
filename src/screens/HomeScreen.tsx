@@ -13,7 +13,7 @@ import Spacing from "../assets/constants/Spacing";
 import Font from "../assets/constants/Font";
 import Colors from "../assets/constants/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "../Types";
 import { useUser, useApi } from "../context/Context";
 import { useEffect } from "react";
 

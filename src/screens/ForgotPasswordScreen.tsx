@@ -5,7 +5,7 @@ import Colors from "../assets/constants/Colors";
 import Spacing from "../assets/constants/Spacing";
 import Font from "../assets/constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "../Types";
 import { useNavigation } from "@react-navigation/native";
 import { useApi } from "../context/Context";
 

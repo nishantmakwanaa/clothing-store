@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "../Types";
 import Spacing from "../assets/constants/Spacing";
 import Colors from "../assets/constants/Colors";
 import Font from "../assets/constants/Font";

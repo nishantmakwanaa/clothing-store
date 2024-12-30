@@ -7,7 +7,7 @@ import Colors from "../assets/constants/Colors";
 import Spacing from "../assets/constants/Spacing";
 import Font from "../assets/constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "../Types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useApi, useUser } from "../context/Context";
 import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view';
