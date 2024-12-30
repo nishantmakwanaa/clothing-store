@@ -47,11 +47,12 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   const [fontsLoaded] = useFonts(Fonts);
   const [showSplash, setShowSplash] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (fontsLoaded) {
-      Animated.sequence([
+      Animated.sequence([ 
         Animated.timing(opacity, {
           toValue: 1,
           duration: 1000,
@@ -86,14 +87,14 @@ export default function App() {
       <SafeAreaProvider>
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
           <StatusBar style="auto" />
-          <Navigation />
+          <Navigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         </SafeAreaView>
       </SafeAreaProvider>
     </ApiProvider>
   );
 }
 
-function Navigation() {
+function Navigation({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean; setIsLoggedIn: (isLoggedIn: boolean) => void }) {
   const { user } = useApi();
 
   return (
@@ -101,7 +102,9 @@ function Navigation() {
       <Stack.Navigator screenOptions={{ headerShown: false, animation: "none" }}>
         {!user ? (
           <>
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Login">
+              {(props) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+            </Stack.Screen>
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
           </>
