@@ -1,11 +1,11 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import React from "react";
-import Colors from "../../constants/Colors";
-import Spacing from "../../constants/Spacing";
-import Font from "../../constants/Font";
+import Colors from "../assets/constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useUser } from "../../context/Context";
+import { useUser } from "../context/Context";
 
 const HeaderScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -27,7 +27,7 @@ const HeaderScreen: React.FC = () => {
           });
     
           if (!response.ok) {
-            throw new Error("Failed to fetch user details");
+            throw new Error("Failed To Fetch User Details.");
           }
     
           const userData = await response.json();
@@ -37,11 +37,11 @@ const HeaderScreen: React.FC = () => {
             const nameParts = userData.name.split(" ");
             setFirstName(nameParts[0]);
           } else {
-            console.log("User name not found in the response");
+            console.log("User Name Not Found In The Response.");
             setFirstName("Guest");
           }
         } catch (error) {
-          console.error("Error fetching user details:", error);
+          console.error("Error Fetching User Details :", error);
           setFirstName("Guest");
         }
       }

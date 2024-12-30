@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { categories, products, user } from "../data/index";
-import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
-import Colors from "../constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
+import Colors from "../assets/constants/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import { useUser, useApi } from "../context/Context";

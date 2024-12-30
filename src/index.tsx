@@ -4,26 +4,26 @@ import * as React from "react";
 import { Animated, StyleSheet } from "react-native";
 import { View } from "react-native";
 import { useFonts } from "expo-font";
-import fonts from "../config/fonts";
-import { RootStackParamList } from "../types";
+import fonts from "./assets/constants/Fonts";
+import { RootStackParamList } from "./types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import CartScreen from "../screens/CartScreen";
-import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
-import HelpSupportScreen from "../screens/HelpSupportScreen";
-import HomeScreen from "../screens/HomeScreen";
-import LoginScreen from "../screens/LoginScreen";
-import NotificationScreen from "../screens/NotificationScreen";
-import ProductDetailsScreen from "../screens/ProductDetailsScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import RatingReviewScreen from "../screens/RatingReviewScreen";
-import SearchScreen from "../screens/SearchScreen";
-import SettingsScreen from "../screens/SettingsScreen";
-import SignUpScreen from "../screens/SignUpScreen";
-import AddProductsScreen from "../screens/AddProductsScreen";
+import CartScreen from "./screens/CartScreen";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
+import HelpSupportScreen from "./screens/HelpSupportScreen";
+import HomeScreen from "./screens/HomeScreen";
+import LoginScreen from "./screens/LoginScreen";
+import NotificationScreen from "./screens/NotificationScreen";
+import ProductDetailsScreen from "./screens/ProductDetailsScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import RatingReviewScreen from "./screens/RatingReviewScreen";
+import SearchScreen from "./screens/SearchScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import AddProductsScreen from "./screens/AddProductsScreen";
 
-import HeaderScreen from "components/HeaderScreen";
-import FooterScreen from "components/FooterScreen";
+import HeaderScreen from "./components/HeaderScreen";
+import FooterScreen from "./components/FooterScreen";
 
 export default function Navigation() {
   const [fontsLoaded] = useFonts(fonts);

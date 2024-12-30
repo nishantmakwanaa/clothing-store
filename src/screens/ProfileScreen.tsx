@@ -12,9 +12,9 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
-import Colors from "../constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
+import Colors from "../assets/constants/Colors";
 
 import { useApi } from "../context/Context";
 

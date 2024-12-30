@@ -13,9 +13,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
-import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
-import Colors from "../constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
+import Colors from "../assets/constants/Colors";
 import { products, Product } from "../data";
 import { useEffect } from "react";
 

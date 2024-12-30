@@ -1,9 +1,9 @@
 import React from "react";
 import { SafeAreaView, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import Colors from "../constants/Colors";
-import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Colors from "../assets/constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
 
 type NotificationsScreenProps = NativeStackScreenProps<any, "Notifications">;
 

@@ -5,11 +5,11 @@ import { ActivityIndicator, Text, View } from "react-native-web";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { ApiProvider } from "./context/Context";
-import fonts from "./config/fonts";
-import Navigation from "./navigation";
+import Fonts from "./assets/constants/Fonts";
+import Navigation from "./index";
 
 export default function App() {
-  const [fontsLoaded] = useFonts(fonts);
+  const [fontsLoaded] = useFonts(Fonts);
 
   if (!fontsLoaded) {
     return (

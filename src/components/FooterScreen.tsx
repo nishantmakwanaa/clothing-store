@@ -1,8 +1,8 @@
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import Colors from "../../../constants/Colors";
-import Spacing from "../../../constants/Spacing";
+import Colors from "../../src/assets/constants/Colors";
+import Spacing from "../../src/assets/constants/Spacing";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 const FooterScreen: React.FC = () => {

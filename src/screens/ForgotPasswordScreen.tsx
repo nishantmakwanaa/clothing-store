@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, ScrollView, Keyboard } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Colors from "../constants/Colors";
-import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Colors from "../assets/constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import { useNavigation } from "@react-navigation/native";

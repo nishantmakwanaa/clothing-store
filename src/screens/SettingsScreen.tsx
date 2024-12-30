@@ -10,11 +10,11 @@ import {
     Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
-import Colors from "../constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
+import Colors from "../assets/constants/Colors";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CustomAlert from "./components/AlertBox";
+import CustomAlert from "../components/AlertBox";
 
 interface SettingsScreenProps {
     navigation: {

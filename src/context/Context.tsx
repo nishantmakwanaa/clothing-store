@@ -159,6 +159,25 @@ export const useApi = (): ApiContextType => {
   return context;
 };
 
+
+export const useCart = () => {
+
+  const cartItems = [];
+
+  const previousOrders = [];
+
+  const addToCart = (product, color, size) => {};
+
+  const removeFromCart = (id) => {};
+
+  const addOrder = (order) => {};
+
+  return { cartItems, previousOrders, addToCart, removeFromCart, addOrder };
+
+};
+
+
+
 export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   if (!context) {

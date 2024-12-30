@@ -10,9 +10,9 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Colors from "../constants/Colors";
-import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Colors from "../assets/constants/Colors";
+import Spacing from "../assets/constants/Spacing";
+import Font from "../assets/constants/Font";
 import * as ImagePicker from "expo-image-picker";
 
 const AddProduct: React.FC = () => {
