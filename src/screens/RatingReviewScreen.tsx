@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AirbnbRating } from "react-native-ratings";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 import CustomAlert from "./components/AlertBox";
 
 type RatingReviewScreenProps = NativeStackScreenProps<any, "RatingReview">;

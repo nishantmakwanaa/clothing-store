@@ -11,7 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/Colors";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 import Spacing from "../constants/Spacing";
 import { products } from "../constants/Data";
 import CustomAlert from "./components/AlertBox";

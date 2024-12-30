@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import React from "react";
 import Colors from "../../constants/Colors";
 import Spacing from "../../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../../constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useUser } from "../../context/Context";

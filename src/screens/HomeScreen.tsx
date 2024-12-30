@@ -10,11 +10,11 @@ import {
 import React, { useState } from "react";
 import { categories, products, user } from "../constants/Data";
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 import Colors from "../constants/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../Types";
-import { useUser, useApi } from "../context/Context";
+import { RootStackParamList } from "../App";
+import { useApi } from "../context/Context";
 import { useEffect } from "react";
 
 const IMAGE_WIDTH = 190;

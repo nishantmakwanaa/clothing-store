@@ -12,9 +12,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../Types";
+import { RootStackParamList } from "../App";
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 import Colors from "../constants/Colors";
 import { products, Product } from "../constants/Data";
 import { useEffect } from "react";
@@ -48,7 +48,7 @@ const SearchScreen: React.FC<Props> = ({ navigation: { navigate, goBack } }) => 
   };
 
   const handleProductPress = (product: Product) => {
-    navigate("Product Details", { product });
+    navigate("ProductDetails", { product });
   };
 
   const handleSearchSubmit = () => {
@@ -58,14 +58,14 @@ const SearchScreen: React.FC<Props> = ({ navigation: { navigate, goBack } }) => 
   };
 
   const imageMapping: Record<number, any> = {
-    23: require("../assets/images/products/yellow.jpg"),
-    24: require("../assets/images/products/green.jpg"),
-    25: require("../assets/images/products/purple.jpg"),
-    26: require("../assets/images/products/blue.jpg"),
+    23: require("../assets/images/products/Yellow.jpg"),
+    24: require("../assets/images/products/Green.jpg"),
+    25: require("../assets/images/products/Purple.jpg"),
+    26: require("../assets/images/products/Blue.jpg"),
   };
   
   const getProductImage = (imageId: number) => {
-      return imageMapping[imageId] || require("../assets/images/products/yellow.jpg");
+      return imageMapping[imageId] || require("../assets/images/products/Yellow.jpg");
   };
     
   return (

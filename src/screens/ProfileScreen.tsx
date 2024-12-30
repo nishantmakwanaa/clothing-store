@@ -13,7 +13,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 import Colors from "../constants/Colors";
 
 import { useApi } from "../context/Context";
@@ -29,7 +29,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
         lastName: "",
         email: "",
         phone: "",
-        photo: require("../assets/images/user/avatar.png"),
+        photo: require("../assets/images/user/Avatar.png"),
         address: "",
         age: 0,
         whatsappNumber: "",
@@ -37,7 +37,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
     const userId = route.params?.userId || "1";
-  
+
     useEffect(() => {
         // Fetch user data on initial load
         const fetchUserData = () => {

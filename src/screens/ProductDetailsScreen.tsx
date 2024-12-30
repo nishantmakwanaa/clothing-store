@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../Types";
+import { RootStackParamList } from "../App";
 import Spacing from "../constants/Spacing";
 import Colors from "../constants/Colors";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Product Details">;
+type Props = NativeStackScreenProps<RootStackParamList, "ProductDetails">;
 
 const IMAGE_HEIGHT = 440;
 

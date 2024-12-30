@@ -3,7 +3,7 @@ import { SafeAreaView, Text, TouchableOpacity, StyleSheet, FlatList } from "reac
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Colors from "../constants/Colors";
 import Spacing from "../constants/Spacing";
-import Font from "../constants/Font";
+import Font from "../constants/Fonts";
 
 type NotificationsScreenProps = NativeStackScreenProps<any, "Notifications">;
 
