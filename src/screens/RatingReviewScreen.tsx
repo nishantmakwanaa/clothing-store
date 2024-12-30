@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, View, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AirbnbRating } from "react-native-ratings";
-import Colors from "../assets/constants/Colors";
-import Spacing from "../assets/constants/Spacing";
-import Font from "../assets/constants/Font";
-import CustomAlert from "../components/AlertBox";
+import Colors from "../constants/Colors";
+import Spacing from "../constants/Spacing";
+import Font from "../constants/Font";
+import CustomAlert from "./components/AlertBox";
 
 type RatingReviewScreenProps = NativeStackScreenProps<any, "RatingReview">;
 

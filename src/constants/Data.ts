@@ -1,5 +1,5 @@
 import { ImageSourcePropType } from "react-native";
-import Colors from "../assets/constants/Colors";
+import Colors from "./Colors";
 
 interface User {
   id: number;

@@ -10,11 +10,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import Colors from "../assets/constants/Colors";
-import Font from "../assets/constants/Font";
-import Spacing from "../assets/constants/Spacing";
-import { products } from "../data";
-import CustomAlert from "../components/AlertBox";
+import Colors from "../constants/Colors";
+import Font from "../constants/Font";
+import Spacing from "../constants/Spacing";
+import { products } from "../constants/Data";
+import CustomAlert from "./components/AlertBox";
 import { useCart } from "../context/Context";
 
 const CartScreen: React.FC = () => {

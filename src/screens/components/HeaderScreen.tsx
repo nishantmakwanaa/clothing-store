@@ -1,11 +1,11 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import React from "react";
-import Colors from "../assets/constants/Colors";
-import Spacing from "../assets/constants/Spacing";
-import Font from "../assets/constants/Font";
+import Colors from "../../constants/Colors";
+import Spacing from "../../constants/Spacing";
+import Font from "../constants/Font";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useUser } from "../context/Context";
+import { useUser } from "../../context/Context";
 
 const HeaderScreen: React.FC = () => {
   const navigation = useNavigation();

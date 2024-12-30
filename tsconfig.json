@@ -16,12 +16,16 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
+    "src/hooks/**/*.ts",
+    "src/hooks/**/*.tsx",
     "src/screens/**/*.tsx",
     "src/screens/**/*.ts",
     "src/context/**/*.ts",
     "src/context/**/*.tsx",
-    "src/components/**/*.ts",
-    "src/components/**/*.tsx",
+    "src/constants/**/*.ts",
+    "src/constants/**/*.tsx",
+    "src/screens/components/**/*.ts",
+    "src/screens/components/**/*.tsx",
   ],
   "exclude": [
     "node_modules",

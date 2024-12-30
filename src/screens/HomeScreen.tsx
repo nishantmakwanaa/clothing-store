@@ -8,10 +8,10 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { categories, products, user } from "../data/index";
-import Spacing from "../assets/constants/Spacing";
-import Font from "../assets/constants/Font";
-import Colors from "../assets/constants/Colors";
+import { categories, products, user } from "../constants/Data";
+import Spacing from "../constants/Spacing";
+import Font from "../constants/Font";
+import Colors from "../constants/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types";
 import { useUser, useApi } from "../context/Context";

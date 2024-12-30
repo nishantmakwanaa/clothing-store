@@ -35,7 +35,7 @@ db.connect((err) => {
   }
 });
 
-const verifyToken = (req, res, next) => {
+const authenticateUser = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) {
     return res.status(403).json({ message: 'No Token Provided.' });
@@ -69,7 +69,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.post("/upload", upload.single("image"), (req, res) => {
+app.post("/upload", authenticateUser, upload.single("image"), (req, res) => {
   if (req.file) {
     const imagePath = "uploads/" + req.file.filename;
     const userId = req.userId;
@@ -85,18 +85,8 @@ app.post("/upload", upload.single("image"), (req, res) => {
   }
 });
 
-app.get('/api/users', verifyToken, (req, res) => {
-  const query = 'SELECT * FROM users';
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.get('/api/users/:id', verifyToken, (req, res) => {
-  const userId = req.params.id;
+app.get('/api/users', authenticateUser, (req, res) => {
+  const userId = req.userId;
   const query = 'SELECT * FROM users WHERE id = ?';
   db.query(query, [userId], (err, results) => {
     if (err) {
@@ -134,24 +124,6 @@ app.post('/api/users', (req, res) => {
         res.status(201).json({ id: result.insertId, firstName, lastName, email, phone, photo, address, age, whatsappNumber });
       });
     });
-  });
-});
-
-app.put('/api/users/:id', verifyToken, (req, res) => {
-  const { firstName, lastName, email, phone, photo, address, age, whatsappNumber } = req.body;
-  const userId = req.params.id;
-
-  const query = 'UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, photo = ?, address = ?, age = ?, whatsapp_number = ? WHERE id = ?';
-  db.query(query, [firstName, lastName, email, phone, photo, address, age, whatsappNumber, userId], (err, result) => {
-    if (err) {
-      console.error('Database Error:', err);
-      return res.status(500).json({ error: 'Database Update Failed', details: err.message });
-    }
-    if (result.affectedRows > 0) {
-      return res.json({ message: 'Profile Updated Successfully.' });
-    } else {
-      return res.status(404).json({ error: 'User Not Found.' });
-    }
   });
 });
 
@@ -249,9 +221,10 @@ app.post('/api/users/reset-password', (req, res) => {
   });
 });
 
-app.get('/api/categories', (req, res) => {
-  const query = 'SELECT * FROM categories';
-  db.query(query, (err, results) => {
+app.get('/api/products', authenticateUser, (req, res) => {
+  const userId = req.userId;
+  const query = 'SELECT * FROM products WHERE user_id = ?';
+  db.query(query, [userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -259,40 +232,11 @@ app.get('/api/categories', (req, res) => {
   });
 });
 
-app.get('/api/colors', (req, res) => {
-  const query = 'SELECT * FROM colors';
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.get('/api/sizes', (req, res) => {
-  const query = 'SELECT * FROM sizes';
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.get('/api/products', (req, res) => {
-  const query = 'SELECT * FROM products';
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
-
-app.get('/api/products/:id', (req, res) => {
+app.get('/api/products/:id', authenticateUser, (req, res) => {
   const productId = req.params.id;
-  const query = 'SELECT * FROM products WHERE id = ?';
-  db.query(query, [productId], (err, results) => {
+  const userId = req.userId;
+  const query = 'SELECT * FROM products WHERE id = ? AND user_id = ?';
+  db.query(query, [productId, userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -300,10 +244,11 @@ app.get('/api/products/:id', (req, res) => {
   });
 });
 
-app.post('/api/products', (req, res) => {
+app.post('/api/products', authenticateUser, (req, res) => {
   const { name, price, categoryId, description, image, reviews, rating, brand, status } = req.body;
-  const query = 'INSERT INTO products (name, price, category_id, description, image, reviews, rating, brand, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  db.query(query, [name, price, categoryId, description, image, reviews, rating, brand, status], (err, result) => {
+  const userId = req.userId;
+  const query = 'INSERT INTO products (name, price, category_id, description, image, reviews, rating, brand, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(query, [name, price, categoryId, description, image, reviews, rating, brand, status, userId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -311,11 +256,12 @@ app.post('/api/products', (req, res) => {
   });
 });
 
-app.put('/api/products/:id/status', (req, res) => {
+app.put('/api/products/:id/status', authenticateUser, (req, res) => {
   const productId = req.params.id;
   const { status } = req.body;
-  const query = 'UPDATE products SET status = ? WHERE id = ?';
-  db.query(query, [status, productId], (err, result) => {
+  const userId = req.userId;
+  const query = 'UPDATE products SET status = ? WHERE id = ? AND user_id = ?';
+  db.query(query, [status, productId, userId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -323,62 +269,6 @@ app.put('/api/products/:id/status', (req, res) => {
   });
 });
 
-app.post('/api/product-colors', (req, res) => {
-  const { productId, colorIds } = req.body;
-  const query = 'INSERT INTO product_colors (product_id, color_id) VALUES ?';
-  const values = colorIds.map(colorId => [productId, colorId]);
-  db.query(query, [values], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.status(201).json({ message: 'Product Colors Added Successfully.' });
-  });
-});
-
-app.post('/api/product-sizes', (req, res) => {
-  const { productId, sizeIds } = req.body;
-  const query = 'INSERT INTO product_sizes (product_id, size_id) VALUES ?';
-  const values = sizeIds.map(sizeId => [productId, sizeId]);
-  db.query(query, [values], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.status(201).json({ message: 'Product Sizes Added Successfully.' });
-  });
-});
-
-app.post('/api/products/check-existence', (req, res) => {
-  const { productId } = req.body;
-  const query = 'SELECT * FROM products WHERE id = ?';
-  db.query(query, [productId], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'Product Not Found.' });
-    }
-
-    res.status(200).json({ status: 'success', message: 'Product Exists.' });
-  });
-});
-
-app.post('/api/check-image', (req, res) => {
-  const { productId } = req.body;
-  const query = 'SELECT image FROM products WHERE id = ?';
-  db.query(query, [productId], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-
-    if (results.length === 0 || !results[0].image) {
-      return res.status(404).json({ status: 'error', message: 'Image Not Found.' });
-    }
-
-    res.status(200).json({ status: 'success', message: 'Image Exists.', image: results[0].image });
-  });
-});
-
 app.listen(port, () => {
-  console.log(`Server Is Running On: http://localhost:${port}`);
+  console.log(`Server Is Running On : http://localhost:${port}`);
 });

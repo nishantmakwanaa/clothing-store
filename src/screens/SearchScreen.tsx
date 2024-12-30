@@ -13,10 +13,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../Types";
-import Spacing from "../assets/constants/Spacing";
-import Font from "../assets/constants/Font";
-import Colors from "../assets/constants/Colors";
-import { products, Product } from "../data";
+import Spacing from "../constants/Spacing";
+import Font from "../constants/Font";
+import Colors from "../constants/Colors";
+import { products, Product } from "../constants/Data";
 import { useEffect } from "react";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Search">;
