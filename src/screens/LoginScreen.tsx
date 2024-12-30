@@ -17,7 +17,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Login"> & {
 };
 
 const LoginScreen: React.FC<Props> = ({ navigation, setIsLoggedIn }) => {
-  const { loginUser, loading, user, error } = useApi();
+  const { loginUser, loading, user } = useApi();
   
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

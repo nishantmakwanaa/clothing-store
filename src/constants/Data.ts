@@ -10,7 +10,7 @@ interface User {
 export const user: User = {
   id: 1,
   name: "Nishant Makwana",
-  image: require("../assets/images/user/avatar.png"),
+  image: require("../assets/images/user/Avatar.png"),
 };
 
 export interface Category {
@@ -91,7 +91,7 @@ export const products: Product[] = [
     category: categories.find((cat) => cat.id === 1)!,
     description:
       "Gently Used, Perfect For Office Or Casual Wear. Good Condition, Minimal Signs Of Wear.",
-    image: require("../assets/images/products/yellow.jpg"),
+    image: require("../assets/images/products/Yellow.jpg"),
     reviews: 80,
     rating: 4.0,
     colors: colors,
@@ -105,7 +105,7 @@ export const products: Product[] = [
     category: categories.find((cat) => cat.id === 1)!,
     description:
       "Lightly Worn Sports-Wear Suitable For Both Casual And Work-Out Wear. Comfortable And Durable.",
-    image: require("../assets/images/products/green.jpg"),
+    image: require("../assets/images/products/Green.jpg"),
     reviews: 28,
     rating: 3.7,
     colors: colors,
@@ -119,7 +119,7 @@ export const products: Product[] = [
     category: categories.find((cat) => cat.id === 1)!,
     description:
       "Pre-Loved Hoodie In Excellent Condition. Soft Fabric, Great For Casual Outings.",
-    image: require("../assets/images/products/purple.jpg"),
+    image: require("../assets/images/products/Purple.jpg"),
     reviews: 70,
     rating: 5.0,
     colors: colors,
@@ -133,7 +133,7 @@ export const products: Product[] = [
     category: categories.find((cat) => cat.id === 2)!, 
     description:
       "Second-Hand Blazer In Very Good Condition. Stylish And Versatile For Both Formal And Casual Looks.",
-    image: require("../assets/images/products/blue.jpg"),
+    image: require("../assets/images/products/Blue.jpg"),
     reviews: 65,
     rating: 4.2,
     colors: colors,

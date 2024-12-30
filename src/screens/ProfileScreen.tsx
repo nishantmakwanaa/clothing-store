@@ -52,7 +52,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ route, navigation }) => {
                             lastName: response.last_name || "",
                             email: response.email || "",
                             phone: response.phone || null,
-                            photo: response.photo || require("../assets/images/user/avatar.png"),
+                            photo: response.photo || require("../assets/images/user/Avatar.png"),
                             address: response.address || null,
                             age: response.age || null,
                             whatsappNumber: response.whatsappNumber || null,

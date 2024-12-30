@@ -52,7 +52,7 @@ export default function App() {
 
   useEffect(() => {
     if (fontsLoaded) {
-      Animated.sequence([ 
+      Animated.sequence([  
         Animated.timing(opacity, {
           toValue: 1,
           duration: 1000,
@@ -110,16 +110,16 @@ function Navigation({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean; setIsL
           </>
         ) : (
           <>
-            <ScreenWrapper name="AddProducts" component={AddProductsScreen} />
-            <ScreenWrapper name="Cart" component={CartScreen} />
-            <ScreenWrapper name="HelpSupport" component={HelpSupportScreen} />
-            <ScreenWrapper name="Home" component={HomeScreen} />
-            <ScreenWrapper name="Notification" component={NotificationScreen} />
-            <ScreenWrapper name="ProductDetails" component={ProductDetailsScreen} />
-            <ScreenWrapper name="Profile" component={ProfileScreen} />
-            <ScreenWrapper name="RatingReview" component={RatingReviewScreen} />
-            <ScreenWrapper name="Search" component={SearchScreen} />
-            <ScreenWrapper name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="Home" component={HomeScreenWrapper} />
+            <Stack.Screen name="AddProducts" component={AddProductsScreenWrapper} />
+            <Stack.Screen name="Cart" component={CartScreenWrapper} />
+            <Stack.Screen name="HelpSupport" component={HelpSupportScreenWrapper} />
+            <Stack.Screen name="Notification" component={NotificationScreenWrapper} />
+            <Stack.Screen name="ProductDetails" component={ProductDetailsScreenWrapper} />
+            <Stack.Screen name="Profile" component={ProfileScreenWrapper} />
+            <Stack.Screen name="RatingReview" component={RatingReviewScreenWrapper} />
+            <Stack.Screen name="Search" component={SearchScreenWrapper} />
+            <Stack.Screen name="Settings" component={SettingsScreenWrapper} />
           </>
         )}
       </Stack.Navigator>
@@ -127,18 +127,103 @@ function Navigation({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean; setIsL
   );
 }
 
-function ScreenWrapper({ name, component }: { name: keyof RootStackParamList; component: React.ComponentType<any> }) {
+function HomeScreenWrapper(props: RootStackScreenProps<"Home">) {
   return (
-    <Stack.Screen
-      name={name}
-      component={(props) => (
-        <>
-          <HeaderScreen />
-          {React.createElement(component, props)}
-          <FooterScreen />
-        </>
-      )}
-    />
+    <>
+      <HeaderScreen />
+      <HomeScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function AddProductsScreenWrapper(props: RootStackScreenProps<"AddProducts">) {
+  return (
+    <>
+      <HeaderScreen />
+      <AddProductsScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function CartScreenWrapper(props: RootStackScreenProps<"Cart">) {
+  return (
+    <>
+      <HeaderScreen />
+      <CartScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function HelpSupportScreenWrapper(props: RootStackScreenProps<"HelpSupport">) {
+  return (
+    <>
+      <HeaderScreen />
+      <HelpSupportScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function NotificationScreenWrapper(props: RootStackScreenProps<"Notification">) {
+  return (
+    <>
+      <HeaderScreen />
+      <NotificationScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function ProductDetailsScreenWrapper(props: RootStackScreenProps<"ProductDetails">) {
+  return (
+    <>
+      <HeaderScreen />
+      <ProductDetailsScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function ProfileScreenWrapper(props: RootStackScreenProps<"Profile">) {
+  return (
+    <>
+      <HeaderScreen />
+      <ProfileScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function RatingReviewScreenWrapper(props: RootStackScreenProps<"RatingReview">) {
+  return (
+    <>
+      <HeaderScreen />
+      <RatingReviewScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function SearchScreenWrapper(props: RootStackScreenProps<"Search">) {
+  return (
+    <>
+      <HeaderScreen />
+      <SearchScreen {...props} />
+      <FooterScreen />
+    </>
+  );
+}
+
+function SettingsScreenWrapper(props: RootStackScreenProps<"Settings">) {
+  return (
+    <>
+      <HeaderScreen />
+      <SettingsScreen {...props} />
+      <FooterScreen />
+    </>
   );
 }
 
