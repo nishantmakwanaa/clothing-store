@@ -58,14 +58,14 @@ const SearchScreen: React.FC<Props> = ({ navigation: { navigate, goBack } }) => 
   };
 
   const imageMapping: Record<number, any> = {
-    23: require("../assets/images/products/yellow-ss.jpg"),
-    24: require("../assets/images/products/green-j.jpg"),
-    25: require("../assets/images/products/hdd.jpg"),
-    26: require("../assets/images/products/blue-ish-w.jpg"),
+    23: require("../assets/images/products/yellow.jpg"),
+    24: require("../assets/images/products/green.jpg"),
+    25: require("../assets/images/products/purple.jpg"),
+    26: require("../assets/images/products/blue.jpg"),
   };
   
   const getProductImage = (imageId: number) => {
-      return imageMapping[imageId] || require("../assets/images/products/yellow-ss.jpg");
+      return imageMapping[imageId] || require("../assets/images/products/yellow.jpg");
   };
     
   return (

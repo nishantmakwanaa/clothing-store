@@ -4,7 +4,7 @@
     "slug": "Clothify",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/logo.png",
+    "icon": "src/assets/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "updates": {
@@ -15,17 +15,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "icon": "./src/assets/logo.png"
+      "icon": "src/assets/logo.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "src/assets/logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.nishantmakwanaa.Clothify"
     },
     "web": {
-      "favicon": "./src/assets/logo.png"
+      "favicon": "src/assets/logo.png"
     },
     "extra": {
       "eas": {

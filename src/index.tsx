@@ -72,7 +72,7 @@ export default function Navigation() {
     return (
       <View style={styles.splashContainer}>
         <Animated.Image
-          source={require("../assets/logo.png")}
+          source={require("./assets/logo.png")}
           style={[styles.logo, { opacity: opacity }]}
         />
         <Animated.Text style={[styles.appName, { opacity: opacity }]}>
