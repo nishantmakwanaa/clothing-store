@@ -11,7 +11,8 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "**/*",
+      "/src/constants/fonts/*"
     ],
     "ios": {
       "supportsTablet": true,

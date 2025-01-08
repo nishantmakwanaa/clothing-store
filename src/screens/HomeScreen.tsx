@@ -8,11 +8,11 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { categories, products, user } from "../constants/Data";
+import { categories } from "../constants/Data";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Spacing from "../constants/Spacing";
 import Font from "../constants/Fonts";
 import Colors from "../constants/Colors";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { useApi } from "../context/Context";
 import { useEffect } from "react";
@@ -23,14 +23,13 @@ const IMAGE_HEIGHT = 250;
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
-  const { user, token } = useUser();
+  const { user } = useApi();
   const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(0);
   const [userProducts, setUserProducts] = useState<any[]>([]);
-  const { loading, error, getCategories } = useApi();
 
   useEffect(() => {
     const fetchUserProducts = async () => {
-      if (user.userId) {
+      if (user && user.userId) {
         try {
           const productsData = [];
           setUserProducts(productsData);
@@ -41,7 +40,7 @@ const HomeScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
     };
 
     fetchUserProducts();
-  }, [user.userId]);
+  }, [user?.userId]);
 
   const categoriesWithProducts = [
     { id: 0, name: "All" },

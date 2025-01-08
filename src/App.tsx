@@ -31,7 +31,7 @@ export type RootStackParamList = {
   AddProducts: undefined;
   Cart: undefined;
   HelpSupport: undefined;
-  Notification: undefined;
+  Notifications: undefined;
   ProductDetails: undefined;
   Profile: undefined;
   RatingReview: undefined;
@@ -47,12 +47,11 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   const [fontsLoaded] = useFonts(Fonts);
   const [showSplash, setShowSplash] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (fontsLoaded) {
-      Animated.sequence([  
+      Animated.sequence([
         Animated.timing(opacity, {
           toValue: 1,
           duration: 1000,
@@ -75,9 +74,7 @@ export default function App() {
           source={require("./assets/app/Logo.png")}
           style={[styles.logo, { opacity }]}
         />
-        <Animated.Text style={[styles.appName, { opacity }]}>
-          Clothify
-        </Animated.Text>
+        <Animated.Text style={[styles.appName, { opacity }]}>Clothify</Animated.Text>
       </View>
     );
   }
@@ -87,23 +84,33 @@ export default function App() {
       <SafeAreaProvider>
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
           <StatusBar style="auto" />
-          <Navigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          <Navigation />
         </SafeAreaView>
       </SafeAreaProvider>
     </ApiProvider>
   );
 }
 
-function Navigation({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean; setIsLoggedIn: (isLoggedIn: boolean) => void }) {
-  const { user } = useApi();
+function Navigation() {
+  const { user, fetchUserProducts, fetchUserNotifications } = useApi();
+
+  useEffect(() => {
+    if (user) {
+      fetchUserProducts();
+      fetchUserNotifications();
+    }
+  }, [user]);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, animation: "none" }}>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false, animation: "none" }}
+        initialRouteName="Login"
+      >
         {!user ? (
           <>
             <Stack.Screen name="Login">
-              {(props) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+              {(props) => <LoginScreenWrapper {...props} setIsLoggedIn={() => {}} />}
             </Stack.Screen>
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
@@ -114,12 +121,14 @@ function Navigation({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean; setIsL
             <Stack.Screen name="AddProducts" component={AddProductsScreenWrapper} />
             <Stack.Screen name="Cart" component={CartScreenWrapper} />
             <Stack.Screen name="HelpSupport" component={HelpSupportScreenWrapper} />
-            <Stack.Screen name="Notification" component={NotificationScreenWrapper} />
+            <Stack.Screen name="Notifications" component={NotificationScreenWrapper} />
             <Stack.Screen name="ProductDetails" component={ProductDetailsScreenWrapper} />
             <Stack.Screen name="Profile" component={ProfileScreenWrapper} />
             <Stack.Screen name="RatingReview" component={RatingReviewScreenWrapper} />
             <Stack.Screen name="Search" component={SearchScreenWrapper} />
-            <Stack.Screen name="Settings" component={SettingsScreenWrapper} />
+            <Stack.Screen name="Settings">
+              {(props) => <SettingsScreenWrapper {...props} setIsLoggedIn={() => {}} />}
+            </Stack.Screen>
           </>
         )}
       </Stack.Navigator>
@@ -127,105 +136,112 @@ function Navigation({ isLoggedIn, setIsLoggedIn }: { isLoggedIn: boolean; setIsL
   );
 }
 
-function HomeScreenWrapper(props: RootStackScreenProps<"Home">) {
+function HomeScreenWrapper({ navigation, route }: RootStackScreenProps<'Home'>) {
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <HeaderScreen />
-      <HomeScreen {...props} />
+      <HomeScreen navigation={navigation} route={route} />
       <FooterScreen />
-    </>
+    </View>
   );
 }
 
-function AddProductsScreenWrapper(props: RootStackScreenProps<"AddProducts">) {
+function AddProductsScreenWrapper() {
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <HeaderScreen />
-      <AddProductsScreen {...props} />
+      <AddProductsScreen />
       <FooterScreen />
-    </>
+    </View>
   );
 }
 
-function CartScreenWrapper(props: RootStackScreenProps<"Cart">) {
+function CartScreenWrapper() {
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <HeaderScreen />
-      <CartScreen {...props} />
+      <CartScreen />
       <FooterScreen />
-    </>
+    </View>
+  )
+}
+
+function HelpSupportScreenWrapper({ navigation, route }: RootStackScreenProps<'HelpSupport'>) {
+  return (
+    <View style={{ flex: 1 }}>
+      <HeaderScreen />
+      <HelpSupportScreen navigation={navigation} route={route} />
+      <FooterScreen />
+    </View>
+  )
+}
+
+function NotificationScreenWrapper({ navigation, route }: RootStackScreenProps<'Notifications'>) {
+  return (
+    <View style={{ flex: 1 }}>
+      <HeaderScreen />
+      <NotificationScreen navigation={navigation} route={route} />
+      <FooterScreen />
+    </View>
+  )
+}
+
+function ProductDetailsScreenWrapper({ navigation, route }: RootStackScreenProps<'ProductDetails'>) {
+  return (
+    <View style={{ flex: 1 }}>
+      <HeaderScreen />
+      <ProductDetailsScreen navigation={navigation} route={route} />
+      <FooterScreen />
+    </View>
+  )
+}
+
+function ProfileScreenWrapper() {
+  return (
+    <View style={{ flex: 1 }}>
+      <HeaderScreen />
+      <ProfileScreen />
+      <FooterScreen />
+    </View>
+  )
+}
+
+function RatingReviewScreenWrapper({ navigation, route }: RootStackScreenProps<'RatingReview'>) {
+  return (
+    <View style={{ flex: 1 }}>
+      <HeaderScreen />
+      <RatingReviewScreen navigation={navigation} route={route} />
+      <FooterScreen />
+    </View>
+  )
+}
+
+function SearchScreenWrapper({ navigation, route }: RootStackScreenProps<'Search'>) {
+  return (
+    <View style={{ flex: 1 }}>
+      <HeaderScreen />
+      <SearchScreen navigation={navigation} route={route} />
+      <FooterScreen />
+    </View>
+  )
+}
+
+
+function LoginScreenWrapper({ navigation, route, setIsLoggedIn }: RootStackScreenProps<'Login'> & { setIsLoggedIn: (isLoggedIn: boolean) => void; }) {
+  return <LoginScreen navigation={navigation} route={route} setIsLoggedIn={setIsLoggedIn} />;
+function SettingsScreenWrapper({ navigation, setIsLoggedIn }: RootStackScreenProps<'Settings'> & { setIsLoggedIn: (isLoggedIn: boolean) => void; }) {
+  return (
+    <View style={{ flex: 1 }}>
+      <HeaderScreen />
+      <SettingsScreen navigation={navigation} setIsLoggedIn={setIsLoggedIn} />
+      <FooterScreen />
+    </View>
+  );
+}
   );
 }
 
-function HelpSupportScreenWrapper(props: RootStackScreenProps<"HelpSupport">) {
-  return (
-    <>
-      <HeaderScreen />
-      <HelpSupportScreen {...props} />
-      <FooterScreen />
-    </>
-  );
-}
-
-function NotificationScreenWrapper(props: RootStackScreenProps<"Notification">) {
-  return (
-    <>
-      <HeaderScreen />
-      <NotificationScreen {...props} />
-      <FooterScreen />
-    </>
-  );
-}
-
-function ProductDetailsScreenWrapper(props: RootStackScreenProps<"ProductDetails">) {
-  return (
-    <>
-      <HeaderScreen />
-      <ProductDetailsScreen {...props} />
-      <FooterScreen />
-    </>
-  );
-}
-
-function ProfileScreenWrapper(props: RootStackScreenProps<"Profile">) {
-  return (
-    <>
-      <HeaderScreen />
-      <ProfileScreen {...props} />
-      <FooterScreen />
-    </>
-  );
-}
-
-function RatingReviewScreenWrapper(props: RootStackScreenProps<"RatingReview">) {
-  return (
-    <>
-      <HeaderScreen />
-      <RatingReviewScreen {...props} />
-      <FooterScreen />
-    </>
-  );
-}
-
-function SearchScreenWrapper(props: RootStackScreenProps<"Search">) {
-  return (
-    <>
-      <HeaderScreen />
-      <SearchScreen {...props} />
-      <FooterScreen />
-    </>
-  );
-}
-
-function SettingsScreenWrapper(props: RootStackScreenProps<"Settings">) {
-  return (
-    <>
-      <HeaderScreen />
-      <SettingsScreen {...props} />
-      <FooterScreen />
-    </>
-  );
-}
+// Similar wrappers can be created for other screens.
 
 const styles = StyleSheet.create({
   splashContainer: {
@@ -235,13 +251,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
   },
   appName: {
-    fontSize: 24,
     marginTop: 20,
-    fontFamily: "poppins-regular",
-    color: "#000",
+    fontSize: 24,
+    fontWeight: "bold",
   },
 });
