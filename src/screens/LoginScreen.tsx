@@ -159,9 +159,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingHorizontal: Spacing * 2,
-    paddingVertical: Spacing * 2,
-    justifyContent: "center",
+    padding: Spacing * 2,
   },
   header: {
     marginVertical: Spacing * 4,
@@ -203,23 +201,14 @@ const styles = StyleSheet.create({
     height: "100%",
     textAlign: "center",
   },
-  forgotPassword: {
-    alignItems: "flex-end",
-    marginBottom: Spacing * 3,
-  },
-  forgotPasswordText: {
-    fontFamily: Font["poppins-regular"],
-    fontSize: Spacing * 1.6,
-    color: Colors.primary,
-  },
-  loginButton: {
+  loginButton: {  // Changed from signUpButton to loginButton
     backgroundColor: Colors.primary,
     padding: Spacing * 2,
     borderRadius: Spacing * 2,
     alignItems: "center",
     marginVertical: Spacing * 2,
   },
-  loginButtonText: {
+  loginButtonText: {  // Changed from signUpButtonText to loginButtonText
     fontFamily: Font["poppins-semiBold"],
     fontSize: Spacing * 2,
     color: Colors.onPrimary,
@@ -233,18 +222,39 @@ const styles = StyleSheet.create({
     fontSize: Spacing * 1.6,
     color: Colors.gray,
   },
+  loginText: {  // This stays the same, since it's for login
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 1.6,
+    color: Colors.primary,
+  },
   signUpText: {
     fontFamily: Font["poppins-semiBold"],
     fontSize: Spacing * 1.6,
     color: Colors.primary,
   },
+  sectionTitle: {
+    fontFamily: Font["poppins-semiBold"],
+    fontSize: Spacing * 2,
+    color: Colors.text,
+  },
+  iconButton: {
+    padding: Spacing / 2,
+  },
+  separator: {
+    width: Spacing / 2,
+    height: Spacing / 2,
+    backgroundColor: Colors.gray,
+    borderRadius: Spacing / 4,
+    marginHorizontal: Spacing,
+  },
   errorText: {
+    color: 'red',
     fontFamily: Font["poppins-regular"],
     fontSize: Spacing * 1.6,
-    color: Colors.background,
     marginTop: Spacing,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
+
 
 export default LoginScreen;

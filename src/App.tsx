@@ -227,9 +227,11 @@ function SearchScreenWrapper({ navigation, route }: RootStackScreenProps<'Search
 }
 
 
-function LoginScreenWrapper({ navigation, route, setIsLoggedIn }: RootStackScreenProps<'Login'> & { setIsLoggedIn: (isLoggedIn: boolean) => void; }) {
+function LoginScreenWrapper({ navigation, route, setIsLoggedIn }: RootStackScreenProps<'Login'> & { setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>; }) {
   return <LoginScreen navigation={navigation} route={route} setIsLoggedIn={setIsLoggedIn} />;
-function SettingsScreenWrapper({ navigation, setIsLoggedIn }: RootStackScreenProps<'Settings'> & { setIsLoggedIn: (isLoggedIn: boolean) => void; }) {
+}
+
+function SettingsScreenWrapper({ navigation, setIsLoggedIn }: RootStackScreenProps<'Settings'> & { setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>; }) {
   return (
     <View style={{ flex: 1 }}>
       <HeaderScreen />
@@ -238,10 +240,6 @@ function SettingsScreenWrapper({ navigation, setIsLoggedIn }: RootStackScreenPro
     </View>
   );
 }
-  );
-}
-
-// Similar wrappers can be created for other screens.
 
 const styles = StyleSheet.create({
   splashContainer: {
